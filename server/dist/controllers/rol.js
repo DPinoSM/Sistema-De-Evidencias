@@ -17,17 +17,15 @@ const getRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getRol = getRol;
 const newRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_rol, numero_rol, nombre_rol } = req.body;
-    const idRol = yield rol_1.Rol.findOne({ where: { id_rol: id_rol } });
+    const { nombre_rol } = req.body;
+    const idRol = yield rol_1.Rol.findOne({ where: { nombre_rol: nombre_rol } });
     if (idRol) {
         return res.status(400).json({
-            msg: 'Ya existe un Rol con es ID'
+            msg: 'Ya existe un Rol con ese nombre'
         });
     }
     try {
         yield rol_1.Rol.create({
-            "id_rol": id_rol,
-            "numero_rol": numero_rol,
             "nombre_rol": nombre_rol
         });
         return res.json({
@@ -44,7 +42,7 @@ const newRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.newRol = newRol;
 const updateRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { numero_rol, nombre_rol } = req.body;
+    const { nombre_rol } = req.body;
     const idRol = yield rol_1.Rol.findOne({ where: { id_rol: id } });
     if (!idRol) {
         return res.status(400).json({
@@ -53,7 +51,6 @@ const updateRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     try {
         yield rol_1.Rol.update({
-            numero_rol: numero_rol,
             nombre_rol: nombre_rol
         }, { where: { id_rol: id } });
         return res.json({

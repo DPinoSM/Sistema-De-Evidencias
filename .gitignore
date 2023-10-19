@@ -2,4 +2,5 @@ server/node_modules
 server/.env
 server/config.json
 server/src
+server/dist/db/connection.js
 SistemaDeEvidencias/node_modules
