@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const rol_1 = require("../controllers/rol");
+// import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/lista', rol_1.getRol);
+router.post('/', rol_1.newRol);
+router.get('/:id', rol_1.getOneRol);
+router.delete('/:id', rol_1.deleteRol);
+router.put('/:id', rol_1.updateRol);
+exports.default = router;
