@@ -17,16 +17,15 @@ const getUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUnidad = getUnidad;
 const newUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_unidad, nombre_unidad, unidad_defecto } = req.body;
-    const idUnidad = yield unidad_1.Unidad.findOne({ where: { id_unidad: id_unidad } });
+    const { nombre_unidad, unidad_defecto } = req.body;
+    const idUnidad = yield unidad_1.Unidad.findOne({ where: { nombre_unidad: nombre_unidad } });
     if (idUnidad) {
         return res.status(400).json({
-            msg: 'Ya existe una Unidad con esa ID'
+            msg: 'Ya existe una Unidad con ese nombre'
         });
     }
     try {
         yield unidad_1.Unidad.create({
-            "id_unidad": id_unidad,
             "nombre_unidad": nombre_unidad,
             "unidad_defecto": unidad_defecto
         });

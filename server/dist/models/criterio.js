@@ -7,7 +7,7 @@ exports.Criterio = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 exports.Criterio = connection_1.default.define('criterio', {
-    "id_criterios": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true },
+    "id_criterios": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "nombre_criterios": { type: sequelize_1.DataTypes.STRING },
     "codigo_criterios": { type: sequelize_1.DataTypes.INTEGER },
     "descripcion_criterios": { type: sequelize_1.DataTypes.STRING },

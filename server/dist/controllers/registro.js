@@ -26,7 +26,6 @@ const newRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     try {
         yield registro_1.Registro.create({
-            "id_registro": id_registro,
             "datos_registro": datos_registro,
             "contenido_registro": contenido_registro
         });

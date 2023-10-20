@@ -7,7 +7,7 @@ exports.Registro = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 exports.Registro = connection_1.default.define('registro', {
-    "id_registro": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true },
+    "id_registro": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "datos_registro": { type: sequelize_1.DataTypes.STRING },
     "contenido_registro": { type: sequelize_1.DataTypes.STRING }
 }, {

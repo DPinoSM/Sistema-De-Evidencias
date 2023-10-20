@@ -17,16 +17,15 @@ const getCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getCriterio = getCriterio;
 const newCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_criterios, nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios } = req.body;
-    const idCriterio = yield criterio_1.Criterio.findOne({ where: { id_criterios: id_criterios } });
+    const { nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios } = req.body;
+    const idCriterio = yield criterio_1.Criterio.findOne({ where: { nombre_criterios: nombre_criterios } });
     if (idCriterio) {
         return res.status(400).json({
-            msg: 'Ya existe un Criterio con esa ID'
+            msg: 'Ya existe un Criterio con ese nombre'
         });
     }
     try {
         yield criterio_1.Criterio.create({
-            "id_criterios": id_criterios,
             "nombre_criterios": nombre_criterios,
             "codigo_criterios": codigo_criterios,
             "descripcion_criterios": descripcion_criterios,
