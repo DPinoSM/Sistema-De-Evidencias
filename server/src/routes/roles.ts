@@ -1,0 +1,10 @@
+import {Router} from 'express';
+import {getRol, newRol, getOneRol,deleteRol, updateRol} from '../controllers/rol';
+// import validateToken from './validate-token';
+const router = Router();
+router.get('/lista',getRol);
+router.post('/',newRol);
+router.get('/:id',getOneRol);
+router.delete('/:id',deleteRol);
+router.put('/:id',updateRol);
+export default router;

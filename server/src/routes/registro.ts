@@ -1,0 +1,10 @@
+import {Router} from 'express';
+import {getRegistro, newRegistro, getOneRegistro,deleteRegistro, updateRegistro} from '../controllers/registro';
+// import validateToken from './validate-token';
+const router = Router();
+router.get('/lista',getRegistro);
+router.post('/',newRegistro);
+router.get('/:id',getOneRegistro);
+router.delete('/:id',deleteRegistro);
+router.put('/:id',updateRegistro);
+export default router;
