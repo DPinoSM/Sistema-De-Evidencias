@@ -7,6 +7,7 @@ import routerRegistro from '../routes/registro';
 import routerCriterio from '../routes/criterio';
 import routerProceso from '../routes/proceso';
 import routerAmbitoAcademico from '../routes/ambito_academico';
+import routerFacultad from '../routes/facultad';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
@@ -14,6 +15,7 @@ import { Registro } from './registro';
 import {Criterio} from './criterio';
 import { Proceso } from './proceso';
 import { AmbitoAcademico } from './ambito_academico';
+import { Facultad } from './facultad';
 
 class Server {
     private app: Application;
@@ -39,6 +41,7 @@ class Server {
         this.app.use('/api/criterio', routerCriterio);
         this.app.use('/api/proceso', routerProceso);
         this.app.use('/api/ambitoacademico', routerAmbitoAcademico);
+        this.app.use('api/facultad', routerFacultad);
     }
     midlewares() {
         //parseo body
@@ -55,6 +58,7 @@ class Server {
             await Criterio.sync()
             await Proceso.sync()
             await AmbitoAcademico.sync()
+            await Facultad.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }

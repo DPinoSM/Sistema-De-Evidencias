@@ -21,6 +21,7 @@ const registro_1 = __importDefault(require("../routes/registro"));
 const criterio_1 = __importDefault(require("../routes/criterio"));
 const proceso_1 = __importDefault(require("../routes/proceso"));
 const ambito_academico_1 = __importDefault(require("../routes/ambito_academico"));
+const facultad_1 = __importDefault(require("../routes/facultad"));
 const rol_1 = require("./rol");
 const user_2 = require("./user");
 const unidad_2 = require("./unidad");
@@ -28,6 +29,7 @@ const registro_2 = require("./registro");
 const criterio_2 = require("./criterio");
 const proceso_2 = require("./proceso");
 const ambito_academico_2 = require("./ambito_academico");
+const facultad_2 = require("./facultad");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -50,6 +52,7 @@ class Server {
         this.app.use('/api/criterio', criterio_1.default);
         this.app.use('/api/proceso', proceso_1.default);
         this.app.use('/api/ambitoacademico', ambito_academico_1.default);
+        this.app.use('api/facultad', facultad_1.default);
     }
     midlewares() {
         //parseo body
@@ -67,6 +70,7 @@ class Server {
                 yield criterio_2.Criterio.sync();
                 yield proceso_2.Proceso.sync();
                 yield ambito_academico_2.AmbitoAcademico.sync();
+                yield facultad_2.Facultad.sync();
             }
             catch (error) {
                 console.error('No se ha podido conectar a la base de datos');
