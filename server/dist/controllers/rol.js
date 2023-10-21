@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRol = exports.getOneRol = exports.updateRol = exports.newRol = exports.getRol = void 0;
 const rol_1 = require("../models/rol");
 const getRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listRol = yield rol_1.Rol.findAll({ attributes: ['id_rol', 'numero_rol', 'nombre_rol'] });
+    const listRol = yield rol_1.Rol.findAll({ attributes: ['id_rol', 'nombre_rol'] });
     res.json(listRol);
 });
 exports.getRol = getRol;
