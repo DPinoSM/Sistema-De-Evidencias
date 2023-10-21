@@ -20,12 +20,14 @@ const unidad_1 = __importDefault(require("../routes/unidad"));
 const registro_1 = __importDefault(require("../routes/registro"));
 const criterio_1 = __importDefault(require("../routes/criterio"));
 const proceso_1 = __importDefault(require("../routes/proceso"));
+const ambito_academico_1 = __importDefault(require("../routes/ambito_academico"));
 const rol_1 = require("./rol");
 const user_2 = require("./user");
 const unidad_2 = require("./unidad");
 const registro_2 = require("./registro");
 const criterio_2 = require("./criterio");
 const proceso_2 = require("./proceso");
+const ambito_academico_2 = require("./ambito_academico");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -37,7 +39,7 @@ class Server {
     }
     listen() {
         this.app.listen(this.port, () => {
-            console.log('Corriendo en el puertoo ' + this.port);
+            console.log('Corriendo en el puerto ' + this.port);
         });
     }
     routes() {
@@ -47,6 +49,7 @@ class Server {
         this.app.use('/api/registro', registro_1.default);
         this.app.use('/api/criterio', criterio_1.default);
         this.app.use('/api/proceso', proceso_1.default);
+        this.app.use('/api/ambitoacademico', ambito_academico_1.default);
     }
     midlewares() {
         //parseo body
@@ -63,6 +66,7 @@ class Server {
                 yield registro_2.Registro.sync();
                 yield criterio_2.Criterio.sync();
                 yield proceso_2.Proceso.sync();
+                yield ambito_academico_2.AmbitoAcademico.sync();
             }
             catch (error) {
                 console.error('No se ha podido conectar a la base de datos');

@@ -6,12 +6,14 @@ import routerUnidad from '../routes/unidad';
 import routerRegistro from '../routes/registro';
 import routerCriterio from '../routes/criterio';
 import routerProceso from '../routes/proceso';
+import routerAmbitoAcademico from '../routes/ambito_academico';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
 import { Registro } from './registro';
 import {Criterio} from './criterio';
 import { Proceso } from './proceso';
+import { AmbitoAcademico } from './ambito_academico';
 
 class Server {
     private app: Application;
@@ -26,7 +28,7 @@ class Server {
     }
     listen(){
         this.app.listen(this.port, ()=> {
-            console.log('Corriendo en el puertoo ' + this.port);
+            console.log('Corriendo en el puerto ' + this.port);
         })
     }
     routes(){
@@ -36,6 +38,7 @@ class Server {
         this.app.use('/api/registro', routerRegistro);
         this.app.use('/api/criterio', routerCriterio);
         this.app.use('/api/proceso', routerProceso);
+        this.app.use('/api/ambitoacademico', routerAmbitoAcademico);
     }
     midlewares() {
         //parseo body
@@ -51,6 +54,7 @@ class Server {
             await Registro.sync()
             await Criterio.sync()
             await Proceso.sync()
+            await AmbitoAcademico.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }
