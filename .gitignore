@@ -1,3 +1,8 @@
 server/node_modules
 server/.env
+<<<<<<< HEAD
+=======
+server/config.json
+server/src/db/connectios.ts
+>>>>>>> 59ec8f7cba26c991e09130da6e4cce01e77e1b71
 sistemadeevidencias
