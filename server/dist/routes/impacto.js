@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const impacto_1 = require("../controllers/impacto");
+// import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/lista', impacto_1.getImpácto);
+router.post('/', impacto_1.newImpacto);
+router.get('/:id', impacto_1.getOneImpacto);
+router.delete('/:id', impacto_1.deleteImpacto);
+router.put('/:id', impacto_1.updateImpacto);
+exports.default = router;
