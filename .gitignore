@@ -1,5 +1,5 @@
 server/node_modules
 server/.env
 server/config.json
-server/src
+server/src/db/connectios.ts
 sistemadeevidencias
