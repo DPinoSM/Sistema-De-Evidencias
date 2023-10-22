@@ -58,8 +58,8 @@ export const loginUser = async(req: Request, res: Response) =>{
     const token = jwt.sign({
        rut_usuario: rut_usuario
     }, process.env.SECRET_KEY || 'PRUEBA1'); // , {expiresIn: '10000'} como tercer parametro para timepo de expiracion del token
-    res.json({token});
-}
+    res.json({token, rol: usuario.Rol.nombre_rol});
+} 
 }
 
 export const getUser = async(req: Request, res: Response) =>{
@@ -108,11 +108,6 @@ export const updateUser = async(req: Request, res: Response)=>{
     const {id} = req.params;
     
     const idUser = await User.findOne({where: {id_usuario: id}})
-
-    // const idUser = await User.sequelize?.query(`SELECT RUT_USUARIO FROM USUARIOS WHERE(ID_USUARIO = ${id})`);
-
-    // const idUser = await User.findOne({attributes:['rut_usuario']});
-
 
     if(!idUser) {
         return res.status(400).json({

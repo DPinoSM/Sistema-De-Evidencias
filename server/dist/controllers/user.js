@@ -73,7 +73,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({
             rut_usuario: rut_usuario
         }, process.env.SECRET_KEY || 'PRUEBA1'); // , {expiresIn: '10000'} como tercer parametro para timepo de expiracion del token
-        res.json({ token });
+        res.json({ token, rol: usuario.Rol.nombre_rol });
     }
 });
 exports.loginUser = loginUser;
@@ -121,8 +121,6 @@ exports.deleteUser = deleteUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
-    // const idUser = await User.sequelize?.query(`SELECT RUT_USUARIO FROM USUARIOS WHERE(ID_USUARIO = ${id})`);
-    // const idUser = await User.findOne({attributes:['rut_usuario']});
     if (!idUser) {
         return res.status(400).json({
             msg: "El id " + id + " de usuario no existe"
