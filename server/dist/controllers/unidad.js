@@ -16,19 +16,18 @@ const getUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(listUnidad);
 });
 exports.getUnidad = getUnidad;
-const newUnidad = async (req, res) => {
+const newUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre_unidad, unidad_defecto } = req.body;
-    const idUnidad = await unidad_1.Unidad.findOne({ where: { nombre_unidad: nombre_unidad } });
+    const idUnidad = yield unidad_1.Unidad.findOne({ where: { nombre_unidad: nombre_unidad } });
     if (idUnidad) {
         return res.status(400).json({
             msg: 'Ya existe una Unidad con ese nombre'
         });
     }
     try {
-        const isUnidadDefecto = unidad_defecto === true; // Verifica si unidad_defecto es verdadero
-        await unidad_1.Unidad.create({
+        yield unidad_1.Unidad.create({
             "nombre_unidad": nombre_unidad,
-            "unidad_defecto": isUnidadDefecto
+            "unidad_defecto": unidad_defecto
         });
         return res.json({
             msg: 'Unidad creada correctamente'
@@ -36,26 +35,25 @@ const newUnidad = async (req, res) => {
     }
     catch (error) {
         res.status(400).json({
-            msg: 'Ocurrió un error',
+            msg: 'Ocurrio un error',
             error
         });
     }
-};
+});
 exports.newUnidad = newUnidad;
-const updateUnidad = async (req, res) => {
+const updateUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { nombre_unidad, unidad_defecto } = req.body;
-    const idUnidad = await unidad_1.Unidad.findOne({ where: { id_unidad: id } });
+    const idUnidad = yield unidad_1.Unidad.findOne({ where: { id_unidad: id } });
     if (!idUnidad) {
         return res.status(400).json({
             msg: "El id de la unidad no existe"
         });
     }
     try {
-        const isUnidadDefecto = unidad_defecto === true; // Verifica si unidad_defecto es verdadero
-        await unidad_1.Unidad.update({
+        yield unidad_1.Unidad.update({
             nombre_unidad: nombre_unidad,
-            unidad_defecto: isUnidadDefecto
+            unidad_defecto: unidad_defecto
         }, { where: { id_unidad: id } });
         return res.json({
             msg: 'Unidad ' + id + ' actualizado correctamente'
@@ -67,8 +65,7 @@ const updateUnidad = async (req, res) => {
             error
         });
     }
-};
-
+});
 exports.updateUnidad = updateUnidad;
 const getOneUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;

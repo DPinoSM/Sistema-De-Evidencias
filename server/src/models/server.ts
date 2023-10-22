@@ -8,6 +8,8 @@ import routerCriterio from '../routes/criterio';
 import routerProceso from '../routes/proceso';
 import routerAmbitoAcademico from '../routes/ambito_academico';
 import routerFacultad from '../routes/facultad';
+import routerAmbitoGeografico from '../routes/ambito_geografico';
+import routerCarrera from '../routes/carrera';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
@@ -16,6 +18,8 @@ import {Criterio} from './criterio';
 import { Proceso } from './proceso';
 import { AmbitoAcademico } from './ambito_academico';
 import { Facultad } from './facultad';
+import { AmbitoGeografico } from './ambito_geografico';
+import { Carrera } from './carrera';
 
 class Server {
     private app: Application;
@@ -42,6 +46,8 @@ class Server {
         this.app.use('/api/proceso', routerProceso);
         this.app.use('/api/ambitoacademico', routerAmbitoAcademico);
         this.app.use('api/facultad', routerFacultad);
+        this.app.use('/api/ambitogeografico', routerAmbitoGeografico);
+        this.app.use('api/carrera', routerCarrera);
     }
     midlewares() {
         //parseo body
@@ -59,6 +65,8 @@ class Server {
             await Proceso.sync()
             await AmbitoAcademico.sync()
             await Facultad.sync()
+            await AmbitoGeografico.sync()
+            await Carrera.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }

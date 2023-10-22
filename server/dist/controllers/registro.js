@@ -16,31 +16,30 @@ const getRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     res.json(listRegistro);
 });
 exports.getRegistro = getRegistro;
-const newRegistro = async (req, res) => {
-    const { datos_registro, contenido_registro } = req.body;
-
-    if (datos_registro === undefined || contenido_registro === undefined) {
+const newRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_registro, datos_registro, contenido_registro } = req.body;
+    const idRegistro = yield registro_1.Registro.findOne({ where: { id_registro: id_registro } });
+    if (idRegistro) {
         return res.status(400).json({
-            msg: 'Los campos datos_registro y contenido_registro son obligatorios'
+            msg: 'Ya existe un Registro con esa ID'
         });
     }
-
     try {
-        await registro_1.Registro.create({
+        yield registro_1.Registro.create({
             "datos_registro": datos_registro,
             "contenido_registro": contenido_registro
         });
         return res.json({
             msg: 'Registro creado correctamente'
         });
-    } catch (error) {
+    }
+    catch (error) {
         res.status(400).json({
-            msg: 'Ocurrió un error',
+            msg: 'Ocurrio un error',
             error
         });
     }
-}
-
+});
 exports.newRegistro = newRegistro;
 const updateRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
