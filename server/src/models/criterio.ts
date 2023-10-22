@@ -5,7 +5,7 @@ export const Criterio = sequelize.define('criterio',{
     "nombre_criterios": {type: DataTypes.STRING},
     "codigo_criterios": {type: DataTypes.INTEGER},
     "descripcion_criterios": {type: DataTypes.STRING},
-    "estado_criterios": {type: DataTypes.BOOLEAN}
+    "estado_criterios": {type: DataTypes.BOOLEAN,allowNull: false, defaultValue: false}
 },
 {
     freezeTableName: true,

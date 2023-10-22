@@ -25,7 +25,7 @@ export const newAmbitoAcademico = async(req: Request, res: Response) =>{
     }
 }
 export const getAmbitosAcademicos = async(req: Request, res: Response) =>{   
-    const listAmbitos = await AmbitoAcademico.findAll({attributes:['codigo_ambito_academico','nombre_ambito_academico','estado_ambito_academico']});
+    const listAmbitos = await AmbitoAcademico.findAll({attributes:['id_ambito_academico','nombre_ambito_academico','estado_ambito_academico']});
     res.json(listAmbitos)
 }
 export const getAmbitoAcademico = async(req: Request, res: Response) =>{

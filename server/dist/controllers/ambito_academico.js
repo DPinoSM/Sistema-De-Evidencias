@@ -37,7 +37,7 @@ const newAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.newAmbitoAcademico = newAmbitoAcademico;
 const getAmbitosAcademicos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listAmbitos = yield ambito_academico_1.AmbitoAcademico.findAll({ attributes: ['codigo_ambito_academico', 'nombre_ambito_academico', 'estado_ambito_academico'] });
+    const listAmbitos = yield ambito_academico_1.AmbitoAcademico.findAll({ attributes: ['id_ambito_academico', 'nombre_ambito_academico', 'estado_ambito_academico'] });
     res.json(listAmbitos);
 });
 exports.getAmbitosAcademicos = getAmbitosAcademicos;

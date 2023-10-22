@@ -9,7 +9,7 @@ const connection_1 = __importDefault(require("../db/connection"));
 exports.Unidad = connection_1.default.define('unidad', {
     "id_unidad": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "nombre_unidad": { type: sequelize_1.DataTypes.STRING },
-    "unidad_defecto": { type: sequelize_1.DataTypes.BOOLEAN }
+    "unidad_defecto": { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }, {
     freezeTableName: true,
     timestamps: false,

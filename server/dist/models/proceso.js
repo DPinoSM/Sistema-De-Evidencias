@@ -10,7 +10,7 @@ exports.Proceso = connection_1.default.define("procesos", {
     "id_procesos": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "codigo_procesos": { type: sequelize_1.DataTypes.STRING },
     "nombre_procesos": { type: sequelize_1.DataTypes.STRING },
-    "estado_procesos": { type: sequelize_1.DataTypes.BOOLEAN }
+    "estado_procesos": { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }, {
     freezeTableName: true,
     timestamps: false,
