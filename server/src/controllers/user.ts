@@ -6,12 +6,12 @@ import sequelize from 'sequelize/types/sequelize';
 import { QueryTypes } from 'sequelize';
 
 export const newUser = async(req: Request, res: Response) =>{
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario} =  req.body;
+    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad} =  req.body;
     const hashedPassword = await bcrypt.hash(clave_usuario, 10);
     const rutUsuario = await User.findOne({where: {rut_usuario: rut_usuario}})
     if(rutUsuario) {
         return res.status(400).json({
-            msg: 'Ya existe un usuario con ese rutt'
+            msg: 'Ya existe un usuario con ese rut'
         })
     }
     try{
@@ -21,7 +21,8 @@ export const newUser = async(req: Request, res: Response) =>{
             "apellido1_usuario": apellido1_usuario,
             "apellido2_usuario": apellido2_usuario,
             "clave_usuario": hashedPassword,
-            "correo_usuario": correo_usuario
+            "correo_usuario": correo_usuario,
+            "estado_usuario": estado_usuario
         })
         return res.json({
             msg: 'Usuario creado correctamentee'      
@@ -34,7 +35,7 @@ export const newUser = async(req: Request, res: Response) =>{
     }
 }
 export const getUsers = async(req: Request, res: Response) =>{   
-    const listUsers = await User.findAll({attributes:['rut_usuario','nombre_usuario','correo_usuario']});
+    const listUsers = await User.findAll({attributes:['rut_usuario','nombre_usuario','correo_usuario','estado_usuario','id_rol','id_unidad']});
     res.json(listUsers)
 }
 export const loginUser = async(req: Request, res: Response) =>{
@@ -119,13 +120,14 @@ export const updateUser = async(req: Request, res: Response)=>{
         })
     }
     try{
-        const {nombre_usuario,apellido1_usuario,apellido2_usuario,clave_usuario,correo_usuario} = req.body;
+        const {nombre_usuario,apellido1_usuario,apellido2_usuario,clave_usuario,correo_usuario,estado_usuario} = req.body;
         await User.update({
             nombre_usuario: nombre_usuario,
             apellido1_usuario: apellido1_usuario,
             apellido2_usuario: apellido2_usuario,
             clave_usuario:clave_usuario,
-            correo_usuario: correo_usuario
+            correo_usuario: correo_usuario,
+            estado_usuario: estado_usuario
 
         },{where: {id_usuario: id}
     })

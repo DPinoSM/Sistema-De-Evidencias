@@ -17,12 +17,12 @@ const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
     const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
     if (rutUsuario) {
         return res.status(400).json({
-            msg: 'Ya existe un usuario con ese rutt'
+            msg: 'Ya existe un usuario con ese rut'
         });
     }
     try {
@@ -32,7 +32,8 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             "apellido1_usuario": apellido1_usuario,
             "apellido2_usuario": apellido2_usuario,
             "clave_usuario": hashedPassword,
-            "correo_usuario": correo_usuario
+            "correo_usuario": correo_usuario,
+            "estado_usuario": estado_usuario
         });
         return res.json({
             msg: 'Usuario creado correctamentee'
@@ -47,7 +48,7 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.newUser = newUser;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listUsers = yield user_1.User.findAll({ attributes: ['rut_usuario', 'nombre_usuario', 'correo_usuario'] });
+    const listUsers = yield user_1.User.findAll({ attributes: ['rut_usuario', 'nombre_usuario', 'correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
     res.json(listUsers);
 });
 exports.getUsers = getUsers;
@@ -128,13 +129,14 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     try {
-        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario } = req.body;
+        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
         yield user_1.User.update({
             nombre_usuario: nombre_usuario,
             apellido1_usuario: apellido1_usuario,
             apellido2_usuario: apellido2_usuario,
             clave_usuario: clave_usuario,
-            correo_usuario: correo_usuario
+            correo_usuario: correo_usuario,
+            estado_usuario: estado_usuario
         }, { where: { id_usuario: id }
         });
         res.json({
