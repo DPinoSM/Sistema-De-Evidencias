@@ -1,0 +1,10 @@
+import {Router} from 'express';
+import {getImpácto, newImpacto, getOneImpacto,deleteImpacto, updateImpacto} from '../controllers/impacto';
+// import validateToken from './validate-token';
+const router = Router();
+router.get('/lista',getImpácto);
+router.post('/',newImpacto);
+router.get('/:id',getOneImpacto);
+router.delete('/:id',deleteImpacto);
+router.put('/:id',updateImpacto);
+export default router;
