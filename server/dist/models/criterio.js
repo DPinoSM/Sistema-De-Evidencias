@@ -11,7 +11,7 @@ exports.Criterio = connection_1.default.define('criterio', {
     "nombre_criterios": { type: sequelize_1.DataTypes.STRING },
     "codigo_criterios": { type: sequelize_1.DataTypes.INTEGER },
     "descripcion_criterios": { type: sequelize_1.DataTypes.STRING },
-    "estado_criterios": { type: sequelize_1.DataTypes.BOOLEAN }
+    "estado_criterios": { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }, {
     freezeTableName: true,
     timestamps: false,
