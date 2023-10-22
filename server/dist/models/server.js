@@ -22,8 +22,6 @@ const criterio_1 = __importDefault(require("../routes/criterio"));
 const proceso_1 = __importDefault(require("../routes/proceso"));
 const ambito_academico_1 = __importDefault(require("../routes/ambito_academico"));
 const facultad_1 = __importDefault(require("../routes/facultad"));
-<<<<<<< HEAD
-=======
 const ambito_geografico_1 = __importDefault(require("../routes/ambito_geografico"));
 const carrera_1 = __importDefault(require("../routes/carrera"));
 const estado_1 = __importDefault(require("../routes/estado"));
@@ -36,8 +34,6 @@ const criterio_2 = require("./criterio");
 const proceso_2 = require("./proceso");
 const ambito_academico_2 = require("./ambito_academico");
 const facultad_2 = require("./facultad");
-<<<<<<< HEAD
-=======
 const ambito_geografico_2 = require("./ambito_geografico");
 const carrera_2 = require("./carrera");
 const estado_2 = require("./estado");
@@ -65,8 +61,6 @@ class Server {
         this.app.use('/api/proceso', proceso_1.default);
         this.app.use('/api/ambitoacademico', ambito_academico_1.default);
         this.app.use('api/facultad', facultad_1.default);
-<<<<<<< HEAD
-=======
         this.app.use('/api/ambitogeografico', ambito_geografico_1.default);
         this.app.use('/api/carrera', carrera_1.default);
         this.app.use('/api/estado', estado_1.default);
@@ -89,8 +83,6 @@ class Server {
                 yield proceso_2.Proceso.sync();
                 yield ambito_academico_2.AmbitoAcademico.sync();
                 yield facultad_2.Facultad.sync();
-<<<<<<< HEAD
-=======
                 yield ambito_geografico_2.AmbitoGeografico.sync();
                 yield carrera_2.Carrera.sync();
                 yield estado_2.Estado.sync();
