@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const estado_1 = require("../controllers/estado");
+// import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/lista', estado_1.getEstado);
+router.post('/', estado_1.newEstado);
+router.get('/:id', estado_1.getOneEstado);
+router.delete('/:id', estado_1.deleteEstado);
+router.put('/:id', estado_1.updateEstado);
+exports.default = router;

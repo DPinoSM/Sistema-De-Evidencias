@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteImpacto = exports.getOneImpacto = exports.updateImpacto = exports.newImpacto = exports.getImpácto = void 0;
+exports.deleteImpacto = exports.getOneImpacto = exports.updateImpacto = exports.newImpacto = exports.getImpacto = void 0;
 const impacto_1 = require("../models/impacto");
-const getImpácto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getImpacto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listImpacto = yield impacto_1.Impacto.findAll({ attributes: ['id_impacto', 'interno_externo'] });
     res.json(listImpacto);
 });
-exports.getImpácto = getImpácto;
+exports.getImpacto = getImpacto;
 const newImpacto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { interno_externo } = req.body;
     const idImpacto = yield impacto_1.Impacto.findOne({ where: { interno_externo: interno_externo } });
@@ -101,7 +101,7 @@ const deleteImpacto = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al actualizar el rol: ' + id,
+            msg: 'Ha ocurrido un error al actualizar el impacto: ' + id,
             error
         });
     }

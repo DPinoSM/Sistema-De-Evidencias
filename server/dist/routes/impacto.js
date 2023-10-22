@@ -4,7 +4,7 @@ const express_1 = require("express");
 const impacto_1 = require("../controllers/impacto");
 // import validateToken from './validate-token';
 const router = (0, express_1.Router)();
-router.get('/lista', impacto_1.getImpácto);
+router.get('/lista', impacto_1.getImpacto);
 router.post('/', impacto_1.newImpacto);
 router.get('/:id', impacto_1.getOneImpacto);
 router.delete('/:id', impacto_1.deleteImpacto);

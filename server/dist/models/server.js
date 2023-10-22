@@ -23,6 +23,7 @@ const proceso_1 = __importDefault(require("../routes/proceso"));
 const ambito_academico_1 = __importDefault(require("../routes/ambito_academico"));
 const facultad_1 = __importDefault(require("../routes/facultad"));
 const impacto_1 = __importDefault(require("../routes/impacto"));
+const estado_1 = __importDefault(require("../routes/estado"));
 const rol_1 = require("./rol");
 const user_2 = require("./user");
 const unidad_2 = require("./unidad");
@@ -32,6 +33,7 @@ const proceso_2 = require("./proceso");
 const ambito_academico_2 = require("./ambito_academico");
 const facultad_2 = require("./facultad");
 const impacto_2 = require("./impacto");
+const estado_2 = require("./estado");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -56,6 +58,7 @@ class Server {
         this.app.use('/api/ambitoacademico', ambito_academico_1.default);
         this.app.use('api/facultad', facultad_1.default);
         this.app.use('/api/impacto', impacto_1.default);
+        this.app.use('/api/estado', estado_1.default);
     }
     midlewares() {
         //parseo body
@@ -75,6 +78,7 @@ class Server {
                 yield ambito_academico_2.AmbitoAcademico.sync();
                 yield facultad_2.Facultad.sync();
                 yield impacto_2.Impacto.sync();
+                yield estado_2.Estado.sync();
             }
             catch (error) {
                 console.error('No se ha podido conectar a la base de datos');
