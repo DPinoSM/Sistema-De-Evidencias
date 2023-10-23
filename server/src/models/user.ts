@@ -12,7 +12,7 @@ export const User = sequelize.define('usuarios',{
     "correo_usuario": {type: DataTypes.STRING},
     "estado_usuario": {type: DataTypes.BOOLEAN,allowNull: false, defaultValue: false},
     "id_rol": {type: DataTypes.INTEGER},
-    "if_unidad": {type: DataTypes.INTEGER}
+    "id_unidad": {type: DataTypes.INTEGER}
 },
 {
     timestamps: false,
