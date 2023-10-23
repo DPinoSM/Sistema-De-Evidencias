@@ -17,8 +17,8 @@ const getRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getRegistro = getRegistro;
 const newRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_registro, datos_registro, contenido_registro } = req.body;
-    const idRegistro = yield registro_1.Registro.findOne({ where: { id_registro: id_registro } });
+    const { datos_registro, contenido_registro } = req.body;
+    const idRegistro = yield registro_1.Registro.findOne({ where: { datos_registro: datos_registro } });
     if (idRegistro) {
         return res.status(400).json({
             msg: 'Ya existe un Registro con esa ID'
