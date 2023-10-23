@@ -6,8 +6,8 @@ export const getRegistro = async(req: Request, res: Response) =>{
     res.json(listRegistro)
 }
 export const newRegistro = async(req: Request, res: Response) =>{
-    const { id_registro, datos_registro, contenido_registro} =  req.body;
-    const idRegistro = await Registro.findOne({where: {id_registro: id_registro}})
+    const { datos_registro, contenido_registro} =  req.body;
+    const idRegistro = await Registro.findOne({where: {datos_registro: datos_registro}})
     if(idRegistro) {
         return res.status(400).json({
             msg: 'Ya existe un Registro con esa ID'

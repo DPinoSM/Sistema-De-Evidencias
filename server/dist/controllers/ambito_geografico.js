@@ -37,13 +37,13 @@ const newAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 exports.newAmbitoGeografico = newAmbitoGeografico;
 const getAmbitosGeograficos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listAmbitosG = yield ambito_geografico_1.AmbitoGeografico.findAll({ attributes: ['codigo_ambito_geografico', 'nombre_ambito_geografico', 'estado_ambito_geografico'] });
+    const listAmbitosG = yield ambito_geografico_1.AmbitoGeografico.findAll({ attributes: ['id_ambito_geografico', 'nombre_ambito_geografico', 'estado_ambito_geografico'] });
     res.json(listAmbitosG);
 });
 exports.getAmbitosGeograficos = getAmbitosGeograficos;
 const getAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idAmbitoGeografico = yield ambito_geografico_1.AmbitoGeografico.findOne({ attributes: ['codigo_ambito_geografico', 'nombre_ambito_geografico', 'estado_ambito_geografico'], where: { id_ambito_geografico: id } });
+    const idAmbitoGeografico = yield ambito_geografico_1.AmbitoGeografico.findOne({ attributes: ['id_ambito_geografico', 'nombre_ambito_geografico', 'estado_ambito_geografico'], where: { id_ambito_geografico: id } });
     if (!idAmbitoGeografico) {
         return res.status(400).json({
             msg: "El ambito geografico indicado no existe"
@@ -95,7 +95,7 @@ const updateAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, f
         yield ambito_geografico_1.AmbitoGeografico.update({
             nombre_ambito_geografico: nombre_ambito_geografico,
             estado_ambito_geografico: estado_ambito_geografico
-        }, { where: { id_procesos: id }
+        }, { where: { id_ambito_geografico: id }
         });
         res.json({
             msg: "Se ha actualizado el ambito geografico: "

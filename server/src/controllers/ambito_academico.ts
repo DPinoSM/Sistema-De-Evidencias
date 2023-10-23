@@ -80,7 +80,7 @@ export const updateAmbitoAcademico = async(req: Request, res: Response)=>{
             nombre_ambito_academico: nombre_ambito_academico,
             estado_ambito_academico: estado_ambito_academico
 
-        },{where: {id_procesos: id}
+        },{where: {id_ambito_academico: id}
     })
         res.json({
             msg: "Se ha actualizado el ambito academico: "
