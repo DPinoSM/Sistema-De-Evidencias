@@ -1,7 +1,7 @@
 server/node_modules
 server/.env
 server/config.json
-server/src/db/connectios.ts
+server/src/db/connectios.js
 SistemaDeEvidencias/.vscode
 SistemaDeEvidencias/node_modules
 
