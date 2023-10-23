@@ -6,7 +6,7 @@ import sequelize from 'sequelize/types/sequelize';
 import { QueryTypes } from 'sequelize';
 
 export const newUser = async(req: Request, res: Response) =>{
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad} =  req.body;
+    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario} =  req.body;
     const hashedPassword = await bcrypt.hash(clave_usuario, 10);
     const rutUsuario = await User.findOne({where: {rut_usuario: rut_usuario}})
     if(rutUsuario) {
