@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const carrera_1 = require("../controllers/carrera");
+// import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/lista', carrera_1.getCarreras);
+router.post('/', carrera_1.newCarrera);
+router.get('/:id', carrera_1.getCarrera);
+router.delete('/:id', carrera_1.deleteCarrera);
+router.put('/:id', carrera_1.updateCarrera);
+exports.default = router;
