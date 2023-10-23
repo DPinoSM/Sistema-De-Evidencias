@@ -25,12 +25,12 @@ export const newAmbitoGeografico = async(req: Request, res: Response) =>{
     }
 }
 export const getAmbitosGeograficos = async(req: Request, res: Response) =>{   
-    const listAmbitosG = await AmbitoGeografico.findAll({attributes:['codigo_ambito_geografico','nombre_ambito_geografico','estado_ambito_geografico']});
+    const listAmbitosG = await AmbitoGeografico.findAll({attributes:['id_ambito_geografico','nombre_ambito_geografico','estado_ambito_geografico']});
     res.json(listAmbitosG)
 }
 export const getAmbitoGeografico = async(req: Request, res: Response) =>{
     const {id} = req.params;
-    const idAmbitoGeografico = await AmbitoGeografico.findOne({attributes: ['codigo_ambito_geografico','nombre_ambito_geografico','estado_ambito_geografico'],where: {id_ambito_geografico: id}});
+    const idAmbitoGeografico = await AmbitoGeografico.findOne({attributes: ['id_ambito_geografico','nombre_ambito_geografico','estado_ambito_geografico'],where: {id_ambito_geografico: id}});
     if(!idAmbitoGeografico) {
         return res.status(400).json({
             msg: "El ambito geografico indicado no existe"
@@ -80,7 +80,7 @@ export const updateAmbitoGeografico = async(req: Request, res: Response)=>{
             nombre_ambito_geografico: nombre_ambito_geografico,
             estado_ambito_geografico: estado_ambito_geografico
 
-        },{where: {id_procesos: id}
+        },{where: {id_ambito_geografico: id}
     })
         res.json({
             msg: "Se ha actualizado el ambito geografico: "

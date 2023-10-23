@@ -95,7 +95,7 @@ const updateAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, fu
         yield ambito_academico_1.AmbitoAcademico.update({
             nombre_ambito_academico: nombre_ambito_academico,
             estado_ambito_academico: estado_ambito_academico
-        }, { where: { id_procesos: id }
+        }, { where: { id_ambito_academico: id }
         });
         res.json({
             msg: "Se ha actualizado el ambito academico: "
