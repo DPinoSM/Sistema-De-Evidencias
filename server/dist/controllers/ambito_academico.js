@@ -43,7 +43,7 @@ const getAmbitosAcademicos = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.getAmbitosAcademicos = getAmbitosAcademicos;
 const getAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idAmbitoAcademico = yield ambito_academico_1.AmbitoAcademico.findOne({ attributes: ['codigo_ambito_academico', 'nombre_ambito_academico', 'estado_ambito_academico'], where: { id_ambito_academico: id } });
+    const idAmbitoAcademico = yield ambito_academico_1.AmbitoAcademico.findOne({ attributes: ['id_ambito_academico', 'nombre_ambito_academico', 'estado_ambito_academico'], where: { id_ambito_academico: id } });
     if (!idAmbitoAcademico) {
         return res.status(400).json({
             msg: "El ambito academico indicado no existe"

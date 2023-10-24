@@ -12,7 +12,7 @@ export const newAmbitoAcademico = async(req: Request, res: Response) =>{
     try{
          await AmbitoAcademico.create({
             "nombre_ambito_academico": nombre_ambito_academico,
-            "estado_ambito_academico": true
+            "estado_ambito_academico": estado_ambito_academico
         })
         return res.json({
             msg: 'Ambito academico creado correctamente'      
@@ -30,7 +30,7 @@ export const getAmbitosAcademicos = async(req: Request, res: Response) =>{
 }
 export const getAmbitoAcademico = async(req: Request, res: Response) =>{
     const {id} = req.params;
-    const idAmbitoAcademico = await AmbitoAcademico.findOne({attributes: ['codigo_ambito_academico','nombre_ambito_academico','estado_ambito_academico'],where: {id_ambito_academico: id}});
+    const idAmbitoAcademico = await AmbitoAcademico.findOne({attributes: ['id_ambito_academico','nombre_ambito_academico','estado_ambito_academico'],where: {id_ambito_academico: id}});
     if(!idAmbitoAcademico) {
         return res.status(400).json({
             msg: "El ambito academico indicado no existe"
