@@ -18,7 +18,7 @@ exports.User = connection_1.default.define('usuarios', {
     "correo_usuario": { type: sequelize_1.DataTypes.STRING },
     "estado_usuario": { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     "id_rol": { type: sequelize_1.DataTypes.INTEGER },
-    "if_unidad": { type: sequelize_1.DataTypes.INTEGER }
+    "id_unidad": { type: sequelize_1.DataTypes.INTEGER }
 }, {
     timestamps: false,
     freezeTableName: true
