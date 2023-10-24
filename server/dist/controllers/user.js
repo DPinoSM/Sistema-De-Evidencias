@@ -17,7 +17,7 @@ const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
+    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
     const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
     if (rutUsuario) {

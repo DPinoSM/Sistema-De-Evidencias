@@ -22,7 +22,7 @@ const newAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         yield ambito_academico_1.AmbitoAcademico.create({
             "nombre_ambito_academico": nombre_ambito_academico,
-            "estado_ambito_academico": estado_ambito_academico
+            "estado_ambito_academico": true
         });
         return res.json({
             msg: 'Ambito academico creado correctamente'
