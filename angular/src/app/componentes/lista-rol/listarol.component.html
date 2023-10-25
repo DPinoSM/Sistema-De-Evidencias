@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="title">
+    <h3 class="page-title">Listado de Roles</h3>
+    <button type="button" class="btn btn-secondary" routerLink="/addR">Agregar Rol</button>
+  </div>
+  <div class="table-container mt-4" [ngClass]="collapsed ? 'table-collapsed' : ''">
+    <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+      <thead>
+        <tr>
+          <th scope="col">ID del Rol</th>
+          <th scope="col">Nombre del Rol</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rol of roles" style="border: 1px solid black;">
+          <td style="border: 1px solid black;">{{ rol.id_rol }}</td>
+          <td style="border: 1px solid black;">{{ rol.nombre_rol }}</td>
+          <td style="border: 1px solid black;">
+            <a [routerLink]="['/editR', rol.id_rol]">
+              <button type="button" class="btn">
+                <i class="fas fa-edit icon-no-bg"></i>
+              </button>
+            </a>
+            <button type="button" class="btn ms-2" (click)="eliminarRol(rol.id_rol)">
+              <i class="fa fa-trash icon-no-bg"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+    <div class="title">
+      <h4>Listado de Unidades</h4>
+      <button type="button" class="btn btn-dark" routerLink="/addU">Agregar Unidad</button>
+    </div>
+    
+    <div class="table-container mt-4">
+      <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+        <thead>
+          <tr>
+            <th scope="col">ID Unidad</th>
+            <th scope="col">Nombre Unidad</th>
+            <th scope="col">Estado Unidad</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let unidad of unidades" style="border: 1px solid black;">
+            <td style="border: 1px solid black;">{{ unidad.id_unidad }}</td>
+            <td style="border: 1px solid black;">{{ unidad.nombre_unidad }}</td>
+            <td style="border: 1px solid black;">{{ traducirEstado(unidad) }}</td>
+            <td style="border: 1px solid black;">
+            <a [routerLink]="['/editU', unidad.id_unidad]">
+              <button type="button" class="btn">
+                <i class="fas fa-edit icon-no-bg"></i>
+              </button>
+            </a>
+            <button type="button" class="btn ms-2" (click)="eliminarUnidad(unidad.id_unidad)">
+              <i class="fa fa-trash icon-no-bg"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>

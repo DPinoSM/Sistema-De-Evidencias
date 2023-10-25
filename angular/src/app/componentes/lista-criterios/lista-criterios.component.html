@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="title">
+    <h3>Listado de Criterios</h3>
+    <button type="button" class="btn btn-dark" routerLink="/addC">Agregar Criterio</button>
+  </div>
+  
+  <div class="table-container mt-4">
+    <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+      <thead>
+        <tr>
+          <th scope="col">ID Criterio</th>
+          <th scope="col">Nombre Criterio</th>
+          <th scope="col">Codigo Criterio</th>
+          <th scope="col">Descripción Criterio</th>
+          <th scope="col">Estado Criterio</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let criterio of criterios" style="border: 1px solid black;">
+          <td style="border: 1px solid black;">{{ criterio.id_criterios }}</td>
+          <td style="border: 1px solid black;">{{ criterio.nombre_criterios }}</td>
+          <td style="border: 1px solid black;">{{ criterio.codigo_criterios}}</td>
+          <td style="border: 1px solid black;">{{ criterio.descripcion_criterios}}</td>
+          <td style="border: 1px solid black;">{{ traducirEstado(criterio)}}</td>
+          <td style="border: 1px solid black;">
+          <a [routerLink]="['/editC', criterio.id_criterios]">
+            <button type="button" class="btn">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+          </a>
+          <button type="button" class="btn ms-2" (click)="eliminarCriterio(criterio.id_criterios)">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

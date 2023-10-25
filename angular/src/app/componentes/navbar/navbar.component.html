@@ -1,0 +1,104 @@
+<div class="container-fluid">
+  <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed' : ''" style="padding: 0; margin: 0;">
+    <div class="logo-container">
+      <button class="logo" (click)="toggleCollapse()">S</button>
+      <div class="logo-text" *ngIf="collapsed"></div>
+      <button class="btn-close" *ngIf="collapsed" (click)="closeSidenav()">
+        <i class="fal fa-times close-icon"></i>
+      </button>
+    </div>
+    <ul class="sidenav-nav">
+      <li class="sidenav-nav-item" *ngFor="let data of navData">
+        <div class="sidenav-column">
+          <a href="/user">
+            <i class="sidenav-column-icon fas fa-user"></i>
+            <span class="sidenav-column-label" *ngIf="collapsed">Usuario</span>
+          </a>
+        </div>
+        <div class="sidenav-column">
+          <a href="/debilidades">
+            <i class="sidenav-column-icon fas fa-chart-bar"></i> 
+            <span class="sidenav-column-label" *ngIf="collapsed">Debilidades</span>
+          </a>
+        </div>
+        <div class="sidenav-column">
+          <a href="/evidencias">
+            <i class="sidenav-column-icon fas fa-file-alt"></i> 
+            <span class="sidenav-column-label" *ngIf="collapsed">Evidencias</span>
+          </a>
+        </div>
+        <div class = "sidenav-column">
+          <a href="/informes">
+            <i class="sidenav-column-icon fas fa-file-invoice"></i> 
+            <span class="sidenav-column-label" *ngIf="collapsed">Informes</span>
+          </a>
+        </div>
+        <div class="sidenav-column">
+          <a href="/impacto">
+            <i class = "sidenav-column-icon fas fa-bullseye"></i> 
+            <span class="sidenav-column-label" *ngIf="collapsed">Impacto</span>
+          </a>
+        </div>
+        <div class="sidenav-column">
+          <a href="/graficos">
+            <i class="sidenav-column-icon fas fa-chart-pie"></i> 
+            <span class="sidenav-column-label" *ngIf="collapsed">Gráficos</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+<nav class="navbar navbar-expand-lg bg-custom-dark-blue" data-bs-theme="dark">
+          <div class="container-fluid">
+              <a class="navbar-brand">Administración</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul class="navbar-nav me-auto">
+                      <li class="nav-item">
+                          <a class="nav-link active" href="/admin">Home
+                              <span class="visually-hidden">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/rol">Roles</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/unidad">Unidades</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/criterio">Criterios</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#">Procesos</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/registro">Tipo de Registro</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/ambitoA">Ambito Academico</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/ambitoG">Ambito Geografico</a>
+                      </li>
+                  </ul>
+              </div>
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                      <a class="nav-link" href="/login">
+                          <i class="fas fa-sign-out-alt"></i> 
+                      </a>
+                  </li>
+              </ul>
+              <img src="../../../assets/logo_admin.png" alt="Logo" class="logo-admin">
+          </div>
+      </nav>
+
+  
+
+      

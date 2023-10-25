@@ -4,4 +4,4 @@ server/config.json
 server/src/db/connectios.js
 SistemaDeEvidencias/.vscode
 SistemaDeEvidencias/node_modules
-
+angular/node_modules

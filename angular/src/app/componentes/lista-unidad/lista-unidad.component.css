@@ -1,0 +1,13 @@
+.title{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.icon-no-bg {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
