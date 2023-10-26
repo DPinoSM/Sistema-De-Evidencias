@@ -29,6 +29,7 @@ import { AddEditUserComponent } from './componentes/add-edit-user/add-edit-user.
 import { AddEditUnidComponent } from './componentes/add-edit-unid/add-edit-unid.component';
 import { AddEditRegComponent } from './componentes/add-edit-reg/add-edit-reg.component';
 import { AddEditCriComponent } from './componentes/add-edit-cri/add-edit-cri.component';
+import { AddEditAgComponent } from './componentes/add-edit-ag/add-edit-ag.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { AddEditCriComponent } from './componentes/add-edit-cri/add-edit-cri.com
     AddEditUnidComponent,
     AddEditRegComponent,
     AddEditCriComponent,
+    AddEditAgComponent,
   ],
   imports: [
     BrowserModule,

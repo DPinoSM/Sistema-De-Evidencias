@@ -1,1 +1,31 @@
-<p>lista-ambito-g works!</p>
+<app-navbar></app-navbar>
+
+<div class="container">
+    <div class="title">
+      <h4>Listado de Ambitos geograficos</h4>
+      <button type="button" class="btn btn-primary" routerLink="/addAmbG">Agregar ambito geografico</button>
+    </div>
+    
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Nombre ambito geografico</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  class="table-hover" *ngFor="let ambitoGeografico of ambitosG">
+          <td>{{ ambitoGeografico.nombre_ambito_geografico }}</td>
+          <td>{{ estado(ambitoGeografico) }}</td> 
+          <td>
+            <a [routerLink]="['/editAmbG', ambitoGeografico.id_ambito_geografico]">
+              <button type="button" class="btn btn-primary btn-sm">Editar</button>
+            </a>
+            <button type="button" class="btn btn-primary btn-sm ms-3" (click)="deleteAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>

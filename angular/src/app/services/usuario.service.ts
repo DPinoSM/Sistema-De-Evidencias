@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, catchError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,44 +10,34 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  // Función para crear un usuario
-  createUser(usuarioData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/`, usuarioData).pipe(
-      catchError(error => this.handleError(error))
-    );
-  }
-
-  // Función para obtener la lista de usuarios
   getUsers(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/lista`).pipe(
-      catchError(error => this.handleError(error))
-    );
+    return this.http.get(`${this.baseUrl}/lista`)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Función para actualizar un usuario
-  updateUser(id: string, userData: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, userData).pipe(
-      catchError(error => this.handleError(error))
-    );
+  getUser(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}`)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Función para eliminar un usuario
-  deleteUser(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-      catchError(error => this.handleError(error))
-    );
+  newUser(data: any): Observable<any> {
+    return this.http.post(this.baseUrl, data)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Función para obtener un usuario por ID
-  getUserById(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`).pipe(
-      catchError(error => this.handleError(error))
-    );
+  updateUser(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, data)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Manejo de errores
-  private handleError(error: HttpErrorResponse) {
-    console.error('Error:', error);
-    return throwError(() => 'Ocurrió un error. Por favor, inténtelo de nuevo.');
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`)
+  }
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    console.error('Error en la solicitud:', error);
+    console.error('Estado HTTP:', error.status);
+    console.error('Mensaje de error:', error.message);
+    return of('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.');
   }
 }
