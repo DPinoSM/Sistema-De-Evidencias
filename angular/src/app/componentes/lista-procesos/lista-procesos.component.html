@@ -1,1 +1,55 @@
-<p>lista-procesos works!</p>
+<app-navbar></app-navbar>
+
+<div class="container mt-2">
+  <div class="title">
+    <h4>Listado de Procesos</h4>
+    <button
+      (click)="getListProcesos()"
+      type="button"
+      class="btn btn-dark"
+      routerLink="/addP"
+    >
+      Agregar Proceso
+    </button>
+  </div>
+  <div class="table-container mt-4">
+    <table
+    class="table table-bordered table-striped table-hover" style="border: 1px solid black;"
+    >
+      <thead>
+        <tr>
+          <th scope="col">N°</th>
+          <th scope="col">Codigo</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Estado</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let proceso of listaProcesos; index as i"
+          style="border: 1px solid black"
+        >
+          <td style="border: 1px solid black">{{ i + 1 }}</td>
+          <td style="border: 1px solid black">{{ proceso.codigo_procesos }}</td>
+          <td style="border: 1px solid black">{{ proceso.nombre_procesos }}</td>
+          <td style="border: 1px solid black">{{ traducirEstado(proceso) }}</td>
+          <td style="border: 1px solid black">
+            <a [routerLink]="['/editP/', proceso.id_procesos]">
+              <button type="button" class="btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </a>
+            <button
+              type="button"
+              class="btn ms-2"
+              (click)="deleteProceso(proceso.id_procesos!)"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

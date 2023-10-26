@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import { Registro } from '../models/registro';
 import { where } from 'sequelize';
+
 export const getRegistro = async(req: Request, res: Response) =>{  
     const listRegistro = await Registro.findAll({attributes:['id_registro','datos_registro','contenido_registro']});
     res.json(listRegistro)

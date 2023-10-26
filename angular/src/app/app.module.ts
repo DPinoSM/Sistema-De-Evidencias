@@ -29,6 +29,7 @@ import { AddEditUserComponent } from './componentes/add-edit-user/add-edit-user.
 import { AddEditUnidComponent } from './componentes/add-edit-unid/add-edit-unid.component';
 import { AddEditRegComponent } from './componentes/add-edit-reg/add-edit-reg.component';
 import { AddEditCriComponent } from './componentes/add-edit-cri/add-edit-cri.component';
+import { AddEditProcesosComponent } from './componentes/add-edit-procesos/add-edit-procesos.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AddEditCriComponent } from './componentes/add-edit-cri/add-edit-cri.com
     AdminComponent,
     InicioComponent,
     ListarolComponent,
+    AddEditProcesosComponent,
     AddEditRolesComponent,
     NavbarComponent,
     ListaAmbitosAComponent,
