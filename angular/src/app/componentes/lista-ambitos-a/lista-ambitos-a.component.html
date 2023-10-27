@@ -1,37 +1,42 @@
-<app-navbar></app-navbar>
-
-<div class="container">
-    <div class="title">
-      <h4>Listado de Ámbitos Académicos</h4>
-      <button type="button" class="btn btn-dark" routerLink="/addAmbitoA">Agregar Ámbito Académico</button>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h4>Listado de Ámbitos Académicos</h4>
+          <button type="button" class="btn btn-dark" routerLink="/addAmbitoA">Agregar Ámbito Académico</button>
+        </div>
+        
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Ámbito Académico</th>
+                <th scope="col">Nombre Ámbito Académico</th>
+                <th scope="col">Estado Ámbito Académico</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ambito of ambitosAcademicos" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ ambito.id_ambito_academico }}</td>
+                <td style="border: 1px solid black;">{{ ambito.nombre_ambito_academico }}</td>
+                <td style="border: 1px solid black;">{{ traducirEstado(ambito) }}</td>
+                <td style="border: 1px solid black;">
+                <a [routerLink]="['/editAmbitoA', ambito.id_ambito_academico]">
+                  <button type="button" class="btn">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </a>
+                <button type="button" class="btn ms-2" (click)="eliminarAmbitoAcademico(ambito.id_ambito_academico)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    
-    <div class="table-container mt-4">
-      <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
-        <thead>
-          <tr>
-            <th scope="col">ID Ambito Acedimico</th>
-            <th scope="col">Nombre Ambito Academico</th>
-            <th scope="col">Estado Ambito Academico</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let ambito of ambitosAcademicos" style="border: 1px solid black;">
-            <td style="border: 1px solid black;">{{ ambito.id_ambito_academico }}</td>
-            <td style="border: 1px solid black;">{{ ambito.nombre_ambito_academico }}</td>
-            <td style="border: 1px solid black;">{{ traducirEstado(ambito) }}</td>
-            <td style="border: 1px solid black;">
-            <a [routerLink]="['/editAmbitoA', ambito.id_ambito_academico]">
-              <button type="button" class="btn">
-                <i class="fas fa-pencil-alt"></i>
-              </button>
-            </a>
-            <button type="button" class="btn ms-2" (click)="eliminarAmbitoAcademico(ambito.id_ambito_academico)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 </div>

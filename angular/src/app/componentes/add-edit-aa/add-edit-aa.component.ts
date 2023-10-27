@@ -7,13 +7,14 @@ import { AmbitoAService } from 'src/app/services/ambito-a.service';
 @Component({
   selector: 'app-add-edit-aa',
   templateUrl: './add-edit-aa.component.html',
-  styleUrls: ['./add-edit-aa.component.css']
+  styleUrls: ['./add-edit-aa.component.css', '../../../shared-styles.css']
 })
 export class AddEditAaComponent implements OnInit {
   ambitosAcademicos: any[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
   editAmbitoAId: number | null = null;
+  sideNavStatus: boolean = false;
 
   constructor(
     private ambitoAService: AmbitoAService,

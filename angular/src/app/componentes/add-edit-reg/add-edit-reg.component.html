@@ -1,26 +1,31 @@
-<app-navbar></app-navbar>
-
-<div class="row mt-4">
-    <div class="col-lg-4 offset-lg-4">
-        <div class="card text-white bg-secondary mb-3" style="max-width: 25rem;">
-            <div class="card-header text-center">{{ editRegistroId ? 'Editar Registro' : 'Agregar Registro' }}</div>
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="row mt-4">
+        <div class="col-lg-4 offset-lg-4">
+          <div class="card text-white bg-secondary mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">{{editRegistroId ? 'Editar Registro' : 'Agregar Registro'}}</div>
             <div class="card-body">
-                <form [formGroup]="form" (ngSubmit)="createNewRegistro()">
-                    <input type="text" class="form-control mt-4" formControlName="datos" placeholder="Ingrese datos" required>
-                    <input type="text" class="form-control mt-4" formControlName="contenido" placeholder="Ingrese contenido" required>
-                    <div *ngIf="form?.get('datos')?.hasError('required') && form?.get('datos')?.touched" class="text-danger">Los datos son requeridos</div>
-                    <div *ngIf="form?.get('contenido')?.hasError('required') && form?.get('contenido')?.touched" class="text-danger">El contenido es requerido</div>
-                    <div *ngIf="errorMsg" class="text-danger">{{ errorMsg }}</div>
-                    <div class="row mt-2 text-center">
-                        <div class="col-lg-6">
-                            <button routerLink="/registro" type="button" class="btn btn-danger mt-3">Volver</button>
-                        </div>
-                        <div class="col-lg-6">
-                            <button type="submit" class="btn btn-primary mt-3" [disabled]="!form.valid">{{ editRegistroId ? 'Guardar' : 'Aceptar' }}</button>
-                        </div>
-                    </div>
-                </form>
+              <form [formGroup]="form" (ngSubmit)="createNewRegistro()">
+                <input type="text" class="form-control mt-4" formControlName="datos" placeholder="Ingrese datos" required>
+                <input type="text" class="form-control mt-4" formControlName="contenido" placeholder="Ingrese contenido" required>
+                <div *ngIf="form?.get('datos')?.hasError('required') && form?.get('datos')?.touched" class="text-danger">Los datos son requeridos</div>
+                <div *ngIf="form?.get('contenido')?.hasError('required') && form?.get('contenido')?.touched" class="text-danger">El contenido es requerido</div>
+                <div *ngIf="errorMsg" class="text-danger">{{errorMsg}}</div>
+                <div class="row mt-2 text-center">
+                  <div class="col-lg-6">
+                    <button routerLink="/registro" type="button" class="btn btn-danger mt-3">Volver</button>
+                  </div>
+                  <div class="col-lg-6">
+                    <button type="submit" class="btn btn-primary mt-3" [disabled]="!form.valid">{{editRegistroId ? 'Guardar' : 'Aceptar'}}</button>
+                  </div>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    </main>
+  </div>
+  

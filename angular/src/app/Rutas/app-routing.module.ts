@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { InicioComponent } from '../componentes/inicio/inicio.component';
-import { LoginComponent } from '../componentes/login/login.component';
-import { AdminComponent } from '../componentes/admin/admin.component';
+import { InicioComponent } from '../componentes/Principal/inicio/inicio.component';
+import { LoginComponent } from '../componentes/Principal/login/login.component';
+import { AdminComponent } from '../componentes/Principal/admin/admin.component';
 import { AddEditRolesComponent } from '../componentes/add-edit-roles/add-edit-roles.component';
 import { ListarolComponent } from '../componentes/lista-rol/listarol.component';
 import { ListaUnidadComponent } from '../componentes/lista-unidad/lista-unidad.component';
@@ -17,7 +17,6 @@ import { ListaCriteriosComponent } from '../componentes/lista-criterios/lista-cr
 import { ListaProcesosComponent } from '../componentes/lista-procesos/lista-procesos.component';
 import { AddEditCriComponent } from '../componentes/add-edit-cri/add-edit-cri.component';
 import { AddEditAaComponent } from '../componentes/add-edit-aa/add-edit-aa.component';
-import { NavbarComponent } from '../componentes/navbar/navbar.component';
 import { AddEditAgComponent } from '../componentes/add-edit-ag/add-edit-ag.component';
 import { ListaUsuariosComponent } from '../componentes/lista-usuarios/lista-usuarios.component';
 import { AddEditUserComponent } from '../componentes/add-edit-user/add-edit-user.component';
@@ -27,33 +26,35 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
+
   { path: 'rol', component: ListarolComponent },
   { path: 'unidad', component: ListaUnidadComponent },
   { path: 'registro', component: ListaRegistrosComponent },
   { path: 'ambitoA', component: ListaAmbitosAComponent },
   { path: 'criterio', component: ListaCriteriosComponent },
   { path: 'process', component: ListaProcesosComponent },
-  { path: 'navbar', component: NavbarComponent },
+  { path: 'ambitoG', component: ListaAmbitoGComponent },
+  { path: 'usuarios', component: ListaUsuariosComponent},
+
 
   { path: 'addR', component: AddEditRolesComponent },
   { path: 'addU', component: AddEditUnidComponent },
   { path: 'addRg', component: AddEditRegComponent },
   { path: 'addC', component: AddEditCriComponent },
   { path: 'addAmbitoA', component: AddEditAaComponent },
+  { path: 'addAmbG', component: AddEditAgComponent},
+  { path: 'addUsuario', component:AddEditUserComponent},
 
   { path: 'editR/:id', component: AddEditRolesComponent },
   { path: 'editU/:id', component: AddEditUnidComponent },
   { path: 'editRg/:id', component: AddEditRegComponent },
   { path: 'editC/:id', component: AddEditRegComponent },
   { path: 'editAmbitoA/:id', component: AddEditAaComponent },
-
-  { path: 'ambitoG', component: ListaAmbitoGComponent },
-  { path: 'addAmbG', component: AddEditAgComponent},
   { path: 'editAmbG/:id', component: AddEditAgComponent},
-
-  { path: 'usuarios', component: ListaUsuariosComponent},
-  { path: 'addUsuario', component:AddEditUserComponent}, //agregar usuarios 
-  { path: 'editUsuario/:id', component:AddEditUserComponent} ,//editar usuarios
+  { path: 'editUsuario/:id', component:AddEditUserComponent} ,
+  
+  
+  
 ];
 
 @NgModule({

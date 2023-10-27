@@ -1,35 +1,40 @@
-<app-navbar></app-navbar>
-
-<div class="row mt-4">
-    <div class="col-lg-4 offset-lg-4">
-        <div class="card text-white bg-secondary mb-3" style="max-width: 25rem;">
-            <div class="card-header text-center">{{ editAmbitoAId ? 'Editar Ámbito Académico' : 'Agregar Ámbito Académico' }}</div>
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="row mt-4">
+        <div class="col-lg-4 offset-lg-4">
+          <div class="card text-white bg-secondary mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">{{editAmbitoAId ? 'Editar Ámbito Académico' : 'Agregar Ámbito Académico'}}</div>
             <div class="card-body">
-                <form [formGroup]="form" (ngSubmit)="guardarAmbitoA($event)">
-                    <div class="form-group">
-                        <label for="nombre_ambito_academico">Nombre</label>
-                        <input type="text" id="nombre_ambito_academico" class="form-control" formControlName="nombre_ambito_academico" placeholder="Ingrese nombre del ámbito académico" required>
-                        <div *ngIf="form.get('nombre ambito academico')?.hasError('required') && form.get('nombre ambito academico')?.touched" class="text-danger">El nombre es obligatorio</div>
-                    </div>
-                    
-                    <div class="form-check form-switch bg-secondary mt-3">
-                        <input class="form-check-input" type="checkbox" id="estado_ambito_academico" formControlName="estado_ambito_academico">
-                        <label class="form-check-label" for="estado_ambito_academico"></label>
-                        <div *ngIf="form.get('estado_ambito_academico')?.hasError('required') && form.get('estado_ambito_academico')?.touched" class="text-danger">El estado es obligatorio</div>
-                    </div>
-
-                    <div *ngIf="errorMsg" class="text-danger">{{ errorMsg }}</div>
-
-                    <div class="row mt-2 text-center">
-                        <div class="col-lg-6">
-                            <button routerLink="/ambitoA" type="button" class="btn btn-danger mt-3">Volver</button>
-                        </div>
-                        <div class="col-lg-6">
-                            <button type="submit" class="btn btn-primary mt-3" [disabled]="!form.valid">Aceptar</button>
-                        </div>
-                    </div>
-                </form>
+              <form [formGroup]="form" (ngSubmit)="guardarAmbitoA($event)">
+                <div class="form-group">
+                  <label for="nombre_ambito_academico">Nombre</label>
+                  <input type="text" id="nombre_ambito_academico" class="form-control" formControlName="nombre_ambito_academico" placeholder="Ingrese nombre del ámbito académico" required>
+                  <div *ngIf="form.get('nombre_ambito_academico')?.hasError('required') && form.get('nombre_ambito_academico')?.touched" class="text-danger">El nombre es obligatorio</div>
+                </div>
+                
+                <div class="form-check form-switch bg-secondary mt-3">
+                  <input class="form-check-input" type="checkbox" id="estado_ambito_academico" formControlName="estado_ambito_academico">
+                  <label class="form-check-label" for="estado_ambito_academico"></label>
+                  <div *ngIf="form.get('estado_ambito_academico')?.hasError('required') && form.get('estado_ambito_academico')?.touched" class="text-danger">El estado es obligatorio</div>
+                </div>
+  
+                <div *ngIf="errorMsg" class="text-danger">{{ errorMsg }}</div>
+  
+                <div class="row mt-2 text-center">
+                  <div class="col-lg-6">
+                    <button routerLink="/ambitoA" type="button" class="btn btn-danger mt-3">Volver</button>
+                  </div>
+                  <div class="col-lg-6">
+                    <button type="submit" class="btn btn-primary mt-3" [disabled]="!form.valid">Aceptar</button>
+                  </div>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    </main>
+  </div>
+  

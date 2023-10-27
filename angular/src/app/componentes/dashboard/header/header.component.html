@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand navbar-dark bg px-2">
+    <div class="side-nav-button p-2 me-3 text-light" (click)="SideNavToggle()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+    <a class="navbar-brand px-4" href="#">Administración</a>
+    <div class="navbar-collapse">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/rol">Roles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/unidad">Unidades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/criterio">Criterios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/registro">Tipos de Registro</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/process">Procesos</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    Ambitos
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" href="/ambitoA">Ambito Academico</a></li>
+                    <li><a class="dropdown-item" href="/ambitoG">Ambito Geografico</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="profile-logo dropstart">
+        <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+            Rohan
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a href="#" class="dropdown-item">Sign Up</a></li>
+            <li><a href="#" class="dropdown-item">Log In</a></li>
+            <li><a href="#" class="dropdown-item">Your Profile</a></li>
+            <li><a href="#" class="dropdown-item">Log Out</a></li>
+        </ul>
+    </div>
+</nav>

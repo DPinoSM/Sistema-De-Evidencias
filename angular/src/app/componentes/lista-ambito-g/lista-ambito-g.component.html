@@ -1,31 +1,34 @@
-<app-navbar></app-navbar>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="container">
+      <div class="title">
+        <h4>Listado de Ámbitos Geográficos</h4>
+        <button type="button" class="btn btn-primary" routerLink="/addAmbG">Agregar Ámbito Geográfico</button>
+      </div>
 
-<div class="container">
-    <div class="title">
-      <h4>Listado de Ambitos geograficos</h4>
-      <button type="button" class="btn btn-primary" routerLink="/addAmbG">Agregar ambito geografico</button>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Nombre Ámbito Geográfico</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-hover" *ngFor="let ambitoGeografico of ambitosG">
+            <td>{{ ambitoGeografico.nombre_ambito_geografico }}</td>
+            <td>{{ estado(ambitoGeografico) }}</td>
+            <td>
+              <a [routerLink]="['/editAmbG', ambitoGeografico.id_ambito_geografico]">
+                <button type="button" class="btn btn-primary btn-sm">Editar</button>
+              </a>
+              <button type="button" class="btn btn-primary btn-sm ms-3" (click)="deleteAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Nombre ambito geografico</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr  class="table-hover" *ngFor="let ambitoGeografico of ambitosG">
-          <td>{{ ambitoGeografico.nombre_ambito_geografico }}</td>
-          <td>{{ estado(ambitoGeografico) }}</td> 
-          <td>
-            <a [routerLink]="['/editAmbG', ambitoGeografico.id_ambito_geografico]">
-              <button type="button" class="btn btn-primary btn-sm">Editar</button>
-            </a>
-            <button type="button" class="btn btn-primary btn-sm ms-3" (click)="deleteAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-      
-    </table>
-  </div>
+  </main>
+</div>

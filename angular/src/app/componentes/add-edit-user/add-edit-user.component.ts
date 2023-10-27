@@ -7,13 +7,14 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-user',
   templateUrl: './add-edit-user.component.html',
-  styleUrls: ['./add-edit-user.component.css']
+  styleUrls: ['./add-edit-user.component.css', '../../../shared-styles.css']
 })
 export class AddEditUserComponent implements OnInit{
   usuarios: any[] = [];
   errorMsg: string | undefined;
   formUsuario: FormGroup;
   editUsuarioId: number | null = null;
+  sideNavStatus: boolean = false;
 
 
 constructor(

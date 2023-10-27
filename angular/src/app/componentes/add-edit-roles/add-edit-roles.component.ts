@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-roles',  
   templateUrl: './add-edit-roles.component.html',  
-  styleUrls: ['./add-edit-roles.component.css']  
+  styleUrls: ['./add-edit-roles.component.css', '../../../shared-styles.css']  
 })
 
 export class AddEditRolesComponent implements OnInit {
@@ -18,6 +18,7 @@ export class AddEditRolesComponent implements OnInit {
   errorMsg: string | undefined;
   form: FormGroup;
   editRoleId: number | null = null;
+  sideNavStatus: boolean = false;
 
   constructor(private rolService: RolService, private route: ActivatedRoute, private toastr: ToastrService) {
     this.form = new FormGroup({

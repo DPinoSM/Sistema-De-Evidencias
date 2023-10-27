@@ -7,12 +7,13 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-list-registros',
   templateUrl: './lista-registros.component.html',
-  styleUrls: ['./lista-registros.component.css']
+  styleUrls: ['./lista-registros.component.css', '../../../shared-styles.css']
 })
 export class ListaRegistrosComponent implements OnInit {
   registros: any[] = [];
   newRegistroData: any;
   private registrosSubscription!: Subscription;
+  sideNavStatus: boolean = false;
 
   constructor(private registroService: RegistroService, private toastr: ToastrService ) {
     this.newRegistroData = {

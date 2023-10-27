@@ -7,13 +7,14 @@ import { AmbitoGeograficoService } from 'src/app/services/ambito-geografico.serv
 @Component({
   selector: 'app-add-edit-ag',
   templateUrl: './add-edit-ag.component.html',
-  styleUrls: ['./add-edit-ag.component.css']
+  styleUrls: ['./add-edit-ag.component.css', '../../../shared-styles.css']
 })
 export class AddEditAgComponent  implements OnInit{
-  ambitosG: any[] = []; //almacena ambitos geograficos
+  ambitosG: any[] = []; 
   errorMsg: string | undefined;
-  formAmG: FormGroup; //formulario
-  editAmGeId: number | null = null; //rastrea el id ve si es numero o nulo
+  formAmG: FormGroup;
+  editAmGeId: number | null = null; 
+  sideNavStatus: boolean = false;
 
 constructor(
   private ambitoGeograficoService: AmbitoGeograficoService,

@@ -7,13 +7,14 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-unid',
   templateUrl: './add-edit-unid.component.html',
-  styleUrls: ['./add-edit-unid.component.css']
+  styleUrls: ['./add-edit-unid.component.css', '../../../shared-styles.css']
 })
 export class AddEditUnidComponent implements OnInit {
   unidades: any[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
   editUnidadId: number | null = null;
+  sideNavStatus: boolean = false;
 
   constructor(
     private unidadService: UnidadService,

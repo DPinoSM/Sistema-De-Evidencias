@@ -8,13 +8,13 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-listarol',
   templateUrl: './listarol.component.html',
-  styleUrls: ['./listarol.component.css']
+  styleUrls: ['./listarol.component.css','../../../shared-styles.css']
 })
 export class ListarolComponent implements OnInit {
   roles: any[] = [];
   newRolData: any;
   private rolesSubscription!: Subscription;
-  collapsed: boolean = false; 
+  sideNavStatus: boolean = false;
 
   constructor(private rolService: RolService, private toastr: ToastrService) {
     this.newRolData = {
@@ -48,9 +48,5 @@ export class ListarolComponent implements OnInit {
       this.getRoles();
       this.toastr.warning('El rol fue eliminado con éxito', 'Rol eliminado');
     });
-  }
-
-  toggleCollapse() {
-    this.collapsed = !this.collapsed;
   }
 }

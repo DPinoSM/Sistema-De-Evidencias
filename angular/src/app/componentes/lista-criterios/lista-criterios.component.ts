@@ -13,11 +13,12 @@ interface Criterio {
 @Component({
   selector: 'app-lista-criterios',
   templateUrl: './lista-criterios.component.html',
-  styleUrls: ['./lista-criterios.component.css']
+  styleUrls: ['./lista-criterios.component.css', '../../../shared-styles.css']
 })
 export class ListaCriteriosComponent implements OnInit {
   criterios: Criterio[] = [];
   errorMsg: string | undefined;
+  sideNavStatus: boolean = false;
 
   constructor(private criterioService: CriterioService, private toastr: ToastrService) {}
 

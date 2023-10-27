@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-reg',
   templateUrl: './add-edit-reg.component.html',
-  styleUrls: ['./add-edit-reg.component.css']
+  styleUrls: ['./add-edit-reg.component.css', '../../../shared-styles.css']
 })
 export class AddEditRegComponent implements OnInit {
   registros: any[] = [];
@@ -17,6 +17,7 @@ export class AddEditRegComponent implements OnInit {
   form: FormGroup;
   editRegistroId: number | null = null;
   registroSeleccionado: any = {};
+  sideNavStatus: boolean = false;
 
   constructor(private registroService: RegistroService, private route: ActivatedRoute, private toastr: ToastrService) {
     this.form = new FormGroup({

@@ -1,31 +1,36 @@
-<app-navbar></app-navbar>
-
-<div class="row mt-4">
-    <div class="col-lg-4 offset-lg-4">
-        <div class="card border-primary mb-3" style="max-width: 25rem;">
-            <div class="card-header text-center">{{ editAmGeId ? 'Editar ambito geografico' : 'Agregar ambito geografico' }}</div>
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="row mt-4">
+        <div class="col-lg-4 offset-lg-4">
+          <div class="card border-primary mb-3" style="max-width: 25rem;">
+            <div class="card-header text-center">{{editAmGeId ? 'Editar ámbito geográfico' : 'Agregar ámbito geográfico'}}</div>
             <div class="card-body">
-                    <form [formGroup]="formAmG" (ngSubmit)="guardarAmbitoG($event)"> 
-                        <div class="form-group col">
-                          <input formControlName="nombre_ambito_geografico"  type="text" class="form-control" placeholder="Ambito Geografico"/>
-                          <div *ngIf="formAmG.get('nombre_ambito_geografico')?.hasError('required') && formAmG.get('nombre_ambito_geografico')?.touched" class="text-danger">el campo ambito nombre ambito es requerido</div>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" formControlName="estado_ambito_geografico" id="estado_ambito_geografico">
-                            <label class="form-check-label" for="estado_ambito_geografico">
-                              {{ formAmG.value.estado_ambito_geografico ? 'Activo' : 'Inactivo' }}
-                            </label>
-                          </div>
-                    <div class="row mt-2 text-center">
-                        <div class="col-lg-6">
-                            <button routerLink="/ambitoG" type="button" class="btn btn-danger mt-3">Volver</button>
-                        </div>
-                        <div class="col-lg-6">
-                            <button type="submit" class="btn btn-primary mt-3" [disabled]="!formAmG.valid">Agregar</button>
-                        </div>
-                    </div>
-                </form>
+              <form [formGroup]="formAmG" (ngSubmit)="guardarAmbitoG($event)"> 
+                <div class="form-group col">
+                  <input formControlName="nombre_ambito_geografico" type="text" class="form-control" placeholder="Ámbito Geográfico"/>
+                  <div *ngIf="formAmG.get('nombre_ambito_geografico')?.hasError('required') && formAmG.get('nombre_ambito_geografico')?.touched" class="text-danger">El campo nombre ámbito es requerido</div>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" formControlName="estado_ambito_geografico" id="estado_ambito_geografico">
+                  <label class="form-check-label" for="estado_ambito_geografico">
+                    {{ formAmG.value.estado_ambito_geografico ? 'Activo' : 'Inactivo' }}
+                  </label>
+                </div>
+                <div class="row mt-2 text-center">
+                  <div class="col-lg-6">
+                    <button routerLink="/ambitoG" type="button" class="btn btn-danger mt-3">Volver</button>
+                  </div>
+                  <div class="col-lg-6">
+                    <button type="submit" class="btn btn-primary mt-3" [disabled]="!formAmG.valid">Agregar</button>
+                  </div>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    </main>
+  </div>
+  

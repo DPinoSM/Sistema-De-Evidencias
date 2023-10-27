@@ -11,11 +11,12 @@ interface AmbitoAcademico {
 @Component({
   selector: 'app-lista-ambitos-a',
   templateUrl: './lista-ambitos-a.component.html',
-  styleUrls: ['./lista-ambitos-a.component.css']
+  styleUrls: ['./lista-ambitos-a.component.css', '../../../shared-styles.css']
 })
 export class ListaAmbitosAComponent implements OnInit {
   ambitosAcademicos: AmbitoAcademico[] = [];
   errorMsg: string | undefined;
+  sideNavStatus: boolean = false;
 
   constructor(private ambitoAService: AmbitoAService, private toastr: ToastrService) {}
 

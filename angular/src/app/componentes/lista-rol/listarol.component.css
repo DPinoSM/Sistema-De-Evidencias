@@ -3,18 +3,6 @@
     display: flex;
     justify-content: space-between;
 }
-
-.smaller-table {
-    font-size: 12px; /* Tamaño de fuente más pequeño */
-    border-collapse: collapse; /* Elimina espacios entre celdas */
-    width: 80%; /* Ancho de la tabla, ajusta según tus necesidades */
-  }
-  
-  .smaller-table th,
-  .smaller-table td {
-    padding: 8px; /* Espaciado interno de las celdas */
-  }
-
   .icon-no-bg {
     background-color: transparent !important;
     border: none !important;
@@ -22,13 +10,4 @@
   }
   
 
-  table.table tbody tr {
-    margin-bottom: 10px;
-  }
-  
-  .table-collapsed {
-    width: calc(100% - 250px); 
-    margin-left: 250px; 
-  }
-  
   

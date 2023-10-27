@@ -7,13 +7,14 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-cri',
   templateUrl: './add-edit-cri.component.html',
-  styleUrls: ['./add-edit-cri.component.css']
+  styleUrls: ['./add-edit-cri.component.css', '../../../shared-styles.css']
 })
 export class AddEditCriComponent implements OnInit {
   criterios: any[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
   editCriterioId: number | null = null;
+  sideNavStatus: boolean = false;
 
   constructor(
     private criterioService: CriterioService,

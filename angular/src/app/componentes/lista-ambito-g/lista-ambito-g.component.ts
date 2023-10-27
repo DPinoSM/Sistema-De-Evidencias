@@ -13,12 +13,13 @@ interface AmbitoGeografico{
 @Component({
   selector: 'app-lista-ambito-g',
   templateUrl: './lista-ambito-g.component.html',
-  styleUrls: ['./lista-ambito-g.component.css']
+  styleUrls: ['./lista-ambito-g.component.css', '../../../shared-styles.css']
 })
 export class ListaAmbitoGComponent implements OnInit {
   // Variable para almacenar la lista de usuarios
   ambitosG: AmbitoGeografico[] = [];
   errorMsg: string | undefined; 
+  sideNavStatus: boolean = false;
   
   constructor(
     private ambitoGeograficoService: AmbitoGeograficoService, private toastr: ToastrService) {} 

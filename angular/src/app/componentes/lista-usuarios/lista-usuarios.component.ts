@@ -16,13 +16,14 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 @Component({
   selector: 'app-lista-usuarios',
   templateUrl: './lista-usuarios.component.html',
-  styleUrls: ['./lista-usuarios.component.css']
+  styleUrls: ['./lista-usuarios.component.css', '../../../shared-styles.css']
 })
 
 export class ListaUsuariosComponent  implements OnInit {
   // Variable para almacenar la lista de usuarios
   usuarios: User[] = [];
   errorMsg: string | undefined;
+  sideNavStatus: boolean = false;
   
 
 

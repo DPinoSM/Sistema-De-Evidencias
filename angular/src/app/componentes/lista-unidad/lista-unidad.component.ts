@@ -12,11 +12,12 @@ interface Unidad {
 @Component({
   selector: 'app-lista-unidad',
   templateUrl: './lista-unidad.component.html',
-  styleUrls: ['./lista-unidad.component.css']
+  styleUrls: ['./lista-unidad.component.css', '../../../shared-styles.css']
 })
 export class ListaUnidadComponent implements OnInit {
   unidades: Unidad[] = [];
   errorMsg: string | undefined;
+  sideNavStatus: boolean = false;
 
   constructor(private unidadService: UnidadService, private toastr: ToastrService) {}
 
