@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CriterioService } from 'src/app/services/criterio.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
-interface Criterio {
-  id_criterios: number;
-  nombre_criterios: string;
-  codigo_criterios: number;
-  descripcion_criterios: string;
-  estado_criterios: boolean | null;
-}
+import { CriterioService } from 'src/app/services/criterio.service';
+import { Criterio } from '../../interfaces/criterio.interface';
 
 @Component({
   selector: 'app-lista-criterios',
@@ -37,6 +30,7 @@ export class ListaCriteriosComponent implements OnInit {
       descripcion_criterios: ['', [Validators.required]],
       estado_criterios: [true, [Validators.required]]
     });
+    
   }
 
   ngOnInit() {
@@ -57,9 +51,10 @@ export class ListaCriteriosComponent implements OnInit {
     if (id !== null) {
       this.getCriterio(id);
     } else {
-      this.form.reset();
+      this.form.reset(); 
     }
   }
+  
 
   cancelarEdicion() {
     this.criteriosEditId = null;
@@ -69,19 +64,13 @@ export class ListaCriteriosComponent implements OnInit {
 
   guardarCriterio(event: Event) {
     event.preventDefault();
-
     if (this.form.valid) {
-      const nombreCriterio = this.form.get('nombre_criterios')?.value;
-      const codigoCriterio = this.form.get('codigo_criterios')?.value;
-      const descripcionCriterio = this.form.get('descripcion_criterios')?.value;
-      const estadoCriterio = this.form.get('estado_criterios')?.value;
-
+      const { nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios } = this.form.value;
       if (this.criteriosEditId !== null) {
-        this.editarCriterios(this.criteriosEditId, nombreCriterio, codigoCriterio, descripcionCriterio);
+        this.editarCriterios(this.criteriosEditId, nombre_criterios, codigo_criterios, descripcion_criterios);
       } else {
-        this.crearCriterios(nombreCriterio, codigoCriterio, descripcionCriterio, estadoCriterio);
+        this.crearCriterios(nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios);
       }
-      
       this.mostrarFormularioAgregarCriterios = false;
     }
   }
@@ -90,8 +79,12 @@ export class ListaCriteriosComponent implements OnInit {
     if (id !== null) {
       this.criterioService.getCriterioById(id).subscribe((criterio) => {
         if (criterio && this.form) {
-          const { nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios } = criterio;
-          this.form.setValue({ nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios });
+          this.form.setValue({
+            nombre_criterios: criterio.nombre_criterios,
+            codigo_criterios: criterio.codigo_criterios,
+            descripcion_criterios: criterio.descripcion_criterios,
+            estado_criterios: criterio.estado_criterios
+          });
         }
       });
     } else {
@@ -101,6 +94,7 @@ export class ListaCriteriosComponent implements OnInit {
       });
     }
   }
+  
 
   actualizarListaDeCriterios() {
     this.criterioService.getCriterios().subscribe((data) => {
@@ -113,11 +107,7 @@ export class ListaCriteriosComponent implements OnInit {
     if (this.form) {
       this.criterioService.updateCriterio(id, { nombre_criterios, codigo_criterios, descripcion_criterios })
         .subscribe({
-          next: (respuesta) => {
-            console.log('Criterios actualizado exitosamente', respuesta);
-            this.actualizarListaDeCriterios();
-            this.toastr.success('El criterios fue editado correctamente', 'Criterios Editado');
-          },
+          next: () => this.handleSuccess('Criterios Editado'),
           error: (error) => this.handleError(error)
         });
     }
@@ -126,11 +116,7 @@ export class ListaCriteriosComponent implements OnInit {
   crearCriterios(nombre_criterios: string, codigo_criterios: number, descripcion_criterios: string, estado_criterios: boolean) {
     this.criterioService.createCriterio({ nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios })
       .subscribe({
-        next: (respuesta) => {
-          console.log('Criterios creado exitosamente', respuesta);
-          this.actualizarListaDeCriterios();
-          this.toastr.success('El criterios fue creado con éxito', 'Criterios Creado');
-        },
+        next: () => this.handleSuccess('Criterios Creado'),
         error: (error) => this.handleError(error)
       });
   }
@@ -138,11 +124,7 @@ export class ListaCriteriosComponent implements OnInit {
   eliminarCriterios(id: number) {
     if (id) {
       this.criterioService.deleteCriterio(id).subscribe({
-        next: (respuesta) => {
-          console.log('Criterios eliminado exitosamente', respuesta);
-          this.actualizarListaDeCriterios();
-          this.toastr.success('El criterios fue eliminado correctamente', 'Criterios Eliminado');
-        },
+        next: () => this.handleSuccess('Criterios Eliminado'),
         error: (error) => this.handleError(error)
       });
     } else {
@@ -152,20 +134,19 @@ export class ListaCriteriosComponent implements OnInit {
 
   cambiarEstadoCriterios(id: number) {
     const criterios = this.criterios.find((c) => c.id_criterios === id);
-
     if (criterios) {
       const nuevoEstado = !criterios.estado_criterios;
-
       this.criterioService.updateCriterio(id, { estado_criterios: nuevoEstado })
         .subscribe({
-          next: (respuesta) => {
-            console.log('Estado del criterios actualizado exitosamente', respuesta);
-            criterios.estado_criterios = nuevoEstado;
-            this.toastr.success('El estado del criterios fue actualizado correctamente', 'Estado del Criterios Actualizado');
-          },
+          next: () => this.handleSuccess('Estado del Criterios Actualizado'),
           error: (error) => this.handleError(error)
         });
     }
+  }
+
+  private handleSuccess(message: string) {
+    this.actualizarListaDeCriterios();
+    this.toastr.success(`El ${message.toLowerCase()} correctamente`, message);
   }
 
   private handleError(error: any) {

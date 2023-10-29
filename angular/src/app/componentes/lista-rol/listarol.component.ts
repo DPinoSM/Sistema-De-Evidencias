@@ -5,19 +5,21 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Rol } from 'src/app/interfaces/rol.interface';
 
 @Component({
   selector: 'app-listaroles',
   templateUrl: './listarol.component.html',
   styleUrls: ['./listarol.component.css', '../../../shared-styles.css']
 })
+
 export class ListarolComponent implements OnInit {
   roles: any[] = [];
   nombreRol: string = '';
   errorMsg: string | undefined;
   form: FormGroup;
-  editRoleId: number | null = null;
   sideNavStatus: boolean = false;
+  editRoleId: number | null = null;
   mostrarFormularioAgregarRol: boolean = false;
   private rolesSubscription!: Subscription;
 
@@ -49,11 +51,10 @@ export class ListarolComponent implements OnInit {
     }
     this.mostrarFormularioAgregarRol = true;
   }
-  
 
   cancelarEdicion() {
-    this.mostrarFormularioAgregarRol = false; 
-    this.editRoleId = null; 
+    this.mostrarFormularioAgregarRol = false;
+    this.editRoleId = null;
     this.form.reset();
   }
 
@@ -64,23 +65,27 @@ export class ListarolComponent implements OnInit {
       if (this.editRoleId) {
         this.editarRol(this.editRoleId, nombreRol);
       } else {
-        this.rolService.createRol(nombreRol).subscribe({
-          next: (respuesta) => {
-            console.log('Rol creado exitosamente', respuesta);
-            this.actualizarListaDeRoles();
-            this.toastr.warning('El rol fue creado con éxito', 'Rol Creado');
-          },
-          error: (error) => {
-            if (error && error.msg) {
-              this.errorMsg = error.msg;
-              console.error('Error al crear el rol', error);
-            }
-          }
-        });
+        this.realizarOperacionDeRol(() => this.rolService.createRol(nombreRol), 'Rol Creado');
       }
-
-      this.mostrarFormularioAgregarRol = false;
     }
+
+    this.mostrarFormularioAgregarRol = false;
+  }
+
+  private realizarOperacionDeRol(operacion: () => any, mensajeExitoso: string) {
+    operacion().subscribe({
+      next: (respuesta: any) => {
+        console.log(`${mensajeExitoso} exitosamente`, respuesta);
+        this.actualizarListaDeRoles();
+        this.toastr.warning(`El rol fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
+      },
+      error: (error: any) => {
+        if (error && error.msg) {
+          this.errorMsg = error.msg;
+          console.error(`Error al ${mensajeExitoso.toLowerCase()} el rol`, error);
+        }
+      }
+    });
   }
 
   obtenerRol(id: number) {
@@ -108,19 +113,7 @@ export class ListarolComponent implements OnInit {
   }
 
   editarRol(id: number, nombre: string) {
-    this.rolService.updateRol(id, nombre).subscribe({
-      next: (respuesta) => {
-        console.log('Rol actualizado exitosamente', respuesta);
-        this.actualizarListaDeRoles();
-        this.toastr.warning('El rol fue editado correctamente', 'Rol editado');
-      },
-      error: (error) => {
-        if (error && error.msg) {
-          this.errorMsg = error.msg;
-          console.error('Error al actualizar el rol', error);
-        }
-      }
-    });
+    this.realizarOperacionDeRol(() => this.rolService.updateRol(id, nombre), 'Rol Editado');
   }
 
   eliminarRol(id: number) {

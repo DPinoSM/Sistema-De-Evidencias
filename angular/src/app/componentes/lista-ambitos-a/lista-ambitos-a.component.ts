@@ -71,22 +71,7 @@ export class ListaAmbitosAComponent implements OnInit {
       if (this.ambitoAcademicoEditId) {
         this.editarAmbitoAcademico(this.ambitoAcademicoEditId, nombreAmbitoAcademico, estadoAmbitoAcademico);
       } else {
-        this.ambitoAService.newAmbitoAcademico({
-          nombre_ambito_academico: nombreAmbitoAcademico,
-          estado_ambito_academico: estadoAmbitoAcademico
-        }).subscribe({
-          next: (respuesta) => {
-            console.log('Ámbito académico creado exitosamente', respuesta);
-            this.actualizarListaDeAmbitosAcademicos();
-            this.toastr.success('El ámbito académico fue creado con éxito', 'Ámbito Académico Creado');
-          },
-          error: (error) => {
-            if (error && error.msg) {
-              this.errorMsg = error.msg;
-              console.error('Error al crear el ámbito académico', error);
-            }
-          }
-        });
+        this.crearAmbitoAcademico(nombreAmbitoAcademico, estadoAmbitoAcademico);
       }
 
       this.mostrarFormularioAgregarAmbitoAcademico = false;
@@ -115,15 +100,24 @@ export class ListaAmbitosAComponent implements OnInit {
       estado_ambito_academico: estadoAmbitoAcademico
     }).subscribe({
       next: (respuesta) => {
-        console.log('Ámbito académico actualizado exitosamente', respuesta);
-        this.actualizarListaDeAmbitosAcademicos();
-        this.toastr.success('El ámbito académico fue editado correctamente', 'Ámbito Académico Editado');
+        this.procesarRespuestaExitosa(respuesta, 'Ámbito académico actualizado exitosamente', 'El ámbito académico fue editado correctamente', 'Ámbito Académico Editado');
       },
       error: (error) => {
-        if (error && error.msg) {
-          this.errorMsg = error.msg;
-          console.error('Error al actualizar el ámbito académico', error);
-        }
+        this.procesarError(error, 'Error al actualizar el ámbito académico', 'Error al actualizar el estado del ámbito académico');
+      }
+    });
+  }
+
+  crearAmbitoAcademico(nombreAmbitoAcademico: string, estadoAmbitoAcademico: boolean) {
+    this.ambitoAService.newAmbitoAcademico({
+      nombre_ambito_academico: nombreAmbitoAcademico,
+      estado_ambito_academico: estadoAmbitoAcademico
+    }).subscribe({
+      next: (respuesta) => {
+        this.procesarRespuestaExitosa(respuesta, 'Ámbito académico creado exitosamente', 'El ámbito académico fue creado con éxito', 'Ámbito Académico Creado');
+      },
+      error: (error) => {
+        this.procesarError(error, 'Error al crear el ámbito académico', 'Error al crear el ámbito académico');
       }
     });
   }
@@ -132,41 +126,45 @@ export class ListaAmbitosAComponent implements OnInit {
     if (id) {
       this.ambitoAService.deleteAmbitoAcademico(id).subscribe({
         next: (respuesta) => {
-          console.log('Ámbito académico eliminado exitosamente', respuesta);
-          this.actualizarListaDeAmbitosAcademicos();
-          this.toastr.warning('El ámbito académico fue eliminado correctamente', 'Ámbito Académico Eliminado');
+          this.procesarRespuestaExitosa(respuesta, 'Ámbito académico eliminado exitosamente', 'El ámbito académico fue eliminado correctamente', 'Ámbito Académico Eliminado');
         },
         error: (error) => {
-          if (error && error.msg) {
-            this.errorMsg = error.msg;
-            console.error('Error al eliminar el ámbito académico', error);
-          }
+          this.procesarError(error, 'Error al eliminar el ámbito académico', 'Error al eliminar el ámbito académico');
         }
       });
     } else {
       console.error('ID de ámbito académico no válido');
     }
-  
   }
+
   cambiarEstadoAmbitoAcademico(id: number) {
     const ambito = this.ambitosAcademicos.find((ambito) => ambito.id_ambito_academico === id);
-  
+
     if (ambito) {
       ambito.estado_ambito_academico = !ambito.estado_ambito_academico;
       this.ambitoAService.updateAmbitoAcademico(id, {
         estado_ambito_academico: ambito.estado_ambito_academico,
       }).subscribe({
         next: (respuesta) => {
-          console.log('Estado del ámbito académico actualizado exitosamente', respuesta);
-          this.toastr.success('El estado del ámbito académico ha sido cambiado', 'Estado Cambiado');
+          this.procesarRespuestaExitosa(respuesta, 'Estado del ámbito académico actualizado exitosamente', 'El estado del ámbito académico ha sido cambiado', 'Estado Cambiado');
         },
         error: (error) => {
-          if (error && error.msg) {
-            this.errorMsg = error.msg;
-            console.error('Error al actualizar el estado del ámbito académico', error);
-          }
+          this.procesarError(error, 'Error al actualizar el estado del ámbito académico', 'Error al actualizar el estado del ámbito académico');
         },
       });
+    }
+  }
+
+  private procesarRespuestaExitosa(respuesta: any, logMessage: string, toastrMessage: string, toastrTitle: string) {
+    console.log(logMessage, respuesta);
+    this.actualizarListaDeAmbitosAcademicos();
+    this.toastr.success(toastrMessage, toastrTitle);
+  }
+
+  private procesarError(error: any, logMessage: string, toastrMessage: string) {
+    if (error && error.msg) {
+      this.errorMsg = error.msg;
+      console.error(logMessage, error);
     }
   }
 }
