@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { Rol } from 'src/app/interfaces/rol.interface';
+import { Rol } from '../../interfaces/rol.interface';
 
 @Component({
   selector: 'app-listaroles',
@@ -14,8 +14,8 @@ import { Rol } from 'src/app/interfaces/rol.interface';
 })
 
 export class ListarolComponent implements OnInit {
-  roles: any[] = [];
-  nombreRol: string = '';
+  roles: Rol[] = [];
+  nombre_rol: string = '';
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
@@ -60,12 +60,12 @@ export class ListarolComponent implements OnInit {
 
   crearNuevoRol() {
     if (this.form.valid) {
-      const nombreRol = this.form.get('nombre')?.value;
+      const nombre_rol = this.form.get('nombre')?.value;
 
       if (this.editRoleId) {
-        this.editarRol(this.editRoleId, nombreRol);
+        this.editarRol(this.editRoleId, nombre_rol);
       } else {
-        this.realizarOperacionDeRol(() => this.rolService.createRol(nombreRol), 'Rol Creado');
+        this.realizarOperacionDeRol(() => this.rolService.createRol(nombre_rol), 'Rol Creado');
       }
     }
 
@@ -89,9 +89,9 @@ export class ListarolComponent implements OnInit {
   }
 
   obtenerRol(id: number) {
-    this.rolService.getRol(id).subscribe(rol => {
+    this.rolService.getRol(id).subscribe((rol: Rol) => {
       if (rol) {
-        this.form.get('nombre')?.setValue(rol.nombre);
+        this.form.get('nombre')?.setValue(rol.nombre_rol);
       }
     });
   }
@@ -107,7 +107,7 @@ export class ListarolComponent implements OnInit {
           return [];
         })
       )
-      .subscribe((data: any) => {
+      .subscribe((data: Rol[]) => {
         this.roles = data;
       });
   }
