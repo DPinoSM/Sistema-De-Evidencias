@@ -18,3 +18,9 @@ nav{
     background-color: rgb(11, 0, 112);
     border-radius: 30%;
 }
+
+.logo-image {
+    width: 130px; 
+    height: auto; 
+    margin-left: 10px; 
+}

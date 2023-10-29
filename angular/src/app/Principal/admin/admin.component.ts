@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css', '../../../../shared-styles.css']
+  styleUrls: ['./admin.component.css', '../../../shared-styles.css']
 })
 export class AdminComponent {
   sideNavStatus: boolean = false;

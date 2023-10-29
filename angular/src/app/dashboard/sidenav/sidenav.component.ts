@@ -10,11 +10,6 @@ export class SidenavComponent implements OnInit {
 
   list = [
     {
-      name: 'Home',
-      icon: 'fa-solid fa-house',
-      link: '/admin', 
-    },
-    {
       name: 'Usuarios',
       icon: 'fa-solid fa-user',
       link: '/usuarios', 

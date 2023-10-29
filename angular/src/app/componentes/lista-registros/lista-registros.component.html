@@ -6,7 +6,27 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Registros</h4>
-          <button type="button" class="btn btn-dark" routerLink="/addRg">Agregar Registro</button>
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRegistro(editRegistroId)">{{ 'Agregar Registro' }}</button>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRegistro">
+          <div class="form-container">
+            <h4>{{ editRegistroId ? 'Editar Registro' : 'Agregar Registro' }}</h4>
+            <form [formGroup]="form" (ngSubmit)="createNewRegistro()">
+              <div class="form-group">
+                <label for="datos">Nombre del Registro</label>
+                <input type="text" id="datos" class="form-control" formControlName="datos" required>
+              </div>
+              <div class="form-group">
+                <label for="contenido">Descripción del Registro</label>
+                <input type="text" id="contenido" class="form-control" formControlName="contenido" required>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionRegistro()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ editRegistroId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+            </form>
+          </div>          
         </div>
 
         <div class="table-container mt-4">
@@ -25,11 +45,9 @@
                 <td style="border: 1px solid black;">{{ registro.datos_registro }}</td>
                 <td style="border: 1px solid black;">{{ registro.contenido_registro }}</td>
                 <td style="border: 1px solid black;">
-                  <a [routerLink]="['/editRg', registro.id_registro]">
-                    <button type="button" class="btn">
-                      <i class="fas fa-edit icon-no-bg"></i>
-                    </button>
-                  </a>
+                  <button type="button" class="btn" (click)="mostrarFormularioAgregarEditarRegistro(registro.id_registro)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
                   <button type="button" class="btn ms-2" (click)="eliminarRegistro(registro.id_registro)">
                     <i class="fa fa-trash icon-no-bg"></i>
                   </button>
