@@ -1,35 +1,57 @@
-<app-navbar></app-navbar>
-
-<div class="container">
-  <div class="title">
-    <h3 class="page-title">Listado de Roles</h3>
-    <button type="button" class="btn btn-secondary" routerLink="/addR">Agregar Rol</button>
-  </div>
-  <div class="table-container mt-4" [ngClass]="collapsed ? 'table-collapsed' : ''">
-    <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
-      <thead>
-        <tr>
-          <th scope="col">ID del Rol</th>
-          <th scope="col">Nombre del Rol</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let rol of roles" style="border: 1px solid black;">
-          <td style="border: 1px solid black;">{{ rol.id_rol }}</td>
-          <td style="border: 1px solid black;">{{ rol.nombre_rol }}</td>
-          <td style="border: 1px solid black;">
-            <a [routerLink]="['/editR', rol.id_rol]">
-              <button type="button" class="btn">
-                <i class="fas fa-edit icon-no-bg"></i>
-              </button>
-            </a>
-            <button type="button" class="btn ms-2" (click)="eliminarRol(rol.id_rol)">
-              <i class="fa fa-trash icon-no-bg"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h3 class="page-title">Listado de Roles</h3>
+          <!-- Botón para mostrar el formulario de agregar/editar rol -->
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar Rol' }}</button>
+        </div>
+        <!-- Div contenedor para centrar el formulario vertical y horizontalmente -->
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRol">
+          <div class="form-container">
+            <h3>{{ editRoleId ? 'Editar Rol' : 'Agregar Rol' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearNuevoRol()">
+              <div class="form-group">
+                <label for="nombre">Nombre del Rol</label>
+                <input type="text" id="nombre" class="form-control" formControlName="nombre" required>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
+                <button type="submit" class="btn btn-primary ">{{ editRoleId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Rol</th>
+                <th scope="col">Nombre Rol</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rol of roles" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ rol.id_rol }}</td>
+                <td style="border: 1px solid black;">{{ rol.nombre_rol }}</td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn" (click)="mostrarFormularioAgregarEditarRol(rol.id_rol)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+  
+                  <button type="button" class="btn ms-2" (click)="eliminarRol(rol.id_rol)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>

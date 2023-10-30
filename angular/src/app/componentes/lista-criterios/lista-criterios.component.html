@@ -1,41 +1,83 @@
-<app-navbar></app-navbar>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h4>Listado de Criterios</h4>
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarCriterios(criterioEditId)">Agregar Criterio</button>
+        </div>
 
-<div class="container">
-  <div class="title">
-    <h3>Listado de Criterios</h3>
-    <button type="button" class="btn btn-dark" routerLink="/addC">Agregar Criterio</button>
-  </div>
-  
-  <div class="table-container mt-4">
-    <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
-      <thead>
-        <tr>
-          <th scope="col">ID Criterio</th>
-          <th scope="col">Nombre Criterio</th>
-          <th scope="col">Codigo Criterio</th>
-          <th scope="col">Descripción Criterio</th>
-          <th scope="col">Estado Criterio</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let criterio of criterios" style="border: 1px solid black;">
-          <td style="border: 1px solid black;">{{ criterio.id_criterios }}</td>
-          <td style="border: 1px solid black;">{{ criterio.nombre_criterios }}</td>
-          <td style="border: 1px solid black;">{{ criterio.codigo_criterios}}</td>
-          <td style="border: 1px solid black;">{{ criterio.descripcion_criterios}}</td>
-          <td style="border: 1px solid black;">{{ traducirEstado(criterio)}}</td>
-          <td style="border: 1px solid black;">
-          <a [routerLink]="['/editC', criterio.id_criterios]">
-            <button type="button" class="btn">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-          </a>
-          <button type="button" class="btn ms-2" (click)="eliminarCriterio(criterio.id_criterios)">
-            <i class="fa fa-trash"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarCriterios">
+          <div class="form-container">
+            <h3>{{ criterioEditId ? 'Editar Criterio' : 'Agregar Criterio' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearEditarCriterio()">
+              <div class="form-group">
+                <label for="nombre_criterios">Nombre del Criterio</label>
+                <input type="text" id="nombre_criterios" class="form-control" formControlName="nombre_criterios" required>
+              </div>
+              <div class="form-group">
+                <label for="codigo_criterios">Código del Criterio</label>
+                <input type="number" id="codigo_criterios" class="form-control" formControlName="codigo_criterios" required>
+              </div>
+              <div class="form-group">
+                <label for="descripcion_criterios">Descripción del Criterio</label>
+                <input type="text" id="descripcion_criterios" class="form-control" formControlName="descripcion_criterios" required>
+              </div>
+              <div *ngIf="!criterioEditId" class="form-group">
+                <label for="estado_criterios">Estado del Criterio</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="estado_criterios" formControlName="estado_criterios">
+                  <label class="form-check-label" for="estado_criterios">Activo</label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ criterioEditId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Criterio</th>
+                <th scope="col">Nombre Criterio</th>
+                <th scope="col">Código Criterio</th>
+                <th scope="col">Descripción Criterio</th>
+                <th scope="col">Estado Criterio</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let criterio of criterios" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ criterio.id_criterios }}</td>
+                <td style="border: 1px solid black;">{{ criterio.nombre_criterios }}</td>
+                <td style="border: 1px solid black;">{{ criterio.codigo_criterios }}</td>
+                <td style="border: 1px solid black;">{{ criterio.descripcion_criterios }}</td>
+                <td style="border: 1px solid black;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" [checked]="criterio.estado_criterios" (change)="cambiarEstadoCriterio(criterio.id_criterios)">
+                    <label class="form-check-label"></label>
+                  </div>
+                </td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn" (click)="mostrarAgregarEditarCriterios(criterio.id_criterios)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+                  <button type="button" class="btn ms-2" (click)="eliminarCriterio(criterio.id_criterios)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>

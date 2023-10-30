@@ -1,33 +1,77 @@
-
 import { Component, OnInit } from '@angular/core';
 import { RolService } from '../../services/rol.service';
-import { Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { Rol } from '../../interfaces/rol.interface';
 
 @Component({
-  selector: 'app-listarol',
+  selector: 'app-listaroles',
   templateUrl: './listarol.component.html',
-  styleUrls: ['./listarol.component.css']
+  styleUrls: ['./listarol.component.css', '../../../shared-styles.css']
 })
+
 export class ListarolComponent implements OnInit {
-  roles: any[] = [];
-  newRolData: any;
+  roles: Rol[] = [];
+  errorMsg: string | undefined;
+  form: FormGroup;
+  sideNavStatus: boolean = false;
+  editRoleId: number | null = null;
+  mostrarFormularioAgregarRol: boolean = false;
   private rolesSubscription!: Subscription;
-  collapsed: boolean = false; 
 
   constructor(private rolService: RolService, private toastr: ToastrService) {
-    this.newRolData = {
-      id_rol: '',
-      nombre_rol: '',
-    };
+    this.form = new FormGroup({
+      nombre: new FormControl('', [Validators.required])
+    });
   }
 
-  ngOnInit(): void {
-    this.getRoles();
+  ngOnInit() {
+    this.actualizarListaDeRoles();
   }
 
-  getRoles() {
+  mostrarFormularioAgregarEditarRol(id: number | null) {
+    if (id !== null) {
+      this.editRoleId = id;
+      this.obtenerRol(id);
+    } else {
+      this.editRoleId = null;
+      this.form.reset();
+    }
+    this.mostrarFormularioAgregarRol = true;
+  }
+
+  cancelarEdicion() {
+    this.mostrarFormularioAgregarRol = false;
+    this.editRoleId = null;
+    this.form.reset();
+  }
+
+  crearNuevoRol() {
+    if (this.form.valid) {
+      const nombre_rol = this.form.get('nombre')?.value;
+
+      if (this.editRoleId) {
+        this.editarRol(this.editRoleId, nombre_rol);
+      } else {
+        this.realizarOperacionDeRol(() => 
+          this.rolService.createRol(nombre_rol), 'Rol Creado');
+      }
+    }
+
+    this.mostrarFormularioAgregarRol = false;
+  }
+
+  obtenerRol(id: number) {
+    this.rolService.getRol(id).subscribe((rol: Rol) => {
+      if (rol) {
+        this.form.get('nombre')?.setValue(rol.nombre_rol);
+      }
+    });
+  }
+
+  actualizarListaDeRoles() {
     if (this.rolesSubscription) {
       this.rolesSubscription.unsubscribe();
     }
@@ -38,19 +82,34 @@ export class ListarolComponent implements OnInit {
           return [];
         })
       )
-      .subscribe((data: any) => {
+      .subscribe((data: Rol[]) => {
         this.roles = data;
       });
   }
 
-  eliminarRol(id: number) {
-    this.rolService.deleteRol(id).subscribe(() => {
-      this.getRoles();
-      this.toastr.warning('El rol fue eliminado con éxito', 'Rol eliminado');
-    });
+  editarRol(id: number, nombre: string) {
+    this.realizarOperacionDeRol(() => 
+      this.rolService.updateRol(id, nombre), 'Rol Editado');
   }
 
-  toggleCollapse() {
-    this.collapsed = !this.collapsed;
+  eliminarRol(id: number) {
+    this.realizarOperacionDeRol(() => 
+      this.rolService.deleteRol(id), 'Registro Eliminado');
+  }
+  
+  private realizarOperacionDeRol(operacion: () => any, mensajeExitoso: string) {
+    operacion().subscribe({
+      next: (respuesta: any) => {
+        console.log(`${mensajeExitoso} exitosamente`, respuesta);
+        this.actualizarListaDeRoles();
+        this.toastr.warning(`El rol fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
+      },
+      error: (error: any) => {
+        if (error && error.msg) {
+          this.errorMsg = error.msg;
+          console.error(`Error al ${mensajeExitoso.toLowerCase()} el rol`, error);
+        }
+      }
+    });
   }
 }

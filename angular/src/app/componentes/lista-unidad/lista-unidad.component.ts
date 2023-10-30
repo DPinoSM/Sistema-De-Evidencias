@@ -1,68 +1,131 @@
 import { Component, OnInit } from '@angular/core';
 import { UnidadService } from '../../services/unidad.service';
 import { ToastrService } from 'ngx-toastr';
-
-interface Unidad {
-  id_unidad: number;
-  nombre_unidad: string;
-  unidad_defecto: boolean; 
-}
-
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { catchError } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { Unidad } from 'src/app/interfaces/unidad.interface';
 
 @Component({
   selector: 'app-lista-unidad',
   templateUrl: './lista-unidad.component.html',
-  styleUrls: ['./lista-unidad.component.css']
+  styleUrls: ['./lista-unidad.component.css', '../../../shared-styles.css']
 })
+
 export class ListaUnidadComponent implements OnInit {
   unidades: Unidad[] = [];
   errorMsg: string | undefined;
+  form: FormGroup;
+  sideNavStatus: boolean = false;
+  unidadEditId: number | null = null;
+  mostrarFormularioAgregarUnidad: boolean = false;
+  private unidadesSubscription!: Subscription;
 
-  constructor(private unidadService: UnidadService, private toastr: ToastrService) {}
+  constructor(
+    private unidadService: UnidadService, 
+    private toastr: ToastrService) {
+    this.form = new FormGroup({
+      nombre: new FormControl('', [Validators.required]),
+      unidad_defecto: new FormControl(null, [Validators.required])
+    });
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.actualizarListaDeUnidades();
   }
 
-  actualizarListaDeUnidades() {
-    this.unidadService.getUnidades().subscribe({
-      next: (data: Unidad[]) => {
-        console.log('Datos en el componente:', data);
-        this.unidades = data;
-      },
-      error: (error) => {
-        if (error && error.msg) {
-          this.errorMsg = error.msg;
-          console.error('Error al obtener la lista de unidades', error);
-        }
+
+  mostrarAgregarEditarUnidad(id: number | null) {
+    if (id !== null) {
+      this.unidadEditId = id;
+      this.obtenerUnidad(id);
+    } else {
+      this.unidadEditId = null;
+      this.form.reset();
+    }
+    this.mostrarFormularioAgregarUnidad = true;
+  }
+
+  cancelarEdicion() {
+    this.mostrarFormularioAgregarUnidad = false;
+    this.unidadEditId = null;
+    this.form.reset();
+  }
+  
+  crearOEditarUnidad() {
+    if (this.form.valid) {
+      const nombre_unidad = this.form.get('nombre_unidad')?.value;
+      const unidad_defecto = this.form.get('unidad_defecto')?.value;
+
+      if (this.unidadEditId) {
+        this.editarUnidad(this.unidadEditId, nombre_unidad, unidad_defecto);
+      } else {
+        this.realizarOperacionDeUnidad(() =>
+          this.unidadService.createUnidad({ nombre_unidad: nombre_unidad, unidad_defecto: unidad_defecto }), 'Unidad Creada');      
+      }
+    }
+
+    this.mostrarFormularioAgregarUnidad = false;
+  }
+
+  obtenerUnidad(id: number) {
+    this.unidadService.getUnidad(id).subscribe(unidad => {
+      if (unidad) {
+        this.form.get('nombre')?.setValue(unidad.nombre_unidad);
+        this.form.get('unidad_defecto')?.setValue(unidad.unidad_defecto);
       }
     });
   }
-  
-  // Función para traducir el valor booleano a "Activo" o "Inactivo"
-  traducirEstado(unidad: Unidad): string {
-    return unidad.unidad_defecto ? "Activo" : "Inactivo";
+
+  actualizarListaDeUnidades() {
+    if (this.unidadesSubscription) {
+      this.unidadesSubscription.unsubscribe();
+    }
+
+    this.unidadesSubscription = this.unidadService.getUnidades()
+      .pipe(
+        catchError(error => {
+          console.error('Error al obtener unidades:', error);
+          return [];
+        })
+      )
+      .subscribe((data: Unidad[]) => {
+        this.unidades = data;
+      });
+  }
+
+  editarUnidad(id: number, nombre: string, unidad_defecto: any) {
+    this.realizarOperacionDeUnidad(() => 
+      this.unidadService.updateUnidad(id, { nombre_unidad: nombre, unidad_defecto }), 'Unidad Editada');
   }
   
-  
+  cambiarEstadoUnidad(id: number) {
+    const unidad = this.unidades.find(u => u.id_unidad === id);
+
+    if (unidad) {
+      const nuevoEstado = !unidad.unidad_defecto;
+
+      this.realizarOperacionDeUnidad(() => this.unidadService.updateUnidad(id, { unidad_defecto: nuevoEstado }), 'Estado Cambiado');
+    }
+  }
 
   eliminarUnidad(id: number) {
-    if (id) {
-      this.unidadService.deleteUnidad(id).subscribe({
-        next: (respuesta) => {
-          console.log('Unidad eliminada exitosamente', respuesta);
-          this.actualizarListaDeUnidades();
-          this.toastr.success('La unidad fue eliminada correctamente', 'Unidad Eliminada');
-        },
-        error: (error) => {
-          if (error && error.msg) {
-            this.errorMsg = error.msg;
-            console.error('Error al eliminar la unidad', error);
-          }
+    this.realizarOperacionDeUnidad(() => this.unidadService.deleteUnidad(id), 'Unidad Eliminada');
+  }
+
+  private realizarOperacionDeUnidad(operacion: () => any, mensajeExitoso: string) {
+    operacion().subscribe({
+      next: (respuesta: any) => {
+        console.log(`${mensajeExitoso} exitosamente`, respuesta);
+        this.actualizarListaDeUnidades();
+        this.toastr.warning(`La unidad fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
+      },
+      error: (error: any) => {
+        if (error && error.msg) {
+          this.errorMsg = error.msg;
+          console.error(`Error al ${mensajeExitoso.toLowerCase()} la unidad`, error);
         }
-      });
-    } else {
-      console.error('ID de unidad no válido');
-    }
+      }
+    });
   }
 }

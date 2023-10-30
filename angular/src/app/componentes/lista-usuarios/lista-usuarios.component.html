@@ -1,1 +1,46 @@
-<p>lista-usuarios works!</p>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h1>Lista usuario</h1>
+          <button type="button" class="btn btn-primary" routerLink="/addUsuario">Agregar Usuario</button>
+        </div>
+        <!-- TABLA EDITAR / ELIMINAR -->
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Rut</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellido1</th>
+              <th scope="col">Apellido2</th>
+              <th scope="col">Contraseña</th>
+              <th scope="col">correo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-hover" *ngFor="let usuario of usuarios">
+              <td>{{ usuario.rut_usuario }}</td>
+              <td>{{ usuario.nombre_usuario }}</td>
+              <td>{{ usuario.apellido1_usuario }}</td>
+              <td>{{ usuario.apellido2_usuario }}</td>
+              <td>{{ usuario.clave_usuario }}</td>
+              <td>{{ usuario.correo_usuario }}</td>
+              <td>{{ estado(usuario) }}</td>
+              <td>
+                <a [routerLink]="['/editUsuario', usuario.id_usuario]">
+                  <button type="button" class="btn btn-primary btn-sm">Editar</button>
+                </a>
+                <button type="button" class="btn btn-primary btn-sm ms-2" (click)="deleteUser(usuario.id_usuario)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

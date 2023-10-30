@@ -1,1 +1,65 @@
-<p>add-edit-user works!</p>
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="row mt-4">
+      <div class="col-lg-4 offset-lg-4">
+        <div class="card border-primary mb-3" style="max-width: 25rem">
+          <div class="card-header text-center">{{editUsuarioId ? 'Editar Usuario' : 'Agregar Usuario'}}</div>
+          <div class="card-body">
+            <form [formGroup]="formUsuario" (ngSubmit)="guardarUsuario($event)">
+              <div class="form-group col">
+                <input formControlName="rut_usuario" type="text" class="form-control" placeholder="Rut" />
+                <div *ngIf="formUsuario.get('rut_usuario')?.hasError('required') && formUsuario.get('rut_usuario')?.touched" class="text-danger">El campo rut es requerido</div>
+              </div>
+              <div>
+                <input formControlName="nombre_usuario" type="text" class="form-control mt-2" placeholder="Nombre" />
+                <div *ngIf="formUsuario.get('nombre_usuario')?.hasError('required') && formUsuario?.get('nombre_usuario')?.touched" class="text-danger">
+                  El campo nombre es requerido
+                </div>
+              </div>
+              <div>
+                <input formControlName="apellido1_usuario" type="text" class="form-control mt-2" placeholder="Apellido1" />
+                <div *ngIf="formUsuario.get('apellido1_usuario')?.hasError('required') && formUsuario.get('apellido1_usuario')?.touched" class="text-danger">
+                  El campo apellido1 es requerido
+                </div>
+              </div>
+              <div>
+                <input formControlName="apellido2_usuario" type="text" class="form-control mt-2" placeholder="Apellido2" />
+                <div *ngIf="formUsuario.get('apellido2_usuario')?.hasError('required') && formUsuario.get('apellido2_usuario')?.touched" class="text-danger">
+                  El campo apellido2 es requerido
+                </div>
+              </div>
+              <div>
+                <input formControlName="clave_usuario" type="password" class="form-control mt-2" placeholder="Contraseña" />
+                <span *ngIf="formUsuario.get('clave_usuario')?.hasError('required') && formUsuario.get('clave_usuario')?.touched" class="text-danger">
+                  El campo contraseña es requerido
+                </span>
+              </div>
+              <div>
+                <input formControlName="correo_usuario" type="email" class="form-control mt-2" placeholder="Correo" />
+                <span *ngIf="formUsuario.get('correo_usuario')?.hasError('required') && formUsuario.get('correo_usuario')?.touched" class="text-danger">
+                  El campo correo es requerido
+                </span>
+              </div>
+              <div class="form-check mt-4">
+                <input type="checkbox" formControlName="estado_usuario" id="estado_usuario">
+                <label class="form-check-label" for="estado_usuario">
+                  {{ formUsuario.value.estado_usuario ? 'Activo' : 'Inactivo' }}
+                </label>
+              </div>
+              <div class="row mt-2 text-center">
+                <div class="col-lg-6">
+                  <button class="btn btn-light" routerLink="/usuarios">Volver</button>
+                </div>
+                <div class="col-lg-6">
+                  <button [disabled]="formUsuario.invalid" type="submit" class="btn btn-light">{{editUsuarioId ? 'Editar Usuario' : 'Agregar Usuario'}}</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

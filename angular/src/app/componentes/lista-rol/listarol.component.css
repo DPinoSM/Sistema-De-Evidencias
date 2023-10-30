@@ -3,32 +3,34 @@
     display: flex;
     justify-content: space-between;
 }
-
-.smaller-table {
-    font-size: 12px; /* Tamaño de fuente más pequeño */
-    border-collapse: collapse; /* Elimina espacios entre celdas */
-    width: 80%; /* Ancho de la tabla, ajusta según tus necesidades */
-  }
-  
-  .smaller-table th,
-  .smaller-table td {
-    padding: 8px; /* Espaciado interno de las celdas */
-  }
-
   .icon-no-bg {
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
   }
   
+  .form-container {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 1; 
+  }
+  
+  .form-container {
+    background-color: #fff; 
+    padding: 20px; 
+    border: 1px solid #000000; 
+    border-radius: 5px; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 10px; 
+  }
 
-  table.table tbody tr {
-    margin-bottom: 10px;
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
   }
-  
-  .table-collapsed {
-    width: calc(100% - 250px); 
-    margin-left: 250px; 
-  }
-  
-  
