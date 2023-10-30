@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RolService } from '../../services/rol.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -15,7 +14,6 @@ import { Rol } from '../../interfaces/rol.interface';
 
 export class ListarolComponent implements OnInit {
   roles: Rol[] = [];
-  nombre_rol: string = '';
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
@@ -23,21 +21,13 @@ export class ListarolComponent implements OnInit {
   mostrarFormularioAgregarRol: boolean = false;
   private rolesSubscription!: Subscription;
 
-  constructor(private rolService: RolService, private route: ActivatedRoute, private toastr: ToastrService) {
+  constructor(private rolService: RolService, private toastr: ToastrService) {
     this.form = new FormGroup({
       nombre: new FormControl('', [Validators.required])
     });
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.editRoleId = id;
-        this.obtenerRol(id);
-        this.mostrarFormularioAgregarRol = true;
-      }
-    });
     this.actualizarListaDeRoles();
   }
 
@@ -65,27 +55,12 @@ export class ListarolComponent implements OnInit {
       if (this.editRoleId) {
         this.editarRol(this.editRoleId, nombre_rol);
       } else {
-        this.realizarOperacionDeRol(() => this.rolService.createRol(nombre_rol), 'Rol Creado');
+        this.realizarOperacionDeRol(() => 
+          this.rolService.createRol(nombre_rol), 'Rol Creado');
       }
     }
 
     this.mostrarFormularioAgregarRol = false;
-  }
-
-  private realizarOperacionDeRol(operacion: () => any, mensajeExitoso: string) {
-    operacion().subscribe({
-      next: (respuesta: any) => {
-        console.log(`${mensajeExitoso} exitosamente`, respuesta);
-        this.actualizarListaDeRoles();
-        this.toastr.warning(`El rol fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
-      },
-      error: (error: any) => {
-        if (error && error.msg) {
-          this.errorMsg = error.msg;
-          console.error(`Error al ${mensajeExitoso.toLowerCase()} el rol`, error);
-        }
-      }
-    });
   }
 
   obtenerRol(id: number) {
@@ -113,13 +88,28 @@ export class ListarolComponent implements OnInit {
   }
 
   editarRol(id: number, nombre: string) {
-    this.realizarOperacionDeRol(() => this.rolService.updateRol(id, nombre), 'Rol Editado');
+    this.realizarOperacionDeRol(() => 
+      this.rolService.updateRol(id, nombre), 'Rol Editado');
   }
 
   eliminarRol(id: number) {
-    this.rolService.deleteRol(id).subscribe(() => {
-      this.actualizarListaDeRoles();
-      this.toastr.warning('El rol fue eliminado con éxito', 'Rol eliminado');
+    this.realizarOperacionDeRol(() => 
+      this.rolService.deleteRol(id), 'Registro Eliminado');
+  }
+  
+  private realizarOperacionDeRol(operacion: () => any, mensajeExitoso: string) {
+    operacion().subscribe({
+      next: (respuesta: any) => {
+        console.log(`${mensajeExitoso} exitosamente`, respuesta);
+        this.actualizarListaDeRoles();
+        this.toastr.warning(`El rol fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
+      },
+      error: (error: any) => {
+        if (error && error.msg) {
+          this.errorMsg = error.msg;
+          console.error(`Error al ${mensajeExitoso.toLowerCase()} el rol`, error);
+        }
+      }
     });
   }
 }

@@ -12,12 +12,12 @@
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarUnidad">
           <div class="form-container">
             <h3>{{ unidadEditId ? 'Editar Unidad' : 'Agregar Unidad' }}</h3>
-            <form [formGroup]="form" (ngSubmit)="guardarUnidad($event)">
+            <form [formGroup]="form" (ngSubmit)="crearOEditarUnidad()">
               <div class="form-group">
                 <label for="nombre_unidad">Nombre de la Unidad</label>
-                <input type="text" id="nombre_unidad" class="form-control" formControlName="nombre_unidad" required>
+                <input type="text" id="nombre_unidad" class="form-control" formControlName="nombre">
               </div>
-              <div *ngIf="!unidadEditId" class="form-group">
+              <div class="form-group">
                 <label for="unidad_defecto">Estado de la Unidad</label>
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="unidad_defecto" formControlName="unidad_defecto">

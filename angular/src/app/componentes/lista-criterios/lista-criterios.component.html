@@ -6,13 +6,13 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Criterios</h4>
-          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarCriterios(criteriosEditId)">Agregar Criterio</button>
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarCriterios(criterioEditId)">Agregar Criterio</button>
         </div>
 
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarCriterios">
           <div class="form-container">
-            <h3>{{ criteriosEditId ? 'Editar Criterio' : 'Agregar Criterio' }}</h3>
-            <form [formGroup]="form" (ngSubmit)="guardarCriterio($event)">
+            <h3>{{ criterioEditId ? 'Editar Criterio' : 'Agregar Criterio' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearEditarCriterio()">
               <div class="form-group">
                 <label for="nombre_criterios">Nombre del Criterio</label>
                 <input type="text" id="nombre_criterios" class="form-control" formControlName="nombre_criterios" required>
@@ -25,17 +25,17 @@
                 <label for="descripcion_criterios">Descripción del Criterio</label>
                 <input type="text" id="descripcion_criterios" class="form-control" formControlName="descripcion_criterios" required>
               </div>
-              <div *ngIf="!criteriosEditId" class="form-group">
+              <div *ngIf="!criterioEditId" class="form-group">
                 <label for="estado_criterios">Estado del Criterio</label>
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="estado_criterios" formControlName="estado_criterios">
                   <label class="form-check-label" for="estado_criterios">Activo</label>
                 </div>
               </div>
-                            
+
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">{{ criteriosEditId ? 'Guardar' : 'Aceptar' }}</button>
+                <button type="submit" class="btn btn-primary">{{ criterioEditId ? 'Guardar' : 'Aceptar' }}</button>
               </div>
             </form>
           </div>
@@ -61,7 +61,7 @@
                 <td style="border: 1px solid black;">{{ criterio.descripcion_criterios }}</td>
                 <td style="border: 1px solid black;">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" [checked]="criterio.estado_criterios" (change)="cambiarEstadoCriterios(criterio.id_criterios)">
+                    <input class="form-check-input" type="checkbox" [checked]="criterio.estado_criterios" (change)="cambiarEstadoCriterio(criterio.id_criterios)">
                     <label class="form-check-label"></label>
                   </div>
                 </td>
@@ -69,7 +69,7 @@
                   <button type="button" class="btn" (click)="mostrarAgregarEditarCriterios(criterio.id_criterios)">
                     <i class="fas fa-edit icon-no-bg"></i>
                   </button>
-                  <button type="button" class="btn ms-2" (click)="eliminarCriterios(criterio.id_criterios)">
+                  <button type="button" class="btn ms-2" (click)="eliminarCriterio(criterio.id_criterios)">
                     <i class="fa fa-trash icon-no-bg"></i>
                   </button>
                 </td>

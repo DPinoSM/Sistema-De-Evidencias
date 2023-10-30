@@ -12,7 +12,7 @@
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarAmbitoAcademico">
           <div class="form-container">
             <h3>{{ ambitoAcademicoEditId ? 'Editar Ámbito Académico' : 'Agregar Ámbito Académico' }}</h3>
-            <form [formGroup]="form" (ngSubmit)="guardarAmbitoAcademico($event)">
+            <form [formGroup]="form" (ngSubmit)="crearOEditarAmbitoAcademico()">
               <div class="form-group">
                 <label for="nombre_ambito_academico">Nombre del Ámbito Académico</label>
                 <input type="text" id="nombre_ambito_academico" class="form-control" formControlName="nombre_ambito_academico" required>

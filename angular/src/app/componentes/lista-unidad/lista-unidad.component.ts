@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UnidadService } from '../../services/unidad.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, tap } from 'rxjs/operators';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Unidad } from 'src/app/interfaces/unidad.interface';
 
@@ -11,34 +11,38 @@ import { Unidad } from 'src/app/interfaces/unidad.interface';
   templateUrl: './lista-unidad.component.html',
   styleUrls: ['./lista-unidad.component.css', '../../../shared-styles.css']
 })
+
 export class ListaUnidadComponent implements OnInit {
-  unidades: any[] = [];
+  unidades: Unidad[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
-  unidadEditId: number | null = null;
   sideNavStatus: boolean = false;
+  unidadEditId: number | null = null;
   mostrarFormularioAgregarUnidad: boolean = false;
   private unidadesSubscription!: Subscription;
 
   constructor(
-    private unidadService: UnidadService,
-    private toastr: ToastrService,
-    private formBuilder: FormBuilder
-  ) {
-    this.form = this.formBuilder.group({
-      nombre_unidad: ['', [Validators.required]],
-      unidad_defecto: [null, [Validators.required]]
+    private unidadService: UnidadService, 
+    private toastr: ToastrService) {
+    this.form = new FormGroup({
+      nombre: new FormControl('', [Validators.required]),
+      unidad_defecto: new FormControl(null, [Validators.required])
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.actualizarListaDeUnidades();
   }
 
+
   mostrarAgregarEditarUnidad(id: number | null) {
-    this.unidadEditId = id;
-    if (id !== null) this.obtenerUnidad(id);
-    else this.form.reset();
+    if (id !== null) {
+      this.unidadEditId = id;
+      this.obtenerUnidad(id);
+    } else {
+      this.unidadEditId = null;
+      this.form.reset();
+    }
     this.mostrarFormularioAgregarUnidad = true;
   }
 
@@ -47,83 +51,81 @@ export class ListaUnidadComponent implements OnInit {
     this.unidadEditId = null;
     this.form.reset();
   }
-
-  guardarUnidad(event: Event) {
+  
+  crearOEditarUnidad() {
     if (this.form.valid) {
-      const { nombre_unidad, unidad_defecto } = this.form.value;
+      const nombre_unidad = this.form.get('nombre_unidad')?.value;
+      const unidad_defecto = this.form.get('unidad_defecto')?.value;
 
-      if (this.unidadEditId) this.editarUnidad(this.unidadEditId, nombre_unidad, unidad_defecto);
-      else this.crearUnidad(nombre_unidad, unidad_defecto);
+      if (this.unidadEditId) {
+        this.editarUnidad(this.unidadEditId, nombre_unidad, unidad_defecto);
+      } else {
+        this.realizarOperacionDeUnidad(() =>
+          this.unidadService.createUnidad({ nombre_unidad: nombre_unidad, unidad_defecto: unidad_defecto }), 'Unidad Creada');      
+      }
     }
+
     this.mostrarFormularioAgregarUnidad = false;
   }
 
   obtenerUnidad(id: number) {
     this.unidadService.getUnidad(id).subscribe(unidad => {
-      if (unidad) this.form.patchValue(unidad);
+      if (unidad) {
+        this.form.get('nombre')?.setValue(unidad.nombre_unidad);
+        this.form.get('unidad_defecto')?.setValue(unidad.unidad_defecto);
+      }
     });
   }
 
   actualizarListaDeUnidades() {
-    this.unidadesSubscription?.unsubscribe();
+    if (this.unidadesSubscription) {
+      this.unidadesSubscription.unsubscribe();
+    }
+
     this.unidadesSubscription = this.unidadService.getUnidades()
       .pipe(
         catchError(error => {
           console.error('Error al obtener unidades:', error);
           return [];
-        }),
-        tap((data: any) => {
-          this.unidades = data;
         })
       )
-      .subscribe();
+      .subscribe((data: Unidad[]) => {
+        this.unidades = data;
+      });
   }
 
-  editarUnidad(id: number, nombre_unidad: string, unidad_defecto: any) {
-    this.unidadService.updateUnidad(id, { nombre_unidad, unidad_defecto }).subscribe({
-      next: () => this.actualizarYMostrarMensaje('La unidad fue editada correctamente', 'Unidad Editada'),
-      error: (error) => this.handleAPIError(error, 'Error al actualizar la unidad')
-    });
+  editarUnidad(id: number, nombre: string, unidad_defecto: any) {
+    this.realizarOperacionDeUnidad(() => 
+      this.unidadService.updateUnidad(id, { nombre_unidad: nombre, unidad_defecto }), 'Unidad Editada');
   }
-
-  crearUnidad(nombre_unidad: string, unidad_defecto: any) {
-    this.unidadService.createUnidad({ nombre_unidad, unidad_defecto }).subscribe({
-      next: () => this.actualizarYMostrarMensaje('La unidad fue creada con éxito', 'Unidad Creada'),
-      error: (error) => this.handleAPIError(error, 'Error al crear la unidad')
-    });
-  }
-
+  
   cambiarEstadoUnidad(id: number) {
     const unidad = this.unidades.find(u => u.id_unidad === id);
 
     if (unidad) {
       const nuevoEstado = !unidad.unidad_defecto;
 
-      this.unidadService.updateUnidad(id, { unidad_defecto: nuevoEstado }).subscribe({
-        next: () => {
-          unidad.unidad_defecto = nuevoEstado;
-          this.toastr.success('El estado de la unidad ha sido cambiado', 'Estado Cambiado');
-        },
-        error: (error) => this.handleAPIError(error, 'Error al actualizar el estado de la unidad')
-      });
+      this.realizarOperacionDeUnidad(() => this.unidadService.updateUnidad(id, { unidad_defecto: nuevoEstado }), 'Estado Cambiado');
     }
   }
 
   eliminarUnidad(id: number) {
-    this.unidadService.deleteUnidad(id).subscribe(() => {
-      this.actualizarYMostrarMensaje('La unidad fue eliminada con éxito', 'Unidad Eliminada');
+    this.realizarOperacionDeUnidad(() => this.unidadService.deleteUnidad(id), 'Unidad Eliminada');
+  }
+
+  private realizarOperacionDeUnidad(operacion: () => any, mensajeExitoso: string) {
+    operacion().subscribe({
+      next: (respuesta: any) => {
+        console.log(`${mensajeExitoso} exitosamente`, respuesta);
+        this.actualizarListaDeUnidades();
+        this.toastr.warning(`La unidad fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
+      },
+      error: (error: any) => {
+        if (error && error.msg) {
+          this.errorMsg = error.msg;
+          console.error(`Error al ${mensajeExitoso.toLowerCase()} la unidad`, error);
+        }
+      }
     });
-  }
-
-  private handleAPIError(error: any, message: string) {
-    if (error && error.msg) {
-      this.errorMsg = error.msg;
-      console.error(message, error);
-    }
-  }
-
-  private actualizarYMostrarMensaje(mensaje: string, mensajeTitulo: string) {
-    this.actualizarListaDeUnidades();
-    this.toastr.warning(mensaje, mensajeTitulo);
   }
 }

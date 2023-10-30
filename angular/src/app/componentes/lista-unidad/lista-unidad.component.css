@@ -22,7 +22,7 @@
 .form-container {
   background-color: #fff; 
   padding: 40px; 
-  border: 1px solid #ccc; 
+  border: 1px solid #000000; 
   border-radius: 5px; 
   display: flex;
   flex-direction: column;

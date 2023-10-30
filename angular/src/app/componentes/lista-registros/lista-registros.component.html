@@ -6,7 +6,7 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Registros</h4>
-          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRegistro(editRegistroId)">{{ 'Agregar Registro' }}</button>
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRegistro(editRegistroId)">{{ editRegistroId ? 'Editar Registro' : 'Agregar Registro' }}</button>
         </div>
 
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRegistro">
@@ -26,7 +26,7 @@
                 <button type="submit" class="btn btn-primary">{{ editRegistroId ? 'Guardar' : 'Aceptar' }}</button>
               </div>
             </form>
-          </div>          
+          </div>
         </div>
 
         <div class="table-container mt-4">

@@ -2,33 +2,69 @@
   <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
   <main>
     <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
-    <div class="container">
-      <div class="title">
-        <h4>Listado de Ámbitos Geográficos</h4>
-        <button type="button" class="btn btn-primary" routerLink="/addAmbG">Agregar Ámbito Geográfico</button>
-      </div>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h4>Listado de Ámbitos Geográficos</h4>
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarAmbitoGeografico(ambitoGeograficoEditId)">Agregar Ámbito Geográfico</button>
+        </div>
 
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Nombre Ámbito Geográfico</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-hover" *ngFor="let ambitoGeografico of ambitosG">
-            <td>{{ ambitoGeografico.nombre_ambito_geografico }}</td>
-            <td>{{ estado(ambitoGeografico) }}</td>
-            <td>
-              <a [routerLink]="['/editAmbG', ambitoGeografico.id_ambito_geografico]">
-                <button type="button" class="btn btn-primary btn-sm">Editar</button>
-              </a>
-              <button type="button" class="btn btn-primary btn-sm ms-3" (click)="deleteAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarAmbitoGeografico">
+          <div class="form-container">
+            <h3>{{ ambitoGeograficoEditId ? 'Editar Ámbito Geográfico' : 'Agregar Ámbito Geográfico' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearOEditarAmbitoGeografico()">
+              <div class="form-group">
+                <label for="nombre_ambito_geografico">Nombre del Ámbito Geográfico</label>
+                <input type="text" id="nombre_ambito_geografico" class="form-control" formControlName="nombre_ambito_geografico" required>
+              </div>
+              <div class="form-group" *ngIf="!ambitoGeograficoEditId">
+                <label for="estado_ambito_geografico">Estado del Ámbito Geográfico</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="estado_ambito_geografico" formControlName="estado_ambito_geografico">
+                  <label class="form-check-label" for="estado_ambito_geografico">Activo</label>
+                </div>
+              </div>              
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionAmbitoGeografico()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ ambitoGeograficoEditId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Ámbito Geográfico</th>
+                <th scope="col">Nombre Ámbito Geográfico</th>
+                <th scope="col">Estado Ámbito Geográfico</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ambitoGeografico of ambitosG" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ ambitoGeografico.id_ambito_geografico }}</td>
+                <td style="border: 1px solid black;">{{ ambitoGeografico.nombre_ambito_geografico }}</td>
+                <td style="border: 1px solid black;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" [checked]="ambitoGeografico.estado_ambito_geografico" (change)="cambiarEstadoAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">
+                    <label class="form-check-label"></label>
+                  </div>
+                </td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn" (click)="mostrarAgregarEditarAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+                  <button type="button" class="btn ms-2" (click)="eliminarAmbitoGeografico(ambitoGeografico.id_ambito_geografico)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 </div>
