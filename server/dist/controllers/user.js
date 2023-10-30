@@ -48,7 +48,7 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.newUser = newUser;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listUsers = yield user_1.User.findAll({ attributes: ['rut_usuario', 'nombre_usuario', 'correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
+    const listUsers = yield user_1.User.findAll({ attributes: ['id_usuario', 'rut_usuario', 'nombre_usuario', 'apellido1_usuario', 'apellido2_usuario', 'correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
     res.json(listUsers);
 });
 exports.getUsers = getUsers;

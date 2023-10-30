@@ -35,7 +35,7 @@ export const newUser = async(req: Request, res: Response) =>{
     }
 }
 export const getUsers = async(req: Request, res: Response) =>{   
-    const listUsers = await User.findAll({attributes:['rut_usuario','nombre_usuario','correo_usuario','estado_usuario','id_rol','id_unidad']});
+    const listUsers = await User.findAll({attributes:['id_usuario','rut_usuario','nombre_usuario','apellido1_usuario','apellido2_usuario','correo_usuario','estado_usuario','id_rol','id_unidad']});
     res.json(listUsers)
 }
 export const loginUser = async(req: Request, res: Response) =>{
