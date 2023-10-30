@@ -5,41 +5,101 @@
     <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
       <div class="container">
         <div class="title">
-          <h1>Lista usuario</h1>
-          <button type="button" class="btn btn-primary" routerLink="/addUsuario">Agregar Usuario</button>
+          <h4>Listado de Usuarios</h4>
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarUsuario(usuarioEditId)">{{ 'Agregar Usuario' }}</button>
         </div>
-        <!-- TABLA EDITAR / ELIMINAR -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Rut</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Apellido1</th>
-              <th scope="col">Apellido2</th>
-              <th scope="col">Contraseña</th>
-              <th scope="col">correo</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="table-hover" *ngFor="let usuario of usuarios">
-              <td>{{ usuario.rut_usuario }}</td>
-              <td>{{ usuario.nombre_usuario }}</td>
-              <td>{{ usuario.apellido1_usuario }}</td>
-              <td>{{ usuario.apellido2_usuario }}</td>
-              <td>{{ usuario.clave_usuario }}</td>
-              <td>{{ usuario.correo_usuario }}</td>
-              <td>{{ estado(usuario) }}</td>
-              <td>
-                <a [routerLink]="['/editUsuario', usuario.id_usuario]">
-                  <button type="button" class="btn btn-primary btn-sm">Editar</button>
-                </a>
-                <button type="button" class="btn btn-primary btn-sm ms-2" (click)="deleteUser(usuario.id_usuario)">Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarUsuario">
+          <div class="form-container">
+            <h3>{{ usuarioEditId ? 'Editar Usuario' : 'Agregar Usuario' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearOEditarUsuario()">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="nombre_usuario">Nombre del Usuario</label>
+                    <input type="text" id="nombre_usuario" class="form-control" formControlName="nombre_usuario">
+                  </div>
+                  <div class="form-group">
+                    <label for="apellido2_usuario">Segundo Apellido</label>
+                    <input type="text" id="apellido2_usuario" class="form-control" formControlName="apellido2_usuario">
+                  </div>
+                  <div class="form-group">
+                    <label for="correo_usuario">Correo del Usuario</label>
+                    <input type="email" id="correo_usuario" class="form-control" formControlName="correo_usuario">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="rut_usuario">Rut del Usuario</label>
+                    <input type="text" id="rut_usuario" class="form-control" formControlName="rut_usuario">
+                  </div>
+                  <div class="form-group">
+                    <label for="apellido1_usuario">Primer Apellido</label>
+                    <input type="text" id="apellido1_usuario" class="form-control" formControlName="apellido1_usuario">
+                  </div>
+                  <div class="form-group">
+                    <label for="clave_usuario">Clave del Usuario</label>
+                    <input type="password" id="clave_usuario" class="form-control" formControlName="clave_usuario">
+                  </div>
+                  <div class="form-group justify-content-center">
+                    <label for="estado_usuario">Estado del Usuario</label>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="estado_usuario" formControlName="estado_usuario">
+                      <label class="form-check-label" for="estado_usuario">Activo</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionUsuario()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ usuarioEditId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Usuario</th>
+                <th scope="col">Rut Usuario</th>
+                <th scope="col">Nombre Usuario</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Clave Usuario</th>
+                <th scope="col">Correo Usuario</th>
+                <th scope="col">Estado Usuario</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido1_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido2_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.clave_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.correo_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.estado_usuario }}</td>
+                <td style="border: 1px solid black;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" [checked]="usuario.estado_usuario" (change)="cambiarEstadoUsuario(usuario.id_usuario)">
+                    <label class="form-check-label"></label>
+                  </div>
+                </td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn" (click)="mostrarAgregarEditarUsuario(usuario.id_usuario)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+                  <button type="button" class="btn ms-2" (click)="eliminarUsuario(usuario.id_usuario)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>

@@ -1,53 +1,38 @@
 .title{
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.black-border{
-    border: 1px solid rgb(11, 0, 112);
-  }
-  
-  app-header{
-    position: fixed;
-    width: 100%;
-    top: 0px;
-    height: 4rem;
-    z-index: 2;
-  }
-  
-  main{
-    position: absolute;
-    width: 100%;
-    top: 4rem;
-    z-index: 1;
-  }
-  
-  app-sidenav{
-    position: absolute;
-    left: 0rem;
-    width: 60px;
-    height: calc(100vh - 4rem);
-    box-shadow: 0px 8px 10px rgb(11, 0, 112);
-    background-color: rgb(11, 0, 112);
-    border-top: 1px solid white;
-    overflow-x: hidden;
-    white-space: nowrap;
-    transition: width 250ms ease-in;
-  }
-  
-  .app-sidenav-open{
-    width: 250px;
-  }
-  
-  .display-area{
-    position: absolute;
-    left: 60px;
-    width: calc(100% - 60px);
-    transition: left 250ms ease-in, width 250ms ease-in;
-  }
-  
-  .display-area-shrink{
-    width: calc(100% - 250px);
-    left: 250px;
-  }
+
+.icon-no-bg {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.form-container {
+  position: absolute;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -20%);
+  z-index: 1; 
+}
+
+.form-container {
+  background-color: #fff; 
+  padding: 40px; 
+  border: 1px solid #000000; 
+  border-radius: 5px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 10px; 
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
