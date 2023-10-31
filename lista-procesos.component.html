@@ -74,7 +74,11 @@
                 >
                   Cancelar
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  (click)="crearEditarProceso()"
+                >
                   {{ procesoEditId ? "Guardar" : "Aceptar" }}
                 </button>
               </div>
@@ -125,9 +129,7 @@
                   <button
                     type="button"
                     class="btn"
-                    (click)="
-                      mostrarAgregarEditarProcesos(proceso.id_procesos)
-                    "
+                    (click)="mostrarAgregarEditarProcesos(proceso.id_procesos)"
                   >
                     <i class="fas fa-edit icon-no-bg"></i>
                   </button>

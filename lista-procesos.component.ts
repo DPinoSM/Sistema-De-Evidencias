@@ -45,6 +45,7 @@ export class ListaProcesosComponent implements OnInit{
       this.form.reset();
     }
     this.mostrarFormularioAgregarProcesos = true;
+    console.log(this.mostrarFormularioAgregarProcesos)
   }
 
   cancelarEdicion() {
@@ -54,12 +55,14 @@ export class ListaProcesosComponent implements OnInit{
   }
 
   crearEditarProceso() {
-    if (this.form.valid) {
+    console.log(this.mostrarFormularioAgregarProcesos);
+    if (this.mostrarFormularioAgregarProcesos == true) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
       const nombre_procesos = this.form.get('nombre_procesos')?.value;
       const estado_procesos = this.form.get('estado_procesos')?.value;
-
+      console.log('entraaaaaaaa')
       if (this.procesoEditId) {
+        console.log(codigo_procesos,nombre_procesos);
         this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
       } else {
         this.realizarOperacionDeProceso(() =>
@@ -92,7 +95,7 @@ export class ListaProcesosComponent implements OnInit{
         })
       )
       .subscribe((data: Proceso[]) => {
-        console.log(data);
+        //console.log(data);
         this.proceso = data;
       });
   }
