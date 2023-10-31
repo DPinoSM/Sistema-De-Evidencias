@@ -2,9 +2,10 @@ import {Request, Response} from 'express';
 import { Proceso } from '../models/proceso'; 
 
 export const newProceso = async(req: Request, res: Response) =>{
-    const { nombre_procesos, codigo_procesos} =  req.body;
+    const { nombre_procesos, codigo_procesos, estado_procesos} =  req.body;
     const codProcesos = await Proceso.findOne({where: {codigo_procesos: codigo_procesos}})
     const nomProcesos = await Proceso.findOne({where: {nombre_procesos: nombre_procesos}})
+
     if(codProcesos) {
         return res.status(400).json({
             msg: 'Ya existe un proceso con ese codigo'
@@ -19,7 +20,7 @@ export const newProceso = async(req: Request, res: Response) =>{
          await Proceso.create({
             "nombre_procesos": nombre_procesos,
             "codigo_procesos": codigo_procesos,
-            "estado_procesos": true
+            "estado_procesos": estado_procesos
         })
         return res.json({
             msg: 'Proceso creado correctamente'      
@@ -32,7 +33,7 @@ export const newProceso = async(req: Request, res: Response) =>{
     }
 }
 export const getProcesos = async(req: Request, res: Response) =>{   
-    const listProcesos = await Proceso.findAll({attributes:['codigo_procesos','nombre_procesos']});
+    const listProcesos = await Proceso.findAll({attributes:['id_procesos','codigo_procesos','nombre_procesos','estado_procesos']});
     res.json(listProcesos)
 }
 export const getProceso = async(req: Request, res: Response) =>{

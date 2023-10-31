@@ -12,9 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProceso = exports.deleteProceso = exports.getProceso = exports.getProcesos = exports.newProceso = void 0;
 const proceso_1 = require("../models/proceso");
 const newProceso = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre_procesos, codigo_procesos } = req.body;
+    const { nombre_procesos, codigo_procesos, estado_procesos } = req.body;
     const codProcesos = yield proceso_1.Proceso.findOne({ where: { codigo_procesos: codigo_procesos } });
     const nomProcesos = yield proceso_1.Proceso.findOne({ where: { nombre_procesos: nombre_procesos } });
+    //const estProcesos = await Proceso.findOne({where: {estado_procesos: estado_procesos}})
     if (codProcesos) {
         return res.status(400).json({
             msg: 'Ya existe un proceso con ese codigo'
@@ -29,7 +30,7 @@ const newProceso = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         yield proceso_1.Proceso.create({
             "nombre_procesos": nombre_procesos,
             "codigo_procesos": codigo_procesos,
-            "estado_procesos": true
+            "estado_procesos": estado_procesos
         });
         return res.json({
             msg: 'Proceso creado correctamente'
@@ -44,7 +45,7 @@ const newProceso = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.newProceso = newProceso;
 const getProcesos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listProcesos = yield proceso_1.Proceso.findAll({ attributes: ['codigo_procesos', 'nombre_procesos'] });
+    const listProcesos = yield proceso_1.Proceso.findAll({ attributes: ['id_procesos', 'codigo_procesos', 'nombre_procesos', 'estado_procesos'] });
     res.json(listProcesos);
 });
 exports.getProcesos = getProcesos;

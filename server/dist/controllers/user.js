@@ -72,7 +72,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // generar token
         const token = jsonwebtoken_1.default.sign({
             rut_usuario: rut_usuario
-        }, process.env.SECRET_KEY || 'PRUEBA1'); // , {expiresIn: '10000'} como tercer parametro para timepo de expiracion del token
+        }, process.env.SECRET_KEY || 'PRUEBA1'); 
         res.json({ token, rol: usuario.Rol.id_rol });
     }
 });
@@ -127,8 +127,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     try {
-        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+        const { rut_usuario,nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
         yield user_1.User.update({
+            rut_usuario: rut_usuario,
             nombre_usuario: nombre_usuario,
             apellido1_usuario: apellido1_usuario,
             apellido2_usuario: apellido2_usuario,

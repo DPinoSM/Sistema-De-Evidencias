@@ -2,54 +2,57 @@
   <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
   <main>
     <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
-    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+    <div class="display-area p-3 " [ngClass]="{'display-area-shrink': sideNavStatus}">
       <div class="container">
         <div class="title">
           <h4>Listado de Usuarios</h4>
           <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarUsuario(usuarioEditId)">{{ 'Agregar Usuario' }}</button>
         </div>
 
+        
+
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarUsuario">
           <div class="form-container">
             <h3>{{ usuarioEditId ? 'Editar Usuario' : 'Agregar Usuario' }}</h3>
             <form [formGroup]="form" (ngSubmit)="crearOEditarUsuario()">
               <div class="row">
-                <div class="col-md-6">
+                <div class="form-group">
+                  <label for="rut_usuario">Rut del Usuario</label>
+                  <input type="number" id="rut_usuario" class="form-control" formControlName="rut_usuario">
+                </div>
                   <div class="form-group">
                     <label for="nombre_usuario">Nombre del Usuario</label>
                     <input type="text" id="nombre_usuario" class="form-control" formControlName="nombre_usuario">
-                  </div>
-                  <div class="form-group">
-                    <label for="apellido2_usuario">Segundo Apellido</label>
-                    <input type="text" id="apellido2_usuario" class="form-control" formControlName="apellido2_usuario">
-                  </div>
-                  <div class="form-group">
-                    <label for="correo_usuario">Correo del Usuario</label>
-                    <input type="email" id="correo_usuario" class="form-control" formControlName="correo_usuario">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="rut_usuario">Rut del Usuario</label>
-                    <input type="text" id="rut_usuario" class="form-control" formControlName="rut_usuario">
                   </div>
                   <div class="form-group">
                     <label for="apellido1_usuario">Primer Apellido</label>
                     <input type="text" id="apellido1_usuario" class="form-control" formControlName="apellido1_usuario">
                   </div>
                   <div class="form-group">
+                    <label for="apellido2_usuario">Segundo Apellido</label>
+                    <input type="text" id="apellido2_usuario" class="form-control" formControlName="apellido2_usuario">
+                  </div>
+                  
+                  <div class="form-group">
                     <label for="clave_usuario">Clave del Usuario</label>
                     <input type="password" id="clave_usuario" class="form-control" formControlName="clave_usuario">
                   </div>
+                  <div class="form-group">
+                    <label for="correo_usuario">Correo del Usuario</label>
+                    <input type="email" id="correo_usuario" class="form-control" formControlName="correo_usuario">
+                  </div>
+                </div>
+
+
                   <div class="form-group justify-content-center">
                     <label for="estado_usuario">Estado del Usuario</label>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="estado_usuario" formControlName="estado_usuario">
                       <label class="form-check-label" for="estado_usuario">Activo</label>
                     </div>
-                  </div>
-                </div>
+          
               </div>
+
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionUsuario()">Cancelar</button>
                 <button type="submit" class="btn btn-primary">{{ usuarioEditId ? 'Guardar' : 'Aceptar' }}</button>
@@ -57,11 +60,11 @@
             </form>
           </div>
         </div>
+
         <div class="table-container mt-4">
           <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
             <thead>
               <tr>
-                <th scope="col">ID Usuario</th>
                 <th scope="col">Rut Usuario</th>
                 <th scope="col">Nombre Usuario</th>
                 <th scope="col">Apellido Paterno</th>
@@ -74,14 +77,12 @@
             </thead>
             <tbody>
               <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
-                <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.apellido1_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.apellido2_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.clave_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.correo_usuario }}</td>
-                <td style="border: 1px solid black;">{{ usuario.estado_usuario }}</td>
                 <td style="border: 1px solid black;">
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" [checked]="usuario.estado_usuario" (change)="cambiarEstadoUsuario(usuario.id_usuario)">
