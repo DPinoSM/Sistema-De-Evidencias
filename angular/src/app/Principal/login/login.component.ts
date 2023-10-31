@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
               this.error = data.msg || 'Error inesperado en el inicio de sesión';
             }
           } else {
-            // Manejo de otro tipo de datos.
           }
         },
         error: (error: any) => {
