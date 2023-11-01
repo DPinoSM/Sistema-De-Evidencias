@@ -7,7 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AppRoutingModule } from './Rutas/app-routing.module';
+import { AppRoutingModule } from './Rutas/app-routing.module'; 
 import { TokenInterceptor } from './Principal/login/token-interceptor';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Principal/login/login.component';
@@ -24,6 +24,7 @@ import { ListaAmbitoGComponent } from './componentes/lista-ambito-g/lista-ambito
 import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuarios.component';
 import { HeaderComponent } from './dashboard/header/header.component';
 import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
+import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facultad.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
     ListaCriteriosComponent,
     ListaProcesosComponent,
     ListaRegistrosComponent,
+    ListaFacultadComponent,
     ListaAmbitoGComponent,
     ListaUsuariosComponent,
     HeaderComponent,
