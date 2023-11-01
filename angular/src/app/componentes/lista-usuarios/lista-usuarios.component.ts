@@ -4,6 +4,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
+import { ROUTER_CONFIGURATION } from '@angular/router';
 
 interface User {
   id_usuario: number;
@@ -64,6 +65,14 @@ export class ListaUsuariosComponent implements OnInit {
     this.form.reset();
   }
 
+  usuarioExistenteEnRut(rut_usuario: string): boolean {
+    return this.usuarios.some(usuario => usuario.rut_usuario === rut_usuario);
+  }
+  
+  usuarioExistenteEnCorreo(correo_usuario: string): boolean {
+    return this.usuarios.some(usuario => usuario.correo_usuario === correo_usuario);
+  }
+
   crearOEditarUsuario() {
     if (this.form.valid) {
       const rut_usuario = this.form.get('rut_usuario')?.value;
@@ -73,25 +82,33 @@ export class ListaUsuariosComponent implements OnInit {
       const clave_usuario = this.form.get('clave_usuario')?.value;
       const correo_usuario = this.form.get('correo_usuario')?.value;
       const estado_usuario = this.form.get('estado_usuario')?.value;
+  
 
-      if (this.usuarioEditId) {
-        this.editarUsuario(this.usuarioEditId, rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario);
+      if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
+
+        this.toastr.error('No se puede crear un usuario con el mismo RUT o Correo existente', 'Error');
       } else {
-        this.realizarOperacionDeUsuario(() =>
-          this.usuarioService.newUser({
-            rut_usuario: rut_usuario,
-            nombre_usuario: nombre_usuario,
-            apellido1_usuario: apellido1_usuario,
-            apellido2_usuario: apellido2_usuario,
-            clave_usuario: clave_usuario,
-            correo_usuario: correo_usuario,
-            estado_usuario: estado_usuario
-          }), 'Usuario Creado');
+        if (this.usuarioEditId) {
+ 
+        } else {
+          this.realizarOperacionDeUsuario(() =>
+            this.usuarioService.newUser({
+              rut_usuario: rut_usuario,
+              nombre_usuario: nombre_usuario,
+              apellido1_usuario: apellido1_usuario,
+              apellido2_usuario: apellido2_usuario,
+              clave_usuario: clave_usuario,
+              correo_usuario: correo_usuario,
+              estado_usuario: estado_usuario
+            }), 'Usuario Creado');
+        }
       }
     }
-
+  
     this.mostrarFormularioAgregarUsuario = false;
   }
+
+  
 
   obtenerUsuario(id: number) {
     this.usuarioService.getUser(id).subscribe((usuario) => {

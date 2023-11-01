@@ -12,7 +12,6 @@ import { ListaAmbitoGComponent } from '../componentes/lista-ambito-g/lista-ambit
 import { ListaCriteriosComponent } from '../componentes/lista-criterios/lista-criterios.component';
 import { ListaProcesosComponent } from '../componentes/lista-procesos/lista-procesos.component';
 import { ListaUsuariosComponent } from '../componentes/lista-usuarios/lista-usuarios.component';
-import { AddEditUserComponent } from '../componentes/add-edit-user/add-edit-user.component';
 import { ListaRegistrosComponent } from '../componentes/lista-registros/lista-registros.component';
 import { ListaFacultadComponent } from '../componentes/lista-facultad/lista-facultad.component';
 
@@ -30,13 +29,7 @@ const routes: Routes = [
   { path: 'process', component: ListaProcesosComponent },
   { path: 'ambitoG', component: ListaAmbitoGComponent },
   { path: 'usuarios', component: ListaUsuariosComponent},
-  { path: 'facultad', component: ListaFacultadComponent},
-
-  { path: 'addUsuario', component:AddEditUserComponent},
-
-  { path: 'editUsuario/:id', component:AddEditUserComponent} ,
-  
-  
+  { path: 'facultad', component: ListaFacultadComponent}
   
 ];
 

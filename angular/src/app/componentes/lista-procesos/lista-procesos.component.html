@@ -82,6 +82,9 @@
                   {{ procesoEditId ? "Guardar" : "Aceptar" }}
                 </button>
               </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
+              </div>
             </form>
           </div>
         </div>

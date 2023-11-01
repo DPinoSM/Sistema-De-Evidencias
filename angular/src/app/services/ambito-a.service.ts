@@ -6,43 +6,44 @@ import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AmbitoAService {
-  private backendUrl = 'http://localhost:3000/api/ambitoacademico';
+  private apiUrl = 'http://localhost:3000/api/ambitoacademico';
 
   constructor(private http: HttpClient) {}
 
   // Obtiene la lista de ámbitos académicos.
   getAmbitosAcademicos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/lista`).pipe(
-      catchError(this.handleError)
+    return this.http.get<any[]>(`${this.apiUrl}/lista`)
+    .pipe(catchError(this.handleError)
     );
   }
 
   // Crea un nuevo ámbito académico.
   newAmbitoAcademico(ambitoData: any): Observable<any> {
-    return this.http.post<any>(`${this.backendUrl}`, ambitoData).pipe(
-      catchError(this.handleError)
+    return this.http.post<any>(`${this.apiUrl}`, ambitoData)
+    .pipe(catchError(this.handleError)
     );
   }
 
   // Obtiene un ámbito académico por su ID.
   getAmbitoAcademico(id: number): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/${id}`).pipe(
-      catchError(this.handleError)
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
+    .pipe(catchError(this.handleError)
     );
   }
 
   // Actualiza un ámbito académico existente por su ID.
   updateAmbitoAcademico(id: number, ambitoData: any): Observable<any> {
-    return this.http.put<any>(`${this.backendUrl}/${id}`, ambitoData).pipe(
-      catchError(this.handleError)
+    return this.http.put<any>(`${this.apiUrl}/${id}`, ambitoData)
+    .pipe(catchError(this.handleError)
     );
   }
 
   // Elimina un ámbito académico por su ID.
   deleteAmbitoAcademico(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.backendUrl}/${id}`).pipe(
-      catchError(this.handleError)
+    return this.http.delete<any>(`${this.apiUrl}/${id}`)
+    .pipe(catchError(this.handleError)
     );
   }
 

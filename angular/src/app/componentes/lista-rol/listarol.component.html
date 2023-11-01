@@ -6,10 +6,8 @@
       <div class="container">
         <div class="title">
           <h3 class="page-title">Listado de Roles</h3>
-          <!-- Botón para mostrar el formulario de agregar/editar rol -->
           <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar Rol' }}</button>
         </div>
-        <!-- Div contenedor para centrar el formulario vertical y horizontalmente -->
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRol">
           <div class="form-container">
             <h3>{{ editRoleId ? 'Editar Rol' : 'Agregar Rol' }}</h3>
@@ -21,6 +19,9 @@
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
                 <button type="submit" class="btn btn-primary ">{{ editRoleId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
               </div>
             </form>
           </div>
@@ -42,7 +43,6 @@
                   <button type="button" class="btn" (click)="mostrarFormularioAgregarEditarRol(rol.id_rol)">
                     <i class="fas fa-edit icon-no-bg"></i>
                   </button>
-  
                   <button type="button" class="btn ms-2" (click)="eliminarRol(rol.id_rol)">
                     <i class="fa fa-trash icon-no-bg"></i>
                   </button>

@@ -50,28 +50,26 @@ export class ListarolComponent implements OnInit {
 
   crearNuevoRol() {
     if (this.form.valid) {
-      const nombreRol = this.form.get('nombre')?.value;
-
-      if (this.nombreRolExistente(nombreRol)) {
-        this.errorMsg = 'El nombre de rol ya existe';
+      const nombre_rol = this.form.get('nombre_rol')?.value;
+      if (this.nombreRolExistente(nombre_rol)) {
+        this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
       } else {
         this.errorMsg = undefined;
-
         if (this.editRoleId) {
-          this.editarRol(this.editRoleId, nombreRol);
+          this.editarRol(this.editRoleId, nombre_rol);
         } else {
           this.realizarOperacionDeRol(() => 
-            this.rolService.createRol(nombreRol), 'Rol Creado');
+            this.rolService.createRol(nombre_rol), 'Rol Creado');
         }
       }
     }
-
     this.mostrarFormularioAgregarRol = false;
   }
-
-  nombreRolExistente(nombre: string): boolean {
-    return this.roles.some(rol => rol.nombre_rol === nombre);
+  
+  nombreRolExistente(nombre_rol: string): boolean {
+    return this.roles.some(rol => rol.nombre_rol === nombre_rol);
   }
+  
 
   obtenerRol(id: number) {
     this.rolService.getRol(id).subscribe((rol: Rol) => {

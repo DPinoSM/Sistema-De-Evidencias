@@ -25,7 +25,6 @@ export class ListaProcesosComponent implements OnInit{
     private toastr: ToastrService
   ) {
     this.form = new FormGroup({
-      //id_procesos: new FormControl(null, [Validators.required]),
       codigo_procesos: new FormControl('', [Validators.required]),
       nombre_procesos: new FormControl('', [Validators.required]),
       estado_procesos: new FormControl(null, [Validators.required])
@@ -54,19 +53,25 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
+  codigoProcesoExistente(codigo_procesos: string): boolean {
+    return this.proceso.some(proceso => proceso.codigo_procesos === codigo_procesos);
+  }
+  
   crearEditarProceso() {
-    console.log(this.mostrarFormularioAgregarProcesos);
-    if (this.mostrarFormularioAgregarProcesos == true) {
+    if (this.mostrarFormularioAgregarProcesos) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
       const nombre_procesos = this.form.get('nombre_procesos')?.value;
       const estado_procesos = this.form.get('estado_procesos')?.value;
-      console.log('entraaaaaaaa')
-      if (this.procesoEditId) {
-        console.log(codigo_procesos,nombre_procesos);
-        this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
+  
+      if (this.codigoProcesoExistente(codigo_procesos)) {
+        this.toastr.error('No se puede crear un proceso con el mismo código existente', 'Error');
       } else {
-        this.realizarOperacionDeProceso(() =>
-          this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
+        if (this.procesoEditId) {
+          this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
+        } else {
+          this.realizarOperacionDeProceso(() =>
+            this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
+        }
       }
     }
     this.mostrarFormularioAgregarProcesos = false;
