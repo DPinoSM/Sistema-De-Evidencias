@@ -28,6 +28,9 @@
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionAmbitoGeografico()">Cancelar</button>
                 <button type="submit" class="btn btn-primary">{{ ambitoGeograficoEditId ? 'Guardar' : 'Aceptar' }}</button>
               </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
+              </div>
             </form>
           </div>
         </div>

@@ -44,17 +44,17 @@ export class CriterioService {
 
   // Manejo de errores
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('Error:', error);
-
-    let errorMessage = 'Ocurrió un error';
-
+    console.error('Error en la solicitud:', error);
+  
+    let errorMessage = 'Error en la solicitud. Por favor, inténtalo de nuevo más tarde.';
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error del lado del cliente: ${error.error.message}`;
-    } else {
-      errorMessage = `Error del lado del servidor: ${error.status} - ${error.error}`;
+    } else if (error.status === 404) {
+      errorMessage = 'No se encontró el recurso solicitado.';
+    } else if (error.status === 500) {
+      errorMessage = 'Error del servidor interno. Por favor, inténtalo más tarde.';
     }
-
-    // Devuelve un error observable con el mensaje de error
+  
     return throwError(() => errorMessage);
   }
 }

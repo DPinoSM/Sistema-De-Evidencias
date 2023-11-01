@@ -22,7 +22,6 @@ import { ListaProcesosComponent } from './componentes/lista-procesos/lista-proce
 import { ListaRegistrosComponent } from './componentes/lista-registros/lista-registros.component';
 import { ListaAmbitoGComponent } from './componentes/lista-ambito-g/lista-ambito-g.component';
 import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuarios.component';
-import { AddEditUserComponent } from './componentes/add-edit-user/add-edit-user.component';
 import { HeaderComponent } from './dashboard/header/header.component';
 import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
 
@@ -40,7 +39,6 @@ import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
     ListaRegistrosComponent,
     ListaAmbitoGComponent,
     ListaUsuariosComponent,
-    AddEditUserComponent,
     HeaderComponent,
     SidenavComponent,
   ],

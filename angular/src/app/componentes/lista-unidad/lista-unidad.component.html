@@ -15,7 +15,7 @@
             <form [formGroup]="form" (ngSubmit)="crearOEditarUnidad()">
               <div class="form-group">
                 <label for="nombre_unidad">Nombre de la Unidad</label>
-                <input type="text" id="nombre_unidad" class="form-control" formControlName="nombre">
+                <input type="text" id="nombre_unidad" class="form-control" formControlName="nombre_unidad">
               </div>
               <div class="form-group">
                 <label for="unidad_defecto">Estado de la Unidad</label>
@@ -27,6 +27,9 @@
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
                 <button type="submit" class="btn btn-primary">{{ unidadEditId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
               </div>
             </form>
           </div>
