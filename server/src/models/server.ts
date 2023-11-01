@@ -49,7 +49,7 @@ class Server {
         this.app.use('/api/criterio', routerCriterio);
         this.app.use('/api/proceso', routerProceso);
         this.app.use('/api/ambitoacademico', routerAmbitoAcademico);
-        this.app.use('api/facultad', routerFacultad);
+        this.app.use('/api/facultad', routerFacultad);
         this.app.use('/api/ambitogeografico', routerAmbitoGeografico);
         this.app.use('/api/carrera', routerCarrera);
         this.app.use('/api/estado', routerEstado);

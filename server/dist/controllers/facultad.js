@@ -12,12 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFacultad = exports.getFacultad = exports.updateFacultad = exports.newFacultad = exports.getFacultades = void 0;
 const facultad_1 = require("../models/facultad");
 const getFacultades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listFacultad = yield facultad_1.Facultad.findAll({ attributes: ['id_facultad', 'nombre_facultad', 'telefono_facultad'] });
+    const listFacultad = yield facultad_1.Facultad.findAll({ attributes: ['id_facultad', 'nombre_facultad'] });
     res.json(listFacultad);
 });
 exports.getFacultades = getFacultades;
 const newFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre_facultad, telefono_facultad } = req.body;
+    const { nombre_facultad } = req.body;
     const idFacultad = yield facultad_1.Facultad.findOne({ where: { nombre_facultad: nombre_facultad } });
     if (idFacultad) {
         return res.status(400).json({
@@ -26,8 +26,7 @@ const newFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     try {
         yield facultad_1.Facultad.create({
-            "nombre_facultad": nombre_facultad,
-            "id_detalle_fono": telefono_facultad
+            "nombre_facultad": nombre_facultad
         });
         return res.json({
             msg: 'Facultad creado correctamente'
@@ -43,7 +42,7 @@ const newFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.newFacultad = newFacultad;
 const updateFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { nombre_facultad, telefono_facultad } = req.body;
+    const { nombre_facultad } = req.body;
     const idFacultad = yield facultad_1.Facultad.findOne({ where: { id_facultad: id } });
     if (!idFacultad) {
         return res.status(400).json({
@@ -52,8 +51,7 @@ const updateFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     try {
         yield facultad_1.Facultad.update({
-            nombre_facultad: nombre_facultad,
-            id_detalle_fono: telefono_facultad
+            nombre_facultad: nombre_facultad
         }, { where: { id_facultad: id } });
         return res.json({
             msg: 'Facultad ' + id + ' actualizado correctamente'

@@ -22,7 +22,7 @@ const newAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, func
     try {
         yield ambito_geografico_1.AmbitoGeografico.create({
             "nombre_ambito_geografico": nombre_ambito_geografico,
-            "estado_ambito_geografico": estado_ambito_geografico
+            "estado_ambito_geografico": true
         });
         return res.json({
             msg: 'Ambito geografico creado correctamente'

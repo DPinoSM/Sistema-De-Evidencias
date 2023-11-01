@@ -25,11 +25,6 @@ export class SidenavComponent implements OnInit {
       link: '/debilidades', 
     },
     {
-      name: 'Informes',
-      icon: 'fa-solid fa-file-alt',
-      link: '/informes', 
-    },
-    {
       name: 'Impacto',
       icon: 'fa-solid fa-chart-area',
       link: '/impacto',

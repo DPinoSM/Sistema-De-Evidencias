@@ -1,11 +1,11 @@
 import {Request, Response} from 'express';
 import { Facultad } from '../models/facultad';
 export const getFacultades = async(req: Request, res: Response) =>{  
-    const listFacultad = await Facultad.findAll({attributes:['id_facultad','nombre_facultad','telefono_facultad']});
+    const listFacultad = await Facultad.findAll({attributes:['id_facultad','nombre_facultad']});
     res.json(listFacultad)
 }
 export const newFacultad = async(req: Request, res: Response) =>{
-    const {nombre_facultad, telefono_facultad} =  req.body;
+    const {nombre_facultad} =  req.body;
     const idFacultad = await Facultad.findOne({where: {nombre_facultad: nombre_facultad}})
     if(idFacultad) {
         return res.status(400).json({
@@ -14,8 +14,7 @@ export const newFacultad = async(req: Request, res: Response) =>{
     }
     try{
          await Facultad.create({
-            "nombre_facultad": nombre_facultad,
-            "id_detalle_fono":telefono_facultad
+            "nombre_facultad": nombre_facultad
         })
         return res.json({
             msg: 'Facultad creado correctamente'       
@@ -29,7 +28,7 @@ export const newFacultad = async(req: Request, res: Response) =>{
 }
 export const updateFacultad = async(req: Request, res: Response) => {
     const {id} = req.params;
-    const {nombre_facultad, telefono_facultad} = req.body;
+    const {nombre_facultad} = req.body;
     const idFacultad = await Facultad.findOne({where: {id_facultad: id}})
     if (!idFacultad) {
         return res.status(400).json({
@@ -38,8 +37,7 @@ export const updateFacultad = async(req: Request, res: Response) => {
     }
     try{
         await Facultad.update({
-            nombre_facultad: nombre_facultad,
-            id_detalle_fono: telefono_facultad
+            nombre_facultad: nombre_facultad
             },
             {where: {id_facultad: id}}
         )

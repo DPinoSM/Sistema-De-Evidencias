@@ -9,7 +9,6 @@ const connection_1 = __importDefault(require("../db/connection"));
 exports.Facultad = connection_1.default.define('facultad', {
     "id_facultad": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "nombre_facultad": { type: sequelize_1.DataTypes.STRING },
-    "telefono_facultad": { type: sequelize_1.DataTypes.INTEGER }
 }, {
     freezeTableName: true,
     timestamps: false,

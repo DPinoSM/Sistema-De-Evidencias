@@ -48,7 +48,7 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.newUser = newUser;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listUsers = yield user_1.User.findAll({ attributes: ['id_usuario', 'rut_usuario', 'nombre_usuario', 'apellido1_usuario', 'apellido2_usuario','clave_usuario', 'correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
+    const listUsers = yield user_1.User.findAll({ attributes: ['id_usuario', 'rut_usuario', 'nombre_usuario', 'apellido1_usuario', 'apellido2_usuario', 'correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
     res.json(listUsers);
 });
 exports.getUsers = getUsers;
@@ -72,7 +72,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // generar token
         const token = jsonwebtoken_1.default.sign({
             rut_usuario: rut_usuario
-        }, process.env.SECRET_KEY || 'PRUEBA1'); 
+        }, process.env.SECRET_KEY || 'PRUEBA1'); // , {expiresIn: '10000'} como tercer parametro para timepo de expiracion del token
         res.json({ token, rol: usuario.Rol.id_rol });
     }
 });
@@ -127,9 +127,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     try {
-        const { rut_usuario,nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
         yield user_1.User.update({
-            rut_usuario: rut_usuario,
             nombre_usuario: nombre_usuario,
             apellido1_usuario: apellido1_usuario,
             apellido2_usuario: apellido2_usuario,

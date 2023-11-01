@@ -60,7 +60,7 @@ class Server {
         this.app.use('/api/criterio', criterio_1.default);
         this.app.use('/api/proceso', proceso_1.default);
         this.app.use('/api/ambitoacademico', ambito_academico_1.default);
-        this.app.use('api/facultad', facultad_1.default);
+        this.app.use('/api/facultad', facultad_1.default);
         this.app.use('/api/ambitogeografico', ambito_geografico_1.default);
         this.app.use('/api/carrera', carrera_1.default);
         this.app.use('/api/estado', estado_1.default);

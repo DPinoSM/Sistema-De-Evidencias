@@ -1,0 +1,58 @@
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+        <div class="container">
+          <div class="title">
+            <h3 class="page-title">Listado de Facultades</h3>
+            <!-- Botón para mostrar el formulario de agregar/editar facultad -->
+            <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarFacultad(editFacultadId)">{{ 'Agregar Facultad' }}</button>
+          </div>
+          <!-- Div contenedor para centrar el formulario vertical y horizontalmente -->
+          <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarFacultad">
+            <div class="form-container">
+              <h3>{{ editFacultadId ? 'Editar Facultad' : 'Agregar Facultad' }}</h3>
+              <form [formGroup]="form" (ngSubmit)="crearNuevoFacultad()">
+                <div class="form-group">
+                  <label for="nombre_facultad">Nombre de la Facultad</label>
+                  <input type="text" id="nombre_facultad" class="form-control" formControlName="nombre_facultad" required>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
+                  <button type="submit" class="btn btn-primary ">{{ editFacultadId ? 'Guardar' : 'Aceptar' }}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="table-container mt-4">
+            <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+              <thead>
+                <tr>
+                  <th scope="col">ID Facultad</th>
+                  <th scope="col">Nombre Facultad</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let facultad of facultades" style="border: 1px solid black;">
+                  <td style="border: 1px solid black;">{{ facultad.id_facultad }}</td>
+                  <td style="border: 1px solid black;">{{ facultad.nombre_facultad }}</td>
+                  <td style="border: 1px solid black;">
+                    <button type="button" class="btn" (click)="mostrarFormularioAgregarEditarFacultad(facultad.id_facultad)">
+                      <i class="fas fa-edit icon-no-bg"></i>
+                    </button>
+    
+                    <button type="button" class="btn ms-2" (click)="eliminarFacultad(facultad.id_facultad)">
+                      <i class="fa fa-trash icon-no-bg"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

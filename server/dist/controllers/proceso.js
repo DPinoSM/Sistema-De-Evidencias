@@ -15,7 +15,6 @@ const newProceso = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { nombre_procesos, codigo_procesos, estado_procesos } = req.body;
     const codProcesos = yield proceso_1.Proceso.findOne({ where: { codigo_procesos: codigo_procesos } });
     const nomProcesos = yield proceso_1.Proceso.findOne({ where: { nombre_procesos: nombre_procesos } });
-    //const estProcesos = await Proceso.findOne({where: {estado_procesos: estado_procesos}})
     if (codProcesos) {
         return res.status(400).json({
             msg: 'Ya existe un proceso con ese codigo'

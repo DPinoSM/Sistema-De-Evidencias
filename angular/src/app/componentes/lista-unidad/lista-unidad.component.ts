@@ -25,7 +25,7 @@ export class ListaUnidadComponent implements OnInit {
     private unidadService: UnidadService, 
     private toastr: ToastrService) {
     this.form = new FormGroup({
-      nombre: new FormControl('', [Validators.required]),
+      nombre_unidad: new FormControl('', [Validators.required]),
       unidad_defecto: new FormControl(null, [Validators.required])
     });
   }
@@ -71,7 +71,7 @@ export class ListaUnidadComponent implements OnInit {
   obtenerUnidad(id: number) {
     this.unidadService.getUnidad(id).subscribe(unidad => {
       if (unidad) {
-        this.form.get('nombre')?.setValue(unidad.nombre_unidad);
+        this.form.get('nombre_unidad')?.setValue(unidad.nombre_unidad);
         this.form.get('unidad_defecto')?.setValue(unidad.unidad_defecto);
       }
     });
@@ -94,9 +94,9 @@ export class ListaUnidadComponent implements OnInit {
       });
   }
 
-  editarUnidad(id: number, nombre: string, unidad_defecto: any) {
+  editarUnidad(id: number, nombre_unidad: string, unidad_defecto: any) {
     this.realizarOperacionDeUnidad(() => 
-      this.unidadService.updateUnidad(id, { nombre_unidad: nombre, unidad_defecto }), 'Unidad Editada');
+      this.unidadService.updateUnidad(id, { nombre_unidad: nombre_unidad, unidad_defecto }), 'Unidad Editada');
   }
   
   cambiarEstadoUnidad(id: number) {
