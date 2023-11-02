@@ -57,7 +57,7 @@ export class ListaAmbitosAComponent implements OnInit {
       const estado_ambito_academico = this.form.get('estado_ambito_academico')?.value;
 
       if (this.nombreAmbitoAcademicoExistente(nombre_ambito_academico)) {
-        this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
+        this.toastr.error('No se puede crear un Ámbito Academico con un nombre ya existente', 'Error');
       } else {
         this.errorMsg = undefined;
         if (this.ambitoAcademicoEditId) {

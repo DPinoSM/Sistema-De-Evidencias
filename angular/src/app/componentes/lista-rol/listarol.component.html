@@ -13,9 +13,13 @@
             <h3>{{ editRoleId ? 'Editar Rol' : 'Agregar Rol' }}</h3>
             <form [formGroup]="form" (ngSubmit)="crearNuevoRol()">
               <div class="form-group">
-                <label for="nombre">Nombre del Rol</label>
-                <input type="text" id="nombre" class="form-control" formControlName="nombre" required>
+                <label for="nombre_rol">Nombre del Rol</label>
+                <input type="text" id="nombre" class="form-control" formControlName="nombre_rol" required>
+                <div class="error-message error-text" *ngIf="form.get('nombre_rol')?.invalid && (form.get('nombre_rol')?.dirty || form.get('nombre_rol')?.touched)">
+                  El Nombre del Rol es obligatorio.
+                </div>
               </div>
+              
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
                 <button type="submit" class="btn btn-primary ">{{ editRoleId ? 'Guardar' : 'Aceptar' }}</button>

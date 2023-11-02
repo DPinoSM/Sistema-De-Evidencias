@@ -50,7 +50,7 @@ const getProcesos = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getProcesos = getProcesos;
 const getProceso = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idProcesos = yield proceso_1.Proceso.findOne({ attributes: ['codigo_procesos', 'nombre_procesos'], where: { id_procesos: id } });
+    const idProcesos = yield proceso_1.Proceso.findOne({ attributes: ['codigo_procesos', 'nombre_procesos', 'estado_procesos'], where: { id_procesos: id } });
     if (!idProcesos) {
         return res.status(400).json({
             msg: "El proceso indicado no existe"

@@ -60,11 +60,11 @@ export class ListaRegistrosComponent implements OnInit {
       const datosRegistro = this.form.get('datos')?.value;
       const contenidoRegistro = this.form.get('contenido')?.value;
   
-      if (this.nombreRegistroExistente(datosRegistro)) {
-        this.toastr.error('No se puede crear un registro con el mismo nombre existente', 'Error');
+      if (this.editRegistroId) {
+        this.editRegistro(this.editRegistroId, datosRegistro, contenidoRegistro);
       } else {
-        if (this.editRegistroId) {
-          this.editRegistro(this.editRegistroId, datosRegistro, contenidoRegistro);
+        if (this.nombreRegistroExistente(datosRegistro)) {
+          this.toastr.error('No se puede crear un registro con el mismo nombre existente', 'Error');
         } else {
           this.realizarOperacionDeRegistro(() =>
             this.registroService.createRegistro({ datos_registro: datosRegistro, contenido_registro: contenidoRegistro }), 'Registro Creado');
@@ -74,6 +74,7 @@ export class ListaRegistrosComponent implements OnInit {
   
     this.mostrarFormularioAgregarRegistro = false;
   }
+  
 
   getRegistroById(id: number) {
     this.registroService.getRegistroById(id).subscribe((registro) => {
