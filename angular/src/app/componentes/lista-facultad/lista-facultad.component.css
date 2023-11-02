@@ -15,6 +15,7 @@
     left: 50%; 
     transform: translate(-10%, -50%);
     z-index: 1; 
+    border-collapse: collapse;
   }
   
   .form-container {
@@ -34,6 +35,7 @@
     display: flex;
     justify-content: flex-end;
   }
+  
 
   /* styles.css */
 .image-container {
@@ -47,3 +49,4 @@
   max-width: 55%; /* La imagen se ajusta al ancho del contenedor */
   max-height: 100%; /* La imagen se ajusta a la altura del contenedor */
 }
+

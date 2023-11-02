@@ -56,7 +56,11 @@ export class ListaAmbitosAComponent implements OnInit {
       const nombre_ambito_academico = this.form.get('nombre_ambito_academico')?.value;
       const estado_ambito_academico = this.form.get('estado_ambito_academico')?.value;
 
-      if (this.ambitoAcademicoEditId) {
+      if (this.nombreAmbitoAcademicoExistente(nombre_ambito_academico)) {
+        this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
+      } else {
+        this.errorMsg = undefined;
+        if (this.ambitoAcademicoEditId) {
         this.editarAmbitoAcademico(this.ambitoAcademicoEditId, nombre_ambito_academico, estado_ambito_academico);
       } else {
         this.realizarOperacionDeAmbitoA(() =>
@@ -64,10 +68,16 @@ export class ListaAmbitosAComponent implements OnInit {
             nombre_ambito_academico: nombre_ambito_academico, 
             estado_ambito_academico: estado_ambito_academico 
           }), 'Ambito Academico Creado');      
+
+        }
       }
-    }
+    }      
 
     this.mostrarFormularioAgregarAmbitoAcademico = false;
+  }
+
+  nombreAmbitoAcademicoExistente(nombre_ambito_academico: string): boolean {
+    return this.ambitosAcademicos.some(ambito_academico => ambito_academico.nombre_ambito_academico === nombre_ambito_academico);
   }
 
   obtenerAmbitoAcademico(id: number) {

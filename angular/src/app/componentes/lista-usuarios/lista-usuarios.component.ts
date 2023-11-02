@@ -4,18 +4,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
-import { ROUTER_CONFIGURATION } from '@angular/router';
-
-interface User {
-  id_usuario: number;
-  rut_usuario: string;
-  nombre_usuario: string;
-  apellido1_usuario: string;
-  apellido2_usuario: string;
-  clave_usuario: string;
-  correo_usuario: string;
-  estado_usuario: boolean;
-}
+import { User } from 'src/app/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-lista-usuarios',
