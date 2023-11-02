@@ -23,7 +23,7 @@ export class ListarolComponent implements OnInit {
 
   constructor(private rolService: RolService, private toastr: ToastrService) {
     this.form = new FormGroup({
-      nombre: new FormControl('', [Validators.required])
+      nombre_rol: new FormControl('', [Validators.required]) // Cambiar a 'nombre_rol'
     });
   }
 
@@ -51,13 +51,14 @@ export class ListarolComponent implements OnInit {
   crearNuevoRol() {
     if (this.form.valid) {
       const nombre_rol = this.form.get('nombre_rol')?.value;
-      if (this.nombreRolExistente(nombre_rol)) {
-        this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
+  
+      if (this.editRoleId) {
+        this.editarRol(this.editRoleId, nombre_rol);
       } else {
-        this.errorMsg = undefined;
-        if (this.editRoleId) {
-          this.editarRol(this.editRoleId, nombre_rol);
+        if (this.nombreRolExistente(nombre_rol)) {
+          this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
         } else {
+          this.errorMsg = undefined;
           this.realizarOperacionDeRol(() => 
             this.rolService.createRol(nombre_rol), 'Rol Creado');
         }
@@ -66,15 +67,15 @@ export class ListarolComponent implements OnInit {
     this.mostrarFormularioAgregarRol = false;
   }
   
+
   nombreRolExistente(nombre_rol: string): boolean {
     return this.roles.some(rol => rol.nombre_rol === nombre_rol);
   }
-  
 
   obtenerRol(id: number) {
     this.rolService.getRol(id).subscribe((rol: Rol) => {
       if (rol) {
-        this.form.get('nombre')?.setValue(rol.nombre_rol);
+        this.form.get('nombre_rol')?.setValue(rol.nombre_rol);
       }
     });
   }
@@ -95,9 +96,9 @@ export class ListarolComponent implements OnInit {
       });
   }
 
-  editarRol(id: number, nombre: string) {
+  editarRol(id: number, nombre_rol: string) {
     this.realizarOperacionDeRol(() => 
-      this.rolService.updateRol(id, nombre), 'Rol Editado');
+      this.rolService.updateRol(id, nombre_rol), 'Rol Editado');
   }
 
   eliminarRol(id: number) {

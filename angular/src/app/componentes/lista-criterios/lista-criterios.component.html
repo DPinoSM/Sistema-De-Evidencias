@@ -16,15 +16,27 @@
               <div class="form-group">
                 <label for="nombre_criterios">Nombre del Criterio</label>
                 <input type="text" id="nombre_criterios" class="form-control" formControlName="nombre_criterios" required>
+                <div class="error-message error-text" *ngIf="form.get('nombre_criterios')?.invalid && (form.get('nombre_criterios')?.dirty || form.get('nombre_criterios')?.touched)">
+                  El Nombre del Criterio es obligatorio.
+                </div>
               </div>
+              
               <div class="form-group">
                 <label for="codigo_criterios">Código del Criterio</label>
                 <input type="number" id="codigo_criterios" class="form-control" formControlName="codigo_criterios" required>
+                <div class="error-message error-text" *ngIf="form.get('codigo_criterios')?.invalid && (form.get('codigo_criterios')?.dirty || form.get('codigo_criterios')?.touched)">
+                  El Código del Criterio es obligatorio.
+                </div>
               </div>
+              
               <div class="form-group">
                 <label for="descripcion_criterios">Descripción del Criterio</label>
                 <input type="text" id="descripcion_criterios" class="form-control" formControlName="descripcion_criterios" required>
+                <div class="error-message error-text" *ngIf="form.get('descripcion_criterios')?.invalid && (form.get('descripcion_criterios')?.dirty || form.get('descripcion_criterios')?.touched)">
+                  La Descripción del Criterio es obligatoria.
+                </div>
               </div>
+              
               <div *ngIf="!criterioEditId" class="form-group">
                 <label for="estado_criterios">Estado del Criterio</label>
                 <div class="form-check form-switch">

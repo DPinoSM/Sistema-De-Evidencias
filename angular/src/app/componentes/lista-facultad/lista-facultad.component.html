@@ -6,10 +6,8 @@
       <div class="container">
         <div class="title">
             <h3 class="page-title">Listado de Facultades</h3>
-            <!-- Botón para mostrar el formulario de agregar/editar facultad -->
             <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarFacultad(editFacultadId)">{{ 'Agregar Facultad' }}</button>
           </div>
-          <!-- Div contenedor para centrar el formulario vertical y horizontalmente -->
           <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarFacultad">
             <div class="form-container">
               <h3>{{ editFacultadId ? 'Editar Facultad' : 'Agregar Facultad' }}</h3>
@@ -17,7 +15,11 @@
                 <div class="form-group">
                   <label for="nombre_facultad">Nombre de la Facultad</label>
                   <input type="text" id="nombre_facultad" class="form-control" formControlName="nombre_facultad" required>
+                  <div class="error-message error-text" *ngIf="form.get('nombre_facultad')?.invalid && (form.get('nombre_facultad')?.dirty || form.get('nombre_facultad')?.touched)">
+                    El Nombre de la Facultad es obligatorio.
+                  </div>
                 </div>
+                
                 <div class="form-actions">
                   <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
                   <button type="submit" class="btn btn-primary ">{{ editFacultadId ? 'Guardar' : 'Aceptar' }}</button>

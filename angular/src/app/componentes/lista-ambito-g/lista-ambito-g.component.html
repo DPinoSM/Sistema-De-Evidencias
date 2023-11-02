@@ -16,7 +16,11 @@
               <div class="form-group">
                 <label for="nombre_ambito_geografico">Nombre del Ámbito Geográfico</label>
                 <input type="text" id="nombre_ambito_geografico" class="form-control" formControlName="nombre_ambito_geografico" required>
+                <div class="error-message error-text" *ngIf="form.get('nombre_ambito_geografico')?.invalid && (form.get('nombre_ambito_geografico')?.dirty || form.get('nombre_ambito_geografico')?.touched)">
+                  El Nombre del Ámbito Geográfico es obligatorio.
+                </div>
               </div>
+              
               <div class="form-group" *ngIf="!ambitoGeograficoEditId">
                 <label for="estado_ambito_geografico">Estado del Ámbito Geográfico</label>
                 <div class="form-check form-switch">

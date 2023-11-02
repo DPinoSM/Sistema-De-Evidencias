@@ -7,32 +7,32 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProcesosService {
-  private apiUrl = 'http://localhost:3000/api/proceso/';
+  private apiUrl = 'http://localhost:3000/api/proceso';
   
   constructor(private http: HttpClient) {}
 
   getProcesos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}lista`)
+    return this.http.get<any[]>(`${this.apiUrl}/lista`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
   createProceso(procesoData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, procesoData)
+    return this.http.post<any>(`${this.apiUrl}/`, procesoData)
         .pipe(catchError(err => this.handleError(err)));
   }
 
   getProcesoById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${id}`)
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
         .pipe(catchError(err => this.handleError(err)));
   }
 
   updateProceso(id: number, procesoData: any): Observable<any>{
-    return this.http.put<any>(`${this.apiUrl}${id}`, procesoData)
+    return this.http.put<any>(`${this.apiUrl}/${id}`, procesoData)
         .pipe(catchError(err => this.handleError(err)));
   }
 
   deleteProceso(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}${id}`)
+    return this.http.delete<any>(`${this.apiUrl}/${id}`)
         .pipe(catchError(err => this.handleError(err)));
   }
 

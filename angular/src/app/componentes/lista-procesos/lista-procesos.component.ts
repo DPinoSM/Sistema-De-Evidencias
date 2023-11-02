@@ -12,7 +12,7 @@ import { Proceso } from 'src/app/interfaces/proceso.interface';
   styleUrls: ['./lista-procesos.component.css', '../../../shared-styles.css']
 })
 export class ListaProcesosComponent implements OnInit{
-  proceso: Proceso[] = [];
+  procesos: Proceso[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
   procesoEditId: number | null = null;
@@ -53,29 +53,22 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
-  codigoProcesoExistente(codigo_procesos: string): boolean {
-    return this.proceso.some(proceso => proceso.codigo_procesos === codigo_procesos);
-  }
-  
   crearEditarProceso() {
-    if (this.mostrarFormularioAgregarProcesos) {
+    if (this.form.valid) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
       const nombre_procesos = this.form.get('nombre_procesos')?.value;
       const estado_procesos = this.form.get('estado_procesos')?.value;
   
-      if (this.codigoProcesoExistente(codigo_procesos)) {
-        this.toastr.error('No se puede crear un proceso con el mismo código existente', 'Error');
+      if (this.procesoEditId) {
+        this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
       } else {
-        if (this.procesoEditId) {
-          this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
-        } else {
           this.realizarOperacionDeProceso(() =>
             this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
         }
-      }
     }
     this.mostrarFormularioAgregarProcesos = false;
   }
+  
 
   obtenerProceso(id: number) {
     this.procesoService.getProcesoById(id).subscribe(proceso => {
@@ -101,7 +94,7 @@ export class ListaProcesosComponent implements OnInit{
       )
       .subscribe((data: Proceso[]) => {
         //console.log(data);
-        this.proceso = data;
+        this.procesos = data;
       });
   }
 
@@ -111,7 +104,7 @@ export class ListaProcesosComponent implements OnInit{
   }
 
   cambiarEstadoProceso(id: number) {
-    const proceso = this.proceso.find(p => p.id_procesos === id);
+    const proceso = this.procesos.find(p => p.id_procesos === id);
 
     if (proceso) {
       const nuevoEstado = !proceso.estado_procesos;

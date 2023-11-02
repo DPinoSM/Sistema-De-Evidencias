@@ -16,7 +16,11 @@
               <div class="form-group">
                 <label for="nombre_ambito_academico">Nombre del Ámbito Académico</label>
                 <input type="text" id="nombre_ambito_academico" class="form-control" formControlName="nombre_ambito_academico" required>
+                <div class="error-message error-text" *ngIf="form.get('nombre_ambito_academico')?.invalid && (form.get('nombre_ambito_academico')?.dirty || form.get('nombre_ambito_academico')?.touched)">
+                  El Nombre del Ámbito Académico es obligatorio.
+                </div>
               </div>
+              
               <div *ngIf="!ambitoAcademicoEditId" class="form-group">
                 <label for="estado_ambito_academico">Estado del Ámbito Académico</label>
                 <div class="form-check form-switch">

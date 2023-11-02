@@ -16,10 +16,16 @@
               <div class="form-group">
                 <label for="datos">Nombre del Registro</label>
                 <input type="text" id="datos" class="form-control" formControlName="datos" required>
+                <div class="error-message error-text" *ngIf="form.get('datos')?.invalid && (form.get('datos')?.dirty || form.get('datos')?.touched)">
+                  El Nombre del Registro es obligatorio.
+                </div>
               </div>
               <div class="form-group">
                 <label for="contenido">Descripción del Registro</label>
                 <input type="text" id="contenido" class="form-control" formControlName="contenido" required>
+                <div class="error-message error-text" *ngIf="form.get('contenido')?.invalid && (form.get('contenido')?.dirty || form.get('contenido')?.touched)">
+                  La descripción es obligatorio.
+                </div>
               </div>
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionRegistro()">Cancelar</button>
