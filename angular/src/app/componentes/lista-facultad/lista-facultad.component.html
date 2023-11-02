@@ -1,10 +1,10 @@
 <div class="container-fluid g-0">
-  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
-  <main>
-    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
-    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
-      <div class="container">
-        <div class="title">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+        <div class="container">
+          <div class="title">
             <h3 class="page-title">Listado de Facultades</h3>
             <!-- Botón para mostrar el formulario de agregar/editar facultad -->
             <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarFacultad(editFacultadId)">{{ 'Agregar Facultad' }}</button>
