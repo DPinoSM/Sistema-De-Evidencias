@@ -1,25 +1,35 @@
-//Jonathan Molina Gonzalez
-//Modelo debilidades
-'use strict';
+"use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetalleRevisor = void 0;
+exports.Debilidades = void 0;
+//JONATHAN MOLINA 
+//MODELS DEBILIDADES
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-exports.DetalleRevisor = connection_1.default.define('detalle_revisor', {
-    "id_debilidades": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    "descripcion_debilidades": { type: sequelize_1.DataTypes.STRING },
-    "estado_debilidades": {type: sequelize_1.DataTypes.BOOLEAN },
-    "id_criterios": {type: sequelize_1.DataTypes.INTEGER}
+const criterio_1 = require("./criterio");
+exports.Debilidades = connection_1.default.define('debilidades', {
+    "id_debilidades": {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    "descripcion_debilidades": {
+        type: sequelize_1.DataTypes.STRING(70)
+    },
+    "estado_debilidades": {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+    "id_criterios": {
+        type: sequelize_1.DataTypes.INTEGER
+    }
 }, {
     freezeTableName: true,
     timestamps: false,
 });
-debilidades.belongsTo(criterios, { foreignKey: 'id_criterios' });
-
-module.exports = debilidades;
- 
-//fin
-
+//Establece la relación entre la clave primaria 
+exports.Debilidades.belongsTo(criterio_1.Criterio, { foreignKey: 'id_criterios' });
+//FIN
