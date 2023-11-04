@@ -20,9 +20,9 @@ export class RoleGuard {
     const expectedRole = route.data['expectedRole'];
 
     if (this.authService.isAuthenticated() && this.authService.getUserRole() === expectedRole) {
-      return true; // El usuario tiene el rol adecuado, permitir el acceso
+      return true;
     } else {
-      this.router.navigate(['/login']); // Redirigir al usuario a la página de inicio de sesión si no tiene el rol necesario
+      this.router.navigate(['/login']);
       return false;
     }
   }
