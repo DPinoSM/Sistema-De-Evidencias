@@ -7,4 +7,6 @@ export interface User{
   clave_usuario: string;
   correo_usuario: string;
   estado_usuario: boolean;
+  id_rol: number;
+  id_unidad: number;
 }
