@@ -72,12 +72,12 @@ export class ListaUsuariosComponent implements OnInit {
       const correo_usuario = this.form.get('correo_usuario')?.value;
       const estado_usuario = this.form.get('estado_usuario')?.value;
   
-      if (this.usuarioEditId) {
+       if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
+          this.toastr.error('El usuario o Correo ya existe ', 'Error');
+        } else if (this.usuarioEditId) {
         this.editarUsuario(this.usuarioEditId, rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario);
       } else {
-        if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
-          this.toastr.error('No se puede crear un usuario con el mismo RUT o Correo existente', 'Error');
-        } else {
+       
           this.realizarOperacionDeUsuario(() =>
             this.usuarioService.newUser({
               rut_usuario: rut_usuario,
@@ -90,9 +90,8 @@ export class ListaUsuariosComponent implements OnInit {
             }), 'Usuario Creado');
         }
       }
-    }
-  
     this.mostrarFormularioAgregarUsuario = false;
+    this.cancelarEdicionUsuario()
   }
   
 

@@ -56,19 +56,19 @@ export class ListaUnidadComponent implements OnInit {
     if (this.form.valid) {
       const nombreUnidad = this.form.get('nombre_unidad')?.value;
       const unidadDefecto = this.form.get('unidad_defecto')?.value;
-      
-      if (this.unidadEditId) {
+
+      if (this.nombreUnidadExistente(nombreUnidad)) {
+          this.toastr.error('El nombre de la unidad ya existe', 'Error');
+        } else if (this.unidadEditId) {
         this.editarUnidad(this.unidadEditId, nombreUnidad, unidadDefecto);
       } else {
-        if (this.nombreUnidadExistente(nombreUnidad)) {
-          this.toastr.error('No se puede crear una unidad con un nombre ya existente', 'Error');
-        } else {
+        
           this.realizarOperacionDeUnidad(() =>
             this.unidadService.createUnidad({ nombre_unidad: nombreUnidad, unidad_defecto: unidadDefecto }), 'Unidad Creada');
         }
       }
-    }
     this.mostrarFormularioAgregarUnidad = false;
+    this.cancelarEdicion()
   }
   
 

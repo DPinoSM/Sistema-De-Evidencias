@@ -17,7 +17,7 @@ const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
     const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
     if (rutUsuario) {
@@ -33,7 +33,9 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             "apellido2_usuario": apellido2_usuario,
             "clave_usuario": hashedPassword,
             "correo_usuario": correo_usuario,
-            "estado_usuario": estado_usuario
+            "estado_usuario": estado_usuario,
+            "id_rol": id_rol,
+            "id_unidad": id_unidad
         });
         return res.json({
             msg: 'Usuario creado correctamentee'
@@ -52,30 +54,37 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(listUsers);
 });
 exports.getUsers = getUsers;
-const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const loginUser = async (req, res) => {
     const { rut_usuario, clave_usuario } = req.body;
-    // validacion de usuario
-    const usuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
+    // Validación de usuario
+    const usuario = await User.findOne({ where: { rut_usuario: rut_usuario } });
     if (!usuario) {
-        return res.status(400).json({
-            msg: 'El rut ingresado no es valido'
-        });
+      return res.status(400).json({
+        msg: 'El rut ingresado no es válido',
+      });
     }
-    //validacion del password
-    const passwordValida = yield bcrypt_1.default.compare(clave_usuario, usuario.clave_usuario);
+  
+    // Validación de contraseña
+    const passwordValida = await bcrypt.compare(clave_usuario, usuario.clave_usuario);
     if (!passwordValida) {
-        return res.status(400).json({
-            msg: 'Contraseña Incorrecta'
-        });
+      return res.status(400).json({
+        msg: 'Contraseña incorrecta',
+      });
     }
-    else {
-        // generar token
-        const token = jsonwebtoken_1.default.sign({
-            rut_usuario: rut_usuario
-        }, process.env.SECRET_KEY || 'PRUEBA1'); 
-        res.json({ token, rol: usuario.Rol.id_rol });
-    }
-});
+  
+    // Generar un token JWT con el rol del usuario
+    const token = jsonwebtoken.sign(
+      {
+        rut_usuario: rut_usuario,
+        role: usuario.id_rol, 
+      },
+      process.env.SECRET_KEY || 'PRUEBA1',
+      { expiresIn: '5m' }
+    );
+  
+    res.json({ token, rol: usuario.id_rol });
+  };
+  
 exports.loginUser = loginUser;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -127,7 +136,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     try {
-        const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+        const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
         yield user_1.User.update({
             rut_usuario: rut_usuario,
             nombre_usuario: nombre_usuario,
@@ -135,7 +144,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             apellido2_usuario: apellido2_usuario,
             clave_usuario: clave_usuario,
             correo_usuario: correo_usuario,
-            estado_usuario: estado_usuario
+            estado_usuario: estado_usuario,
+            id_rol: id_rol,
+            id_unidad: id_unidad
         }, { where: { id_usuario: id }
         });
         res.json({

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+
+
 
 export interface LoginResponse {
   msg: string;
@@ -22,8 +24,24 @@ export class AuthService {
   login(rut: string, password: string): Observable<LoginResponse> {
     const loginData = { rut_usuario: rut, clave_usuario: password };
     return this.http.post<LoginResponse>(`${this.apiUrl}`, loginData).pipe(
-      catchError(this.handleError)
+      catchError(this.handleError),
+      tap((data: LoginResponse) => {
+        if (data.token && data.role) {
+          this.authToken = data.token;
+          this.userRole = data.role;
+        }
+      })
     );
+  }
+
+  isAuthenticated(): boolean {
+    // Implementa la lógica para verificar si el usuario está autenticado.
+    return this.authToken !== null;
+  }
+
+  hasRole(expectedRole: number): boolean {
+    // Implementa la lógica para verificar si el usuario tiene el rol adecuado.
+    return this.userRole === expectedRole;
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {

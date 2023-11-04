@@ -53,13 +53,19 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
+  nombreRegistroExistente(codigo: number): boolean {
+    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
+  }
+
   crearEditarProceso() {
     if (this.form.valid) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
       const nombre_procesos = this.form.get('nombre_procesos')?.value;
       const estado_procesos = this.form.get('estado_procesos')?.value;
   
-      if (this.procesoEditId) {
+      if (this.nombreRegistroExistente(codigo_procesos)) {
+        this.toastr.error('ya existe un codigo', 'Error');
+      } else if (this.procesoEditId) {
         this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
       } else {
           this.realizarOperacionDeProceso(() =>
@@ -67,6 +73,7 @@ export class ListaProcesosComponent implements OnInit{
         }
     }
     this.mostrarFormularioAgregarProcesos = false;
+    this.cancelarEdicion()
   }
   
 

@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './Rutas/app-routing.module'; 
-import { TokenInterceptor } from './Principal/login/token-interceptor';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Principal/login/login.component';
 import { AdminComponent } from './Principal/admin/admin.component';
@@ -59,14 +58,7 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     }),
     NgbModule,
   ],
-  providers: [
-    AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true,
-    },
-  ],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
