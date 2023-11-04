@@ -44,7 +44,6 @@ export class ListaProcesosComponent implements OnInit{
       this.form.reset();
     }
     this.mostrarFormularioAgregarProcesos = true;
-    console.log(this.mostrarFormularioAgregarProcesos)
   }
 
   cancelarEdicion() {
@@ -59,16 +58,22 @@ export class ListaProcesosComponent implements OnInit{
       const nombre_procesos = this.form.get('nombre_procesos')?.value;
       const estado_procesos = this.form.get('estado_procesos')?.value;
   
-      if (this.procesoEditId) {
+      if (this.codigoExistente(codigo_procesos)) {
+        this.toastr.error('Este Codigo ya existe', 'Error');
+      }else if (this.procesoEditId) {
         this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
-      } else {
+        } else {
           this.realizarOperacionDeProceso(() =>
             this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
         }
     }
     this.mostrarFormularioAgregarProcesos = false;
+    this.cancelarEdicion()
   }
   
+  codigoExistente(codigo: number): boolean {
+    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
+  }
 
   obtenerProceso(id: number) {
     this.procesoService.getProcesoById(id).subscribe(proceso => {
@@ -98,10 +103,11 @@ export class ListaProcesosComponent implements OnInit{
       });
   }
 
-  editarProceso(id: number, codigo_procesos: string, nombre_procesos: string, estado_procesos: any) {
+  editarProceso(id: number, codigo_procesos: number, nombre_procesos: string, estado_procesos: any) {
     this.realizarOperacionDeProceso(() =>
       this.procesoService.updateProceso(id, { codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Editado');
   }
+
 
   cambiarEstadoProceso(id: number) {
     const proceso = this.procesos.find(p => p.id_procesos === id);

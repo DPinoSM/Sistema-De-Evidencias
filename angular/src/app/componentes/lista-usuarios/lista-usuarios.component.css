@@ -1,35 +1,37 @@
-.title{
+
+.title {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
 }
 
-
-.icon-no-bg {
-  background-color: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
 .form-container {
   position: absolute;
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -20%);
-  z-index: 1; 
-}
-
-.form-container {
-  background-color: #fff; 
-  padding: 25px; 
-  border: 1px solid #000000; 
-  border-radius: 5px; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  z-index: 1;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #000000;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
 }
 
+.form-pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
 .form-group {
   margin-bottom: 10px; 
+}
+
+.form-pair .form-group label[for="estado_usuario"] {
+  margin-top: 5px;
+  margin-right: 10px; 
 }
 
 .form-actions {
@@ -37,7 +39,23 @@
   justify-content: flex-end;
 }
 
-.error-text {
+.error-message {
   color: red;
-  font-size: 14px; 
+  font-size: 14px;
+  margin-top: 1px; 
+  position: absolute;
+}
+
+.table-container {
+  max-width: 100%;
+  margin-top: 10px; 
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  max-width: none;
 }

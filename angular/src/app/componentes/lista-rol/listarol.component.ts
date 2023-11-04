@@ -23,7 +23,7 @@ export class ListarolComponent implements OnInit {
 
   constructor(private rolService: RolService, private toastr: ToastrService) {
     this.form = new FormGroup({
-      nombre_rol: new FormControl('', [Validators.required]) // Cambiar a 'nombre_rol'
+      nombre_rol: new FormControl('', [Validators.required])
     });
   }
 
@@ -52,19 +52,18 @@ export class ListarolComponent implements OnInit {
     if (this.form.valid) {
       const nombre_rol = this.form.get('nombre_rol')?.value;
   
-      if (this.editRoleId) {
+      if (this.nombreRolExistente(nombre_rol)) {
+        this.toastr.error('Este nombre ya existe', 'Error');
+      } else if (this.editRoleId) {
         this.editarRol(this.editRoleId, nombre_rol);
       } else {
-        if (this.nombreRolExistente(nombre_rol)) {
-          this.toastr.error('No se puede crear un rol con un nombre ya existente', 'Error');
-        } else {
-          this.errorMsg = undefined;
-          this.realizarOperacionDeRol(() => 
-            this.rolService.createRol(nombre_rol), 'Rol Creado');
+        this.errorMsg = undefined;
+        this.realizarOperacionDeRol(() => 
+        this.rolService.createRol(nombre_rol), 'Rol Creado');
         }
-      }
     }
     this.mostrarFormularioAgregarRol = false;
+    this.cancelarEdicion()
   }
   
 
@@ -97,8 +96,9 @@ export class ListarolComponent implements OnInit {
   }
 
   editarRol(id: number, nombre_rol: string) {
-    this.realizarOperacionDeRol(() => 
+      this.realizarOperacionDeRol(() => 
       this.rolService.updateRol(id, nombre_rol), 'Rol Editado');
+    
   }
 
   eliminarRol(id: number) {

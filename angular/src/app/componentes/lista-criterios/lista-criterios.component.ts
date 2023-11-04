@@ -60,21 +60,20 @@ export class ListaCriteriosComponent implements OnInit {
       const codigo_criterios = this.form.get('codigo_criterios')?.value;
       const descripcion_criterios = this.form.get('descripcion_criterios')?.value;
       const estado_criterios = this.form.get('estado_criterios')?.value;
-  
-      if (this.criterioEditId) {
+      
+      if (this.codigoCriterioExistente(codigo_criterios)) {
+        this.toastr.error('Este codigo ya existe', 'Error');
+      } else if (this.criterioEditId) {
         this.editarCriterio(this.criterioEditId, nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios);
       } else {
-        if (this.codigoCriterioExistente(codigo_criterios)) {
-          this.toastr.error('No se puede crear un Criterio con el mismo código existente', 'Error');
-        } else {
           this.errorMsg = undefined;
           this.realizarOperacionDeCriterio(() =>
-            this.criterioService.createCriterio({ nombre_criterios: nombre_criterios, codigo_criterios: codigo_criterios, descripcion_criterios: descripcion_criterios, estado_criterios: estado_criterios }), 'Criterio Creado');
-        }
+          this.criterioService.createCriterio({ nombre_criterios: nombre_criterios, codigo_criterios: codigo_criterios, descripcion_criterios: descripcion_criterios, estado_criterios: estado_criterios }), 'Criterio Creado');
       }
     }
   
     this.mostrarFormularioAgregarCriterios = false;
+    this.cancelarEdicion()
   }
   
   codigoCriterioExistente(codigo_criterios: number): boolean {

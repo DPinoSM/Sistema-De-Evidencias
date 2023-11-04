@@ -56,19 +56,17 @@ export class ListaAmbitoGComponent implements OnInit {
       const nombre_ambito_geografico = this.form.get('nombre_ambito_geografico')?.value;
       const estado_ambito_geografico = this.form.get('estado_ambito_geografico')?.value;
   
-      if (this.ambitoGeograficoEditId) {
+      if (this.nombreAmbitoGeograficoExistente(nombre_ambito_geografico)) {
+        this.toastr.error('Este nombre ya existe', 'Error');
+      } else if (this.ambitoGeograficoEditId) {
         this.editarAmbitoGeografico(this.ambitoGeograficoEditId, nombre_ambito_geografico, estado_ambito_geografico);
       } else {
-        if (this.nombreAmbitoGeograficoExistente(nombre_ambito_geografico)) {
-          this.toastr.error('No se puede crear un ámbito geográfico con el mismo nombre existente', 'Error');
-        } else {
           this.realizarOperacionDeAmbitoG(() =>
             this.ambitoGeograficoService.newAmbitoGeografico({
               nombre_ambito_geografico: nombre_ambito_geografico,
               estado_ambito_geografico: estado_ambito_geografico
             }), 'Ámbito Geográfico Creado');
         }
-      }
     }
   
     this.mostrarFormularioAgregarAmbitoGeografico = false;

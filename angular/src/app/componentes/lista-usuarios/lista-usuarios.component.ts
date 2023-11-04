@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators, AbstractControl} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { User } from 'src/app/interfaces/usuario.interface';
 
 @Component({
@@ -23,8 +23,8 @@ export class ListaUsuariosComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService, private toastr: ToastrService) {
   this.form = new FormGroup({
-    rut_usuario: new FormControl('', [Validators.required]),
-    nombre_usuario: new FormControl(null, [Validators.required]),
+    rut_usuario: new FormControl(null, [Validators.required]),
+    nombre_usuario: new FormControl('', [Validators.required]),
     apellido1_usuario: new FormControl('', [Validators.required]),
     apellido2_usuario: new FormControl('', [Validators.required]),
     clave_usuario: new FormControl('', [Validators.required]),
@@ -76,7 +76,7 @@ export class ListaUsuariosComponent implements OnInit {
         this.editarUsuario(this.usuarioEditId, rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario);
       } else {
         if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
-          this.toastr.error('No se puede crear un usuario con el mismo RUT o Correo existente', 'Error');
+          this.toastr.error('El Rut o Correo ya existe', 'Error');
         } else {
           this.realizarOperacionDeUsuario(() =>
             this.usuarioService.newUser({
