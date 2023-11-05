@@ -53,17 +53,19 @@ export class ListaFacultadComponent implements OnInit {
       const nombreFacultad = this.form.get('nombre_facultad')?.value;
   
       if (this.nombreFacultadExistente(nombreFacultad)) {
-        this.toastr.error('Este Nombre ya existe', 'Error');
+        this.toastr.error('Ya existe una facultad con ese nombre', 'Error');
       } else if (this.editFacultadId) {
         this.editarFacultad(this.editFacultadId, nombreFacultad);
       } else {
-        this.errorMsg = undefined;
-        this.realizarOperacionDeFacultad(() =>
-          this.FacultadService.createFacultad(nombreFacultad), 'Facultad Creada');
+          this.errorMsg = undefined;
+          this.realizarOperacionDeFacultad(() => 
+            this.FacultadService.createFacultad(nombreFacultad), 'Facultad Creada');
+        
       }
     }
   
     this.mostrarFormularioAgregarFacultad = false;
+    this.cancelarEdicion()
     this.cancelarEdicion()
   }
   

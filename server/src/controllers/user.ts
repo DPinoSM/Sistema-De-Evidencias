@@ -1,138 +1,215 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { User } from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import sequelize from 'sequelize/types/sequelize';
-import { QueryTypes } from 'sequelize';
+import { Rol } from '../models/rol';
+import { Unidad } from '../models/unidad';
 
-export const newUser = async(req: Request, res: Response) =>{
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario} =  req.body;
-    const hashedPassword = await bcrypt.hash(clave_usuario, 10);
-    const rutUsuario = await User.findOne({where: {rut_usuario: rut_usuario}})
-    if(rutUsuario) {
-        return res.status(400).json({
-            msg: 'Ya existe un usuario con ese rut'
-        })
-    }
-    try{
-         await User.create({
-            "rut_usuario": rut_usuario,
-            "nombre_usuario": nombre_usuario,
-            "apellido1_usuario": apellido1_usuario,
-            "apellido2_usuario": apellido2_usuario,
-            "clave_usuario": hashedPassword,
-            "correo_usuario": correo_usuario,
-            "estado_usuario": estado_usuario
-        })
+export const newUser = async (req: Request, res: Response) => {
+    try {
+        const {
+            rut_usuario,
+            nombre_usuario,
+            apellido1_usuario,
+            apellido2_usuario,
+            clave_usuario,
+            correo_usuario,
+            estado_usuario,
+            id_rol,
+            id_unidad,
+        } = req.body;
+
+        const hashedPassword = await bcrypt.hash(clave_usuario, 10);
+
+        const rutUsuario = await User.findOne({ where: { rut_usuario } });
+
+        if (rutUsuario) {
+            return res.status(400).json({
+                msg: 'Ya existe un usuario con ese RUT',
+            });
+        }
+
+        const newUser = await User.create({
+            rut_usuario,
+            nombre_usuario,
+            apellido1_usuario,
+            apellido2_usuario,
+            clave_usuario: hashedPassword,
+            correo_usuario,
+            estado_usuario,
+            id_rol,
+            id_unidad,
+        });
+
+        const usuarioConRelaciones = await newUser.reload();
+
         return res.json({
-            msg: 'Usuario creado correctamentee'      
-        })
-    } catch (error){
+            msg: 'Usuario creado correctamente',
+            usuario: usuarioConRelaciones,
+        });
+    } catch (error) {
+        console.error('Error en el controlador newUser:', error);
         res.status(400).json({
-            msg: 'Ocurrio un error',
-            error
-        })
+            msg: 'Ocurrió un error',
+            error,
+        });
     }
-}
-export const getUsers = async(req: Request, res: Response) =>{   
-    const listUsers = await User.findAll({attributes:['id_usuario','rut_usuario','nombre_usuario','apellido1_usuario','apellido2_usuario','correo_usuario','estado_usuario','id_rol','id_unidad']});
-    res.json(listUsers)
-}
-export const loginUser = async(req: Request, res: Response) =>{
+};
+
+export const getUsers = async (req: Request, res: Response) => {
+    try {
+        const listUsers = await User.findAll({
+            attributes: [
+                'id_usuario',
+                'rut_usuario',
+                'nombre_usuario',
+                'apellido1_usuario',
+                'apellido2_usuario',
+                'correo_usuario',
+                'estado_usuario',
+            ],
+            include: [
+                { model: Rol, attributes: ['nombre_rol'] },
+                { model: Unidad, attributes: ['nombre_unidad'] },
+            ],
+        });
+
+        res.json(listUsers);
+    } catch (error) {
+        console.error('Error en el controlador getUsers:', error);
+        res.status(500).json({
+            msg: 'Ocurrió un error en el servidor',
+            error,
+        });
+    }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
     const { rut_usuario, clave_usuario } = req.body;
-    // validacion de usuario
-    const usuario: any = await User.findOne({where: {rut_usuario: rut_usuario}})
-    if(!usuario) {
-        return res.status(400).json({
-            msg: 'El rut ingresado no es valido'
-        })
-    }
-    //validacion del password
-    const passwordValida = await bcrypt.compare(clave_usuario, usuario.clave_usuario)
-    if(!passwordValida) {
-        return res.status(400).json({
-            msg: 'Contraseña Incorrecta'
-        })
-    }else {
-    // generar token
-    const token = jwt.sign({
-       rut_usuario: rut_usuario
-    }, process.env.SECRET_KEY || 'PRUEBA1'); // , {expiresIn: '10000'} como tercer parametro para timepo de expiracion del token
-    res.json({token, rol: usuario.Rol.id_rol});
-} 
-}
 
-export const getUser = async(req: Request, res: Response) =>{
-    const {id} = req.params;
-    const idUser = await User.findOne({where:{id_usuario: id}})
+    try {
+        // Validación de usuario
+        const usuario: any = await User.findOne({ where: { rut_usuario } });
 
-    if(!idUser) {
-        return res.status(400).json({
-            msg: "El usuario indicado no existe"
-        })
+        if (!usuario) {
+            return res.status(400).json({
+                msg: 'El RUT ingresado no es válido',
+            });
+        }
+
+        // Validación de contraseña
+        const passwordValida = await bcrypt.compare(clave_usuario, usuario.clave_usuario);
+
+        if (!passwordValida) {
+            return res.status(400).json({
+                msg: 'Contraseña incorrecta',
+            });
+        }
+
+        // Generar token JWT con el rol del usuario
+        const token = jwt.sign(
+            {
+                rut_usuario,
+                role: usuario.id_rol,
+            },
+            process.env.SECRET_KEY || 'PRUEBA1',
+            { expiresIn: '5m' }
+        );
+
+        res.json({ token, rol: usuario.id_rol });
+    } catch (error) {
+        console.error('Error en el controlador loginUser:', error);
+        res.status(500).json({
+            msg: 'Error en el servidor',
+            error,
+        });
     }
-    try{
-        res.json(idUser)
-    }catch (error){
+};
+
+export const getUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const idUser = await User.findOne({ where: { id_usuario: id } });
+
+        if (!idUser) {
+            return res.status(400).json({
+                msg: 'El usuario indicado no existe',
+            });
+        }
+
+        res.json(idUser);
+    } catch (error) {
+        console.error('Error en el controlador getUser:', error);
         res.status(400).json({
-            msg: "Ha ocurrido un error",
-            error
-        })
-
+            msg: 'Ha ocurrido un error',
+            error,
+        });
     }
-}
+};
 
-export const deleteUser = async(req: Request, res: Response) =>{
-    const {id} = req.params;
-    const idUser = await User.findOne({where: {id_usuario: id}})
+export const deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
 
-    if(!idUser) {
-        return res.status(400).json({
-            msg: "El usuario "+id+ " no existe"
-        })
-    }
-    try{
-        await User.destroy({where: {id_usuario: id}})
+    try {
+        const idUser = await User.findOne({ where: { id_usuario: id } });
+
+        if (!idUser) {
+            return res.status(400).json({
+                msg: `El usuario ${id} no existe`,
+            });
+        }
+
+        await User.destroy({ where: { id_usuario: id } });
+
         res.json({
-            msg: "Se ha eliminado al usuario: "+id
-        })
-    }catch (error){
+            msg: `Se ha eliminado al usuario: ${id}`,
+        });
+    } catch (error) {
+        console.error('Error en el controlador deleteUser:', error);
         res.status(400).json({
-            msg: "No se ha podido eliminar el usuario "+id,
-            error
-        })
+            msg: `No se ha podido eliminar el usuario ${id}`,
+            error,
+        });
     }
-}
+};
 
-export const updateUser = async(req: Request, res: Response)=>{
-    const {id} = req.params;
-    
-    const idUser = await User.findOne({where: {id_usuario: id}})
+export const updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
 
-    if(!idUser) {
-        return res.status(400).json({
-            msg: "El id "+id+ " de usuario no existe"
-        })
-    }
-    try{
-        const {nombre_usuario,apellido1_usuario,apellido2_usuario,clave_usuario,correo_usuario,estado_usuario} = req.body;
-        await User.update({
-            nombre_usuario: nombre_usuario,
-            apellido1_usuario: apellido1_usuario,
-            apellido2_usuario: apellido2_usuario,
-            clave_usuario:clave_usuario,
-            correo_usuario: correo_usuario,
-            estado_usuario: estado_usuario
+    try {
+        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
 
-        },{where: {id_usuario: id}
-    })
+        const idUser = await User.findOne({ where: { id_usuario: id } });
+
+        if (!idUser) {
+            return res.status(400).json({
+                msg: `El id ${id} de usuario no existe`,
+            });
+        }
+
+        await User.update(
+            {
+                nombre_usuario,
+                apellido1_usuario,
+                apellido2_usuario,
+                clave_usuario,
+                correo_usuario,
+                estado_usuario,
+                id_rol,
+                id_unidad,
+            },
+            { where: { id_usuario: id } }
+        );
+
         res.json({
-            msg: "Se ha actualizado al usuario: "+id
-        })
-    }catch (error){
+            msg: `Se ha actualizado al usuario: ${id}`,
+        });
+    } catch (error) {
+        console.error('Error en el controlador updateUser:', error);
         res.status(400).json({
-            msg: "No se ha podido actualizar el usuario con rut: "+id,
-            error
-        })
+            msg: `No se ha podido actualizar el usuario con rut: ${id}`,
+            error,
+        });
     }
-}
+};

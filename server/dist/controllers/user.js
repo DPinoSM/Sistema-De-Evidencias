@@ -16,136 +16,177 @@ exports.updateUser = exports.deleteUser = exports.getUser = exports.loginUser = 
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const rol_1 = require("../models/rol");
+const unidad_1 = require("../models/unidad");
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
-    const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
-    const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
-    if (rutUsuario) {
-        return res.status(400).json({
-            msg: 'Ya existe un usuario con ese rut'
-        });
-    }
     try {
-        yield user_1.User.create({
-            "rut_usuario": rut_usuario,
-            "nombre_usuario": nombre_usuario,
-            "apellido1_usuario": apellido1_usuario,
-            "apellido2_usuario": apellido2_usuario,
-            "clave_usuario": hashedPassword,
-            "correo_usuario": correo_usuario,
-            "estado_usuario": estado_usuario
+        const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
+        const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
+        const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario } });
+        if (rutUsuario) {
+            return res.status(400).json({
+                msg: 'Ya existe un usuario con ese RUT',
+            });
+        }
+        const newUser = yield user_1.User.create({
+            rut_usuario,
+            nombre_usuario,
+            apellido1_usuario,
+            apellido2_usuario,
+            clave_usuario: hashedPassword,
+            correo_usuario,
+            estado_usuario,
+            id_rol,
+            id_unidad,
         });
+        const usuarioConRelaciones = yield newUser.reload();
         return res.json({
-            msg: 'Usuario creado correctamentee'
+            msg: 'Usuario creado correctamente',
+            usuario: usuarioConRelaciones,
         });
     }
     catch (error) {
+        console.error('Error en el controlador newUser:', error);
         res.status(400).json({
-            msg: 'Ocurrio un error',
-            error
+            msg: 'Ocurrió un error',
+            error,
         });
     }
 });
 exports.newUser = newUser;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listUsers = yield user_1.User.findAll({ attributes: ['id_usuario', 'rut_usuario', 'nombre_usuario', 'apellido1_usuario', 'apellido2_usuario', 'clave_usuario','correo_usuario', 'estado_usuario', 'id_rol', 'id_unidad'] });
-    res.json(listUsers);
+    try {
+        const listUsers = yield user_1.User.findAll({
+            attributes: [
+                'id_usuario',
+                'rut_usuario',
+                'nombre_usuario',
+                'apellido1_usuario',
+                'apellido2_usuario',
+                'correo_usuario',
+                'estado_usuario',
+            ],
+            include: [
+                { model: rol_1.Rol, attributes: ['nombre_rol'] },
+                { model: unidad_1.Unidad, attributes: ['nombre_unidad'] },
+            ],
+        });
+        res.json(listUsers);
+    }
+    catch (error) {
+        console.error('Error en el controlador getUsers:', error);
+        res.status(500).json({
+            msg: 'Ocurrió un error en el servidor',
+            error,
+        });
+    }
 });
 exports.getUsers = getUsers;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { rut_usuario, clave_usuario } = req.body;
-    // validacion de usuario
-    const usuario = yield user_1.User.findOne({ where: { rut_usuario: rut_usuario } });
-    if (!usuario) {
-        return res.status(400).json({
-            msg: 'El rut ingresado no es valido'
-        });
-    }
-    //validacion del password
-    const passwordValida = yield bcrypt_1.default.compare(clave_usuario, usuario.clave_usuario);
-    if (!passwordValida) {
-        return res.status(400).json({
-            msg: 'Contraseña Incorrecta'
-        });
-    }
-    else {
-        // generar token
+    try {
+        // Validación de usuario
+        const usuario = yield user_1.User.findOne({ where: { rut_usuario } });
+        if (!usuario) {
+            return res.status(400).json({
+                msg: 'El RUT ingresado no es válido',
+            });
+        }
+        // Validación de contraseña
+        const passwordValida = yield bcrypt_1.default.compare(clave_usuario, usuario.clave_usuario);
+        if (!passwordValida) {
+            return res.status(400).json({
+                msg: 'Contraseña incorrecta',
+            });
+        }
+        // Generar token JWT con el rol del usuario
         const token = jsonwebtoken_1.default.sign({
-            rut_usuario: rut_usuario
-        }, process.env.SECRET_KEY || 'PRUEBA1'); 
-        res.json({ token, rol: usuario.Rol.id_rol });
+            rut_usuario,
+            role: usuario.id_rol,
+        }, process.env.SECRET_KEY || 'PRUEBA1', { expiresIn: '5m' });
+        res.json({ token, rol: usuario.id_rol });
+    }
+    catch (error) {
+        console.error('Error en el controlador loginUser:', error);
+        res.status(500).json({
+            msg: 'Error en el servidor',
+            error,
+        });
     }
 });
 exports.loginUser = loginUser;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
-    if (!idUser) {
-        return res.status(400).json({
-            msg: "El usuario indicado no existe"
-        });
-    }
     try {
+        const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
+        if (!idUser) {
+            return res.status(400).json({
+                msg: 'El usuario indicado no existe',
+            });
+        }
         res.json(idUser);
     }
     catch (error) {
+        console.error('Error en el controlador getUser:', error);
         res.status(400).json({
-            msg: "Ha ocurrido un error",
-            error
+            msg: 'Ha ocurrido un error',
+            error,
         });
     }
 });
 exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
-    if (!idUser) {
-        return res.status(400).json({
-            msg: "El usuario " + id + " no existe"
-        });
-    }
     try {
+        const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
+        if (!idUser) {
+            return res.status(400).json({
+                msg: `El usuario ${id} no existe`,
+            });
+        }
         yield user_1.User.destroy({ where: { id_usuario: id } });
         res.json({
-            msg: "Se ha eliminado al usuario: " + id
+            msg: `Se ha eliminado al usuario: ${id}`,
         });
     }
     catch (error) {
+        console.error('Error en el controlador deleteUser:', error);
         res.status(400).json({
-            msg: "No se ha podido eliminar el usuario " + id,
-            error
+            msg: `No se ha podido eliminar el usuario ${id}`,
+            error,
         });
     }
 });
 exports.deleteUser = deleteUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
-    if (!idUser) {
-        return res.status(400).json({
-            msg: "El id " + id + " de usuario no existe"
-        });
-    }
     try {
-        const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario } = req.body;
+        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad } = req.body;
+        const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
+        if (!idUser) {
+            return res.status(400).json({
+                msg: `El id ${id} de usuario no existe`,
+            });
+        }
         yield user_1.User.update({
-            rut_usuario: rut_usuario,
-            nombre_usuario: nombre_usuario,
-            apellido1_usuario: apellido1_usuario,
-            apellido2_usuario: apellido2_usuario,
-            clave_usuario: clave_usuario,
-            correo_usuario: correo_usuario,
-            estado_usuario: estado_usuario
-        }, { where: { id_usuario: id }
-        });
+            nombre_usuario,
+            apellido1_usuario,
+            apellido2_usuario,
+            clave_usuario,
+            correo_usuario,
+            estado_usuario,
+            id_rol,
+            id_unidad,
+        }, { where: { id_usuario: id } });
         res.json({
-            msg: "Se ha actualizado al usuario: " + id
+            msg: `Se ha actualizado al usuario: ${id}`,
         });
     }
     catch (error) {
+        console.error('Error en el controlador updateUser:', error);
         res.status(400).json({
-            msg: "No se ha podido actualizar el usuario con rut: " + id,
-            error
+            msg: `No se ha podido actualizar el usuario con rut: ${id}`,
+            error,
         });
     }
 });

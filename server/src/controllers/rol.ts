@@ -94,3 +94,33 @@ export const deleteRol = async(req: Request, res: Response) =>{
 
         }
 }
+
+export const buscarRol = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const roles = await Rol.findAll({
+        attributes: ['id_rol', 'nombre_rol'],
+        where: {
+          [Op.or]: [
+            { id_rol: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_rol: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(roles);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar roles',
+        error,
+      });
+    }
+  };
+  

@@ -1,3 +1,4 @@
+// modulos
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -6,9 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AppRoutingModule } from './Rutas/app-routing.module';
 
-import { AppRoutingModule } from './Rutas/app-routing.module'; 
-import { TokenInterceptor } from './Principal/login/token-interceptor';
+//componentes
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Principal/login/login.component';
 import { AdminComponent } from './Principal/admin/admin.component';
@@ -25,6 +27,15 @@ import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuar
 import { HeaderComponent } from './dashboard/header/header.component';
 import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
 import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facultad.component';
+import { DacComponent } from './Principal/dac/dac.component';
+import { ComiteComponent } from './Principal/comite/comite.component';
+import { ResponsableComponent } from './Principal/responsable/responsable.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
+
+
+//interceptores
+import { AddTokenInterceptor } from './utils/add-token.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -43,6 +54,10 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     ListaUsuariosComponent,
     HeaderComponent,
     SidenavComponent,
+    DacComponent,
+    ComiteComponent,
+    ResponsableComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +66,7 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
+    NgxPaginationModule,
     CommonModule,
     ToastrModule.forRoot({
       timeOut: 2000,
@@ -63,7 +79,7 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: AddTokenInterceptor,
       multi: true,
     },
   ],

@@ -12,35 +12,34 @@
           <div class="form-container">
             <h3>{{ usuarioEditId ? 'Editar Usuario' : 'Agregar Usuario' }}</h3>
             <form [formGroup]="form" (ngSubmit)="crearOEditarUsuario()">
-              <div class="row">
-                <div class="form-pair">
-                  <div class="form-group">
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col">
                     <label for="rut_usuario">Rut del Usuario</label>
                     <input type="number" id="rut_usuario" class="form-control" formControlName="rut_usuario" required>
                     <div class="error-message error-text" *ngIf="form.get('rut_usuario')?.invalid && (form.get('rut_usuario')?.dirty || form.get('rut_usuario')?.touched)">
                       El Rut del Usuario es obligatorio.
                     </div>
                   </div>
-                  
-                  <div class="form-group">
+                  <div class="col">
                     <label for="nombre_usuario">Nombre del Usuario</label>
-                    <input type ="text" id="nombre_usuario" class="form-control" formControlName="nombre_usuario" required>
+                    <input type="text" id="nombre_usuario" class="form-control" formControlName="nombre_usuario" required>
                     <div class="error-message error-text" *ngIf="form.get('nombre_usuario')?.invalid && (form.get('nombre_usuario')?.dirty || form.get('nombre_usuario')?.touched)">
                       El Nombre del Usuario es obligatorio.
                     </div>
                   </div>
                 </div>
-                
-                <div class="form-pair">
-                  <div class="form-group">
+              </div>
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col">
                     <label for="apellido1_usuario">Primer Apellido</label>
-                    <input type="text" id="apellido1_usuario" class="form-control" formControlName="apellido1_usuario" required>
+                    <input type text id="apellido1_usuario" class="form-control" formControlName="apellido1_usuario" required>
                     <div class="error-message error-text" *ngIf="form.get('apellido1_usuario')?.invalid && (form.get('apellido1_usuario')?.dirty || form.get('apellido1_usuario')?.touched)">
                       El Primer Apellido es obligatorio.
                     </div>
                   </div>
-                  
-                  <div class="form-group">
+                  <div class="col">
                     <label for="apellido2_usuario">Segundo Apellido</label>
                     <input type="text" id="apellido2_usuario" class="form-control" formControlName="apellido2_usuario" required>
                     <div class="error-message error-text" *ngIf="form.get('apellido2_usuario')?.invalid && (form.get('apellido2_usuario')?.dirty || form.get('apellido2_usuario')?.touched)">
@@ -48,36 +47,46 @@
                     </div>
                   </div>
                 </div>
-                
-                <div class="form-pair">
-                  <div class="form-group">
-                    <label for="clave_usuario">Clave del Usuario</label>
-                    <input type="password" id="clave_usuario" class="form-control" formControlName="clave_usuario" required>
-                    <div class="error-message error-text" *ngIf="form.get('clave_usuario')?.invalid && (form.get('clave_usuario')?.dirty || form.get('clave_usuario')?.touched)">
-                      La Clave del Usuario es obligatoria.
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="correo_usuario">Correo del Usuario</label>
-                    <input type="email" id="correo_usuario" class="form-control" formControlName="correo_usuario" required>
-                    <div class="error-message error-text" *ngIf="form.get('correo_usuario')?.invalid && (form.get('correo_usuario')?.dirty || form.get('correo_usuario')?.touched)">
-                      El Correo del Usuario es obligatorio y debe ser un correo válido.
-                    </div>
-                  </div>
+              </div>
+              <div class="form-group">
+                <label for="correo_usuario">Correo del Usuario</label>
+                <input type="email" id="correo_usuario" class="form-control" formControlName="correo_usuario" required>
+                <div class="error-message error-text" *ngIf="form.get('correo_usuario')?.invalid && (form.get('correo_usuario')?.dirty || form.get('correo_usuario')?.touched)">
+                  El Correo del Usuario es obligatorio y debe ser un correo válido.
                 </div>
-                
-                <div class="form-pair justify-content-start">
-                  <div class="form-group">
-                    <label for="estado_usuario">Estado del Usuario</label>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="estado_usuario" formControlName="estado_usuario">
-                      <label class="form-check-label" for="estado_usuario">Activo</label>
+              </div>
+              <div class="form-group">
+                <label for="clave_usuario">Clave del Usuario</label>
+                <input type="password" id="clave_usuario" class="form-control" formControlName="clave_usuario" required>
+                <div class="error-message error-text" *ngIf="form.get('clave_usuario')?.invalid && (form.get('clave_usuario')?.dirty || form.get('clave_usuario')?.touched)">
+                  La Clave del Usuario es obligatoria.
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col">
+                    <label for="id_rol">Rol</label>
+                    <input type="number" id="id_rol" class="form-control" formControlName="id_rol" required>
+                    <div class="error-message error-text" *ngIf="form.get('id_rol')?.invalid && (form.get('id_rol')?.dirty || form.get('id_rol')?.touched)">
+                      El ID de Rol es obligatorio.
+                    </div>
+                  </div>
+                  <div class="col">
+                    <label for="id_unidad">Unidad</label>
+                    <input type="number" id="id_unidad" class="form-control" formControlName="id_unidad" required>
+                    <div class="error-message error-text" *ngIf="form.get('id_unidad')?.invalid && (form.get('id_unidad')?.dirty || form.get('id_unidad')?.touched)">
+                      El ID de Unidad es obligatorio.
                     </div>
                   </div>
                 </div>
               </div>
-
+              <div class="form-group justify-content-center">
+                <label for="estado_usuario">Estado del Usuario</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="estado_usuario" formControlName="estado_usuario">
+                  <label class="form-check-label" for="estado_usuario">Activo</label>
+                </div>
+              </div>
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionUsuario()">Cancelar</button>
                 <button type="submit" class="btn btn-primary">{{ usuarioEditId ? 'Guardar' : 'Aceptar' }}</button>
@@ -90,30 +99,28 @@
         </div>
 
         <div class="table-container mt-4">
-          <div class="table-scroll">
-            <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
-              <thead>
-                <tr>
-                  <th scope="col">ID Usuario</th>
-                  <th scope="col">Rut Usuario</th>
-                  <th scope="col">Nombre Usuario</th>
-                  <th scope="col">Apellido Paterno</th>
-                  <th scope="col">Apellido Materno</th>
-                  <th scope="col">Clave Usuario</th>
-                  <th scope="col">Correo Usuario</th>
-                  <th scope="col">Estado Usuario</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
-                  <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
-                  <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
-                  <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
-                  <td style="border: 1px solid black;">{{ usuario.apellido1_usuario }}</td>
-                  <td style="border: 1px solid black;">{{ usuario.apellido2_usuario }}</td>
-                  <td style="border: 1px solid black;">{{ usuario.clave_usuario }}</td>
-
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Usuario</th>
+                <th scope="col">Rut Usuario</th>
+                <th scope="col">Nombre Usuario</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Clave Usuario</th>
+                <th scope="col">Correo Usuario</th>
+                <th scope="col">Estado Usuario</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido1_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido2_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.clave_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.correo_usuario }}</td>
                 <td style="border: 1px solid black;">
                   <div class="form-check form-switch">
@@ -121,7 +128,7 @@
                     <label class="form-check-label"></label>
                   </div>
                 </td>
-                <td style="border: 1px solid black;">
+                <td>
                   <button type="button" class="btn" (click)="mostrarAgregarEditarUsuario(usuario.id_usuario)">
                     <i class="fas fa-edit icon-no-bg"></i>
                   </button>

@@ -1,46 +1,23 @@
 <div class="bodylogin">
-  <div class="blur"></div>
-  <div class="form-container">
+  <div *ngIf="!loading" class="body">
     <img src="../../assets/logo.png" alt="Logo" class="logologin logo">
     <hr/>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
-      <div class="form-group">
-        <input
-          type="text"
-          formControlName="RUT"
-          id="RUT"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['RUT'].errors }"
-          placeholder="Usuario"
-        />
-        <div *ngIf="submitted && f['RUT'].errors" class="invalid-feedback">
-          <div *ngIf="f['RUT'].errors['required']">
-            Usuario es requerido
-          </div>
-        </div>
+    <div class="container">
+      <div class="form-floating mb-3 mt-3">
+        <input type="text" [(ngModel)]="rut_usuario" autocomplete="false" class="form-control" placeholder="Ingrese usuario">
+        <label>Usuario</label>
       </div>
-      <div class="form-group position-relative">
-        <input
-          [type]="hide ? 'password' : 'text'"
-          formControlName="password"
-          id="password"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
-          placeholder="Contraseña"
-          autocomplete="off"
-        />
-        <i class="fa fa-eye position-absolute eye-icon" *ngIf="hide" (click)="toggleHide()"></i>
-        <i class="fa fa-eye-slash position-absolute eye-icon" *ngIf="!hide" (click)="toggleHide()"></i>
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">
-            Contraseña es requerida
-          </div>
-        </div>
+      <div class="form-floating mb-3">
+        <input type="password" [(ngModel)]="clave_usuario" autocomplete="false" class="form-control" placeholder="Ingrese password">
+        <label>Password</label>
       </div>
-      <div class="button-container">
-        <button type="submit" class="btn btn-primary" [disabled]="loading">Iniciar sesión</button>
+      <div class="d-grid gap-2">
+        <button type="button" class="btn btn-primary btn-lg" (click)="login()">Aceptar</button>
       </div>
-      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
-    </form>
+      <p class="mt-3">
+        <a routerLink="">¿Olvidó su nombre de usuario o contraseña?</a>
+      </p>
+    </div>
   </div>
+  <app-spinner *ngIf="loading"></app-spinner>
 </div>

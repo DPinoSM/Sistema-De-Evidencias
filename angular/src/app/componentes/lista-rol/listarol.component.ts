@@ -14,22 +14,26 @@ import { Rol } from '../../interfaces/rol.interface';
 
 export class ListarolComponent implements OnInit {
   roles: Rol[] = [];
+  rolesOriginal: Rol[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
   editRoleId: number | null = null;
   mostrarFormularioAgregarRol: boolean = false;
   private rolesSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(private rolService: RolService, private toastr: ToastrService) {
     this.form = new FormGroup({
-      nombre_rol: new FormControl('', [Validators.required])
+      nombre_rol: new FormControl('', [Validators.required]) 
     });
   }
 
   ngOnInit() {
     this.actualizarListaDeRoles();
   }
+
 
   mostrarFormularioAgregarEditarRol(id: number | null) {
     if (id !== null) {
@@ -51,21 +55,20 @@ export class ListarolComponent implements OnInit {
   crearNuevoRol() {
     if (this.form.valid) {
       const nombre_rol = this.form.get('nombre_rol')?.value;
-  
+      
       if (this.nombreRolExistente(nombre_rol)) {
-        this.toastr.error('Este nombre ya existe', 'Error');
+        this.toastr.error('Ya existe un rol con ese nombre', 'Error');
       } else if (this.editRoleId) {
         this.editarRol(this.editRoleId, nombre_rol);
       } else {
         this.errorMsg = undefined;
         this.realizarOperacionDeRol(() => 
-        this.rolService.createRol(nombre_rol), 'Rol Creado');
-        }
+          this.rolService.createRol(nombre_rol), 'Rol Creado');
+      }
     }
     this.mostrarFormularioAgregarRol = false;
-    this.cancelarEdicion()
+    this.cancelarEdicion();
   }
-  
 
   nombreRolExistente(nombre_rol: string): boolean {
     return this.roles.some(rol => rol.nombre_rol === nombre_rol);
@@ -77,6 +80,24 @@ export class ListarolComponent implements OnInit {
         this.form.get('nombre_rol')?.setValue(rol.nombre_rol);
       }
     });
+  }
+
+  realizarBusqueda() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.actualizarListaDeRoles(); 
+    } else {
+
+      if (this.rolesOriginal) {
+        this.roles = this.rolesOriginal;
+        
+      }
+    }
+  }
+
+
+  pageChanged(page: number) {
+    this.currentPage = page;
   }
 
   actualizarListaDeRoles() {
@@ -91,14 +112,40 @@ export class ListarolComponent implements OnInit {
         })
       )
       .subscribe((data: Rol[]) => {
-        this.roles = data;
+        if (!this.rolesOriginal) {
+          this.rolesOriginal = data;
+        }
+        
+        this.roles = data.filter(rol => {
+          return (
+            this.comienzaConCadena(rol.id_rol.toString(), this.searchTerm) ||
+            this.comienzaConCadena(rol.nombre_rol, this.searchTerm)
+          );
+        });
       });
   }
+  
+  
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
+  
 
   editarRol(id: number, nombre_rol: string) {
-      this.realizarOperacionDeRol(() => 
+    this.realizarOperacionDeRol(() => 
       this.rolService.updateRol(id, nombre_rol), 'Rol Editado');
-    
   }
 
   eliminarRol(id: number) {

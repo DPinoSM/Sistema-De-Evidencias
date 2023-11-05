@@ -57,7 +57,7 @@ export class ListaAmbitosAComponent implements OnInit {
       const estado_ambito_academico = this.form.get('estado_ambito_academico')?.value;
 
       if (this.nombreAmbitoAcademicoExistente(nombre_ambito_academico)) {
-        this.toastr.error('Este nombre ya existe', 'Error');
+        this.toastr.error('Ya existe un Ámbito Academico con ese nombre', 'Error');
       } else {
         if (this.ambitoAcademicoEditId) {
         this.editarAmbitoAcademico(this.ambitoAcademicoEditId, nombre_ambito_academico, estado_ambito_academico);
@@ -72,6 +72,7 @@ export class ListaAmbitosAComponent implements OnInit {
       }
     }      
     this.mostrarFormularioAgregarAmbitoAcademico = false;
+    this.cancelarEdicionAmbitoAcademico()
     this.cancelarEdicionAmbitoAcademico()
   }
 

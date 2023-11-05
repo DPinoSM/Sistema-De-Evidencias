@@ -61,16 +61,19 @@ export class ListaRegistrosComponent implements OnInit {
       const contenidoRegistro = this.form.get('contenido')?.value;
   
       if (this.nombreRegistroExistente(datosRegistro)) {
-        this.toastr.error('Este nombre ya existe', 'Error');
-      } else if (this.editRegistroId) {
+          this.toastr.error('El nombre de ese registro ya esta en uso', 'Error');
+        } else if (this.editRegistroId) {
         this.editRegistro(this.editRegistroId, datosRegistro, contenidoRegistro);
       } else {
+        
           this.realizarOperacionDeRegistro(() =>
             this.registroService.createRegistro({ datos_registro: datosRegistro, contenido_registro: contenidoRegistro }), 'Registro Creado');
-        }
+        
+      }
     }
   
     this.mostrarFormularioAgregarRegistro = false;
+    this.cancelarEdicionRegistro()
     this.cancelarEdicionRegistro()
   }
   

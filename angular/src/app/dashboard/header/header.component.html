@@ -5,7 +5,7 @@
     <a class="navbar-brand px-4" href="/admin">Administración</a>
     <div class="navbar-collapse">
         <ul class="navbar-nav me-auto">
-            <li class="nav-item">
+            <li  class="nav-item">
                 <a class="nav-link" href="/rol">Roles</a>
             </li>
             <li class="nav-item">
@@ -36,15 +36,7 @@
     </div>
 
     <div class="profile-logo dropstart">
-        <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
-            
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark">
-            <li><a href="#" class="dropdown-item" href="/login">Sign Up</a></li>
-            <li><a href="#" class="dropdown-item" >Log In</a></li>
-            <li><a href="#" class="dropdown-item">Your Profile</a></li>
-            <li><a href="#" class="dropdown-item">Log Out</a></li>
-        </ul>
+        <button class="btn btn-outline-primary" (click)="logOut()" type="button">LogOut</button>
     </div>
     <img src="../../../assets/logo_admin.png" alt="Logo administración" class="logo-image">
 </nav>

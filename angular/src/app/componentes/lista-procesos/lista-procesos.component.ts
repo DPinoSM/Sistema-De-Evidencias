@@ -52,6 +52,10 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
+  nombreRegistroExistente(codigo: number): boolean {
+    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
+  }
+
   crearEditarProceso() {
     if (this.form.valid) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
@@ -68,6 +72,7 @@ export class ListaProcesosComponent implements OnInit{
         }
     }
     this.mostrarFormularioAgregarProcesos = false;
+    this.cancelarEdicion()
     this.cancelarEdicion()
   }
   

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -41,10 +41,19 @@ export class RolService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Manejo de errores
+
+  buscarRol(searchTerm: string): Observable<any> {
+    // Define los parámetros de consulta con el término de búsqueda
+    const params = new HttpParams().set('searchTerm', searchTerm);
+
+    return this.http.get(`${this.apiUrl}/buscar`, { params })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  // Manejo de errores (igual que en tu código original)
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
-  
+
     let errorMessage = 'Error en la solicitud. Por favor, inténtalo de nuevo más tarde.';
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error del lado del cliente: ${error.error.message}`;
@@ -53,7 +62,7 @@ export class RolService {
     } else if (error.status === 500) {
       errorMessage = 'Error del servidor interno. Por favor, inténtalo más tarde.';
     }
-  
+
     return throwError(() => errorMessage);
   }
 }

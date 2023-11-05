@@ -6,7 +6,13 @@
       <div class="container">
         <div class="title">
           <h3 class="page-title">Listado de Roles</h3>
-          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar Rol' }}</button>
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+            <button class="btn " (click)="realizarBusqueda()"></button>
+            <i class="fas fa-search"></i>
+          </div>
+          
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar Rol' }}</button>          
         </div>
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRol">
           <div class="form-container">
@@ -40,7 +46,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let rol of roles" style="border: 1px solid black;">
+              <tr *ngFor="let rol of roles | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+
                 <td style="border: 1px solid black;">{{ rol.id_rol }}</td>
                 <td style="border: 1px solid black;">{{ rol.nombre_rol }}</td>
                 <td style="border: 1px solid black;">
@@ -54,6 +61,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
         </div>
       </div>
     </div>
