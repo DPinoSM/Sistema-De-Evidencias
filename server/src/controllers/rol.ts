@@ -1,9 +1,5 @@
 import {Request, Response} from 'express';
 import { Rol } from '../models/rol';
-import { where } from 'sequelize';
-import { Op } from 'sequelize';
-
-
 export const getRol = async(req: Request, res: Response) =>{  
     const listRol = await Rol.findAll({attributes:['id_rol','nombre_rol']});
     res.json(listRol)

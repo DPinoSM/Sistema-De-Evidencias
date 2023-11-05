@@ -20,7 +20,7 @@
             <form [formGroup]="form" (ngSubmit)="crearNuevoRol()">
               <div class="form-group">
                 <label for="nombre_rol">Nombre del Rol</label>
-                <input type="text" id="nombre" class="form-control" formControlName="nombre_rol" required>
+                <input type="text" id="nombre_rol" class="form-control" formControlName="nombre_rol" required>
                 <div class="error-message error-text" *ngIf="form.get('nombre_rol')?.invalid && (form.get('nombre_rol')?.dirty || form.get('nombre_rol')?.touched)">
                   El Nombre del Rol es obligatorio.
                 </div>

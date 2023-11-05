@@ -74,6 +74,7 @@ export class ListaRegistrosComponent implements OnInit {
   
     this.mostrarFormularioAgregarRegistro = false;
     this.cancelarEdicionRegistro()
+    this.cancelarEdicionRegistro()
   }
   
 
