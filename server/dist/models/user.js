@@ -10,7 +10,7 @@ const rol_1 = require("./rol");
 const unidad_1 = require("./unidad");
 exports.User = connection_1.default.define('usuarios', {
     id_usuario: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    rut_usuario: { type: sequelize_1.DataTypes.STRING },
+    rut_usuario: { type: sequelize_1.DataTypes.INTEGER },
     nombre_usuario: { type: sequelize_1.DataTypes.STRING },
     apellido1_usuario: { type: sequelize_1.DataTypes.STRING },
     apellido2_usuario: { type: sequelize_1.DataTypes.STRING },

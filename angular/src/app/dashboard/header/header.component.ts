@@ -1,6 +1,6 @@
-
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +12,10 @@ export class HeaderComponent implements OnInit {
   menuStatus: boolean = false;
   isAdmin: boolean = false;
 
-  constructor(private authService: AuthService) {
-    this.isAdmin = this.authService.checkIsAdmin();
+  constructor(
+    private authService: AuthService,
+    private router: Router) {
+    //this.isAdmin = this.authService.checkIsAdmin();
   }
 
   ngOnInit(): void {
@@ -22,5 +24,10 @@ export class HeaderComponent implements OnInit {
   SideNavToggle() {
     this.menuStatus = !this.menuStatus;
     this.SideNavToggled.emit(this.menuStatus);
+  }
+
+  logOut() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login'])
   }
 }

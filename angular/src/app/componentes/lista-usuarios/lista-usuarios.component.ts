@@ -23,8 +23,8 @@ export class ListaUsuariosComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService, private toastr: ToastrService) {
     this.form = new FormGroup({
-      rut_usuario: new FormControl('', [Validators.required]),
-      nombre_usuario: new FormControl(null, [Validators.required]),
+      rut_usuario: new FormControl(null, [Validators.required]),
+      nombre_usuario: new FormControl('', [Validators.required]),
       apellido1_usuario: new FormControl('', [Validators.required]),
       apellido2_usuario: new FormControl('', [Validators.required]),
       clave_usuario: new FormControl('', [Validators.required]),
@@ -56,7 +56,7 @@ export class ListaUsuariosComponent implements OnInit {
     this.form.reset();
   }
 
-  usuarioExistenteEnRut(rut_usuario: string): boolean {
+  usuarioExistenteEnRut(rut_usuario: number): boolean {
     return this.usuarios.some(usuario => usuario.rut_usuario === rut_usuario);
   }
   
