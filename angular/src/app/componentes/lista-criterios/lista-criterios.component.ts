@@ -80,6 +80,7 @@ export class ListaCriteriosComponent implements OnInit {
   
     this.mostrarFormularioAgregarCriterios = false;
     this.cancelarEdicion()
+    this.cancelarEdicion()
   }
   
   codigoCriterioExistente(codigo_criterios: number): boolean {

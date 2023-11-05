@@ -1,6 +1,6 @@
 export interface User{
   id_usuario: number;
-  rut_usuario: string;
+  rut_usuario:  number;
   nombre_usuario: string ;
   apellido1_usuario: string;
   apellido2_usuario: string;

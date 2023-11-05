@@ -1,13 +1,16 @@
+// modulos
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AppRoutingModule } from './Rutas/app-routing.module';
 
-import { AppRoutingModule } from './Rutas/app-routing.module'; 
+//componentes
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Principal/login/login.component';
 import { AdminComponent } from './Principal/admin/admin.component';
@@ -24,10 +27,15 @@ import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuar
 import { HeaderComponent } from './dashboard/header/header.component';
 import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
 import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facultad.component';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { DacComponent } from './Principal/dac/dac.component';
 import { ComiteComponent } from './Principal/comite/comite.component';
 import { ResponsableComponent } from './Principal/responsable/responsable.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
+
+
+//interceptores
+import { AddTokenInterceptor } from './utils/add-token.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -49,6 +57,7 @@ import { ResponsableComponent } from './Principal/responsable/responsable.compon
     DacComponent,
     ComiteComponent,
     ResponsableComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +75,14 @@ import { ResponsableComponent } from './Principal/responsable/responsable.compon
     }),
     NgbModule,
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddTokenInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

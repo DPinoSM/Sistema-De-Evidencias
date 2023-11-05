@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscarRol = exports.deleteRol = exports.getOneRol = exports.updateRol = exports.newRol = exports.getRol = void 0;
 const rol_1 = require("../models/rol");
-const sequelize_1 = require("sequelize");
 const getRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listRol = yield rol_1.Rol.findAll({ attributes: ['id_rol', 'nombre_rol'] });
     res.json(listRol);
@@ -120,9 +119,9 @@ const buscarRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const roles = yield rol_1.Rol.findAll({
             attributes: ['id_rol', 'nombre_rol'],
             where: {
-                [sequelize_1.Op.or]: [
-                    { id_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
-                    { nombre_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                [Op.or]: [
+                    { id_rol: { [Op.like]: `%${searchTerm}%` } },
+                    { nombre_rol: { [Op.like]: `%${searchTerm}%` } },
                 ],
             },
         });

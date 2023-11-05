@@ -72,6 +72,7 @@ export class ListaUnidadComponent implements OnInit {
       }
     this.mostrarFormularioAgregarUnidad = false;
     this.cancelarEdicion()
+    this.cancelarEdicion()
   }
   
 
@@ -148,7 +149,7 @@ export class ListaUnidadComponent implements OnInit {
   }
 
   editarUnidad(id: number, nombre_unidad: string, unidad_defecto: any) {
-    this.realizarOperacionDeUnidad(() => 
+      this.realizarOperacionDeUnidad(() => 
       this.unidadService.updateUnidad(id, { nombre_unidad: nombre_unidad, unidad_defecto }), 'Unidad Editada');
   }
   

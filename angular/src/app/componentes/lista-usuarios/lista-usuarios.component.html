@@ -103,30 +103,26 @@
             <thead>
               <tr>
                 <th scope="col">ID Usuario</th>
-                <th scope="col">Rut</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido1</th>
-                <th scope="col">Apellido2</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Clave</th>
-                <th scope="col">Rol</th>
-                <th scope="col">Unidad</th>
-                <th scope="col">Estado</th>
+                <th scope="col">Rut Usuario</th>
+                <th scope="col">Nombre Usuario</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Clave Usuario</th>
+                <th scope="col">Correo Usuario</th>
+                <th scope="col">Estado Usuario</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let usuario of usuarios">
-                <td>{{ usuario.id_usuario }}</td>
-                <td>{{ usuario.rut_usuario }}</td>
-                <td>{{ usuario.nombre_usuario }}</td>
-                <td>{{ usuario.apellido1_usuario }}</td>
-                <td>{{ usuario.apellido2_usuario }}</td>
-                <td>{{ usuario.correo_usuario }}</td>
-                <td>*****</td>
-                <td>{{ usuario.id_rol }}</td>
-                <td>{{ usuario.id_unidad }}</td>
-                <td>
+              <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido1_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.apellido2_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.clave_usuario }}</td>
+                <td style="border: 1px solid black;">{{ usuario.correo_usuario }}</td>
+                <td style="border: 1px solid black;">
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" [checked]="usuario.estado_usuario" (change)="cambiarEstadoUsuario(usuario.id_usuario)">
                     <label class="form-check-label"></label>
@@ -143,6 +139,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService, LoginResponse } from '../../services/auth.service';
+import { Component, OnInit } from '@angular/core';;
+import { AuthService} from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ErrorService } from '../../services/error.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../interfaces/login.interface';
+
 
 @Component({
   selector: 'app-login',
@@ -9,88 +13,69 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-  loading = false;
-  error = '';
-  submitted = false;
+  loading: boolean = false;
   hide = true;
+  rut_usuario: string = '';
+  clave_usuario: string = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
+  constructor( private toastr: ToastrService,
+    private _errorService: ErrorService,
+    private _authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      rut_usuario: ['', Validators.required],
-      clave_usuario: ['', Validators.required],
-    });
   }
 
-  get f() {
-    return this.loginForm.controls;
-  }
+  login() {
 
-  onSubmit() {
-    this.submitted = true;
+    // Validamos que el usuario ingrese datos
+    if (this.rut_usuario == '' || this.clave_usuario == '') {
+      this.toastr.error('Todos los campos son obligatorios', 'Error');
+      return
+    }
 
-    if (this.loginForm.invalid) {
-      this.error = 'Por favor, complete todos los campos requeridos.';
-      return;
+    // Creamos el body
+    const user: User = {
+      rut_usuario: this.rut_usuario,
+      clave_usuario: this.clave_usuario
     }
 
     this.loading = true;
-    this.login();
-  }
+    this._authService.login(user).subscribe({
+      next: (userData: User) => {
+        const userRole = userData.id_rol; 
 
-  async login() {
-    try {
-      const { rut_usuario, clave_usuario } = this.f;
-      this.authService.login(rut_usuario.value, clave_usuario.value).subscribe({
-        next: (data: LoginResponse | undefined) => {
-          if (data) {
-            if (data.token) {
-              localStorage.setItem('authToken', data.token);
-              if (data.id_rol) {
-                console.log('Rol del usuario:', data.id_rol);
-                this.onLoginSuccess(data.id_rol);
-              }
-            } else {
-              this.error = data.msg || 'Error inesperado en el inicio de sesión';
-            }
-          } else {
-          }
-        },
-        error: (error: any) => {
-          this.handleError(error);
-        }
-      });
-      
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  onLoginSuccess(id_rol: number | undefined) {
-    if (id_rol === 1) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/inicio']);
-    }
-  }
+        switch (userRole) {
+          case 1:
+            this.router.navigate(['/admin']);
+            break;
+          case 2:
+            this.router.navigate(['/dac']);
+            break;
+          case 3:
+            this.router.navigate(['/comite']);
+            break;
+          case 4:
+            this.router.navigate(['/responsable']);
+            break;
+          case 5:
+            this.router.navigate(['/inicio']);
+            break;
+          default:
   
-  handleError(error: any) {
-    if (error.status === 401) {
-      this.error = 'Usuario o contraseña incorrectos';
-    } else {
-      this.error = 'Error en el inicio de sesión, intente más tarde';
-    }
+            this.router.navigate(['/login']);
+        }
+      },
+      error: (e: HttpErrorResponse) => {
+        this._errorService.msjError(e);
+        this.loading = false;
+      }
+    });
+    
+    
   }
 
-  toggleHide() {
-    this.hide = !this.hide;
-  }
+  
+
 }

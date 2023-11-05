@@ -43,20 +43,20 @@ export class SidenavComponent implements OnInit {
     
   }
 
-  isItemVisible(item: any): boolean {
-    switch (item.link) {
-      case '/usuarios':
-        return this.authService.checkRoleAndVisibility(1, [1]);
-      case '/evidencias':
-        return this.authService.checkRoleAndVisibility(5, [5]);
-      case '/debilidades':
-      case '/impacto':
-      case '/graficos':
-        return this.authService.checkRoleAndVisibility(2, [1, 2, 3, 4]);
-      default:
-        return true;
-    }
-  }
+  //isItemVisible(item: any): boolean {
+    //switch (item.link) {
+      //case '/usuarios':
+        //return this.authService.checkRoleAndVisibility(1, [1]);
+      //case '/evidencias':
+        //return this.authService.checkRoleAndVisibility(5, [5]);
+      //case '/debilidades':
+      //case '/impacto':
+      //case '/graficos':
+        //return this.authService.checkRoleAndVisibility(2, [1, 2, 3, 4]);
+      //default:
+        //return true;
+    //}
+  //}
   
   
 }

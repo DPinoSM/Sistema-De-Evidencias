@@ -69,7 +69,9 @@ export class ListaFacultadComponent implements OnInit {
   
     this.mostrarFormularioAgregarFacultad = false;
     this.cancelarEdicion()
+    this.cancelarEdicion()
   }
+  
   
 
   nombreFacultadExistente(nombre: string): boolean {
