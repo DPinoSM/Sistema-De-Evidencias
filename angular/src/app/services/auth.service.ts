@@ -8,15 +8,15 @@ import { User } from '../interfaces/login.interface';
   providedIn: 'root',
 })
 export class AuthService {
-  private myAppUrl: string;
-  private myApiUrl: string;
+  private ApiUrl: string;
+  private ApiiUrl: string;
 
   constructor(private http: HttpClient) {
-    this.myAppUrl = environment.endpoint;
-    this.myApiUrl = 'api/users'
+    this.ApiUrl = environment.endpoint;
+    this.ApiiUrl = 'api/users'
    }
    
-   login(user: User): Observable<string> {
-    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}/login`, user)
+   login(user: User): Observable<User> {
+    return this.http.post<User>(`${this.ApiUrl}${this.ApiiUrl}/login`, user);
    }
 }

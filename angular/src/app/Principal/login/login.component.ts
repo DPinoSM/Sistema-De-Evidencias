@@ -43,15 +43,37 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this._authService.login(user).subscribe({
-      next: (token) => {
-        localStorage.setItem('token', token);
-        this.router.navigate(['/admin'])
+      next: (userData: User) => {
+        const userRole = userData.id_rol; 
+
+        switch (userRole) {
+          case 1:
+            this.router.navigate(['/admin']);
+            break;
+          case 2:
+            this.router.navigate(['/dac']);
+            break;
+          case 3:
+            this.router.navigate(['/comite']);
+            break;
+          case 4:
+            this.router.navigate(['/responsable']);
+            break;
+          case 5:
+            this.router.navigate(['/inicio']);
+            break;
+          default:
+  
+            this.router.navigate(['/login']);
+        }
       },
       error: (e: HttpErrorResponse) => {
         this._errorService.msjError(e);
-        this.loading = false
+        this.loading = false;
       }
-    })
+    });
+    
+    
   }
 
   

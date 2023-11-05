@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/interfaces/usuario.interface';
 
 @Component({
