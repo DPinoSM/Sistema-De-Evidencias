@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import { Facultad } from '../models/facultad';
+import { Op } from 'sequelize';
 export const getFacultades = async(req: Request, res: Response) =>{  
     const listFacultad = await Facultad.findAll({attributes:['id_facultad','nombre_facultad']});
     res.json(listFacultad)
@@ -93,3 +94,34 @@ export const deleteFacultad = async(req: Request, res: Response) =>{
             })
         }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarFacultad = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const facultades = await Facultad.findAll({
+        attributes: ['id_facultad', 'nombre_facultad'],
+        where: {
+          [Op.or]: [
+            { id_facultad: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_facultad: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(facultades);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar Facultad',
+        error,
+      });
+    }
+  };
+  

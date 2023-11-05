@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFacultad = exports.getFacultad = exports.updateFacultad = exports.newFacultad = exports.getFacultades = void 0;
+exports.buscarFacultad = exports.deleteFacultad = exports.getFacultad = exports.updateFacultad = exports.newFacultad = exports.getFacultades = void 0;
 const facultad_1 = require("../models/facultad");
+const sequelize_1 = require("sequelize");
 const getFacultades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listFacultad = yield facultad_1.Facultad.findAll({ attributes: ['id_facultad', 'nombre_facultad'] });
     res.json(listFacultad);
@@ -107,3 +108,31 @@ const deleteFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteFacultad = deleteFacultad;
+//FILTRO DE BUSQUEDA
+const buscarFacultad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const facultades = yield facultad_1.Facultad.findAll({
+            attributes: ['id_facultad', 'nombre_facultad'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_facultad: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_facultad: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(facultades);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar Facultad',
+            error,
+        });
+    }
+});
+exports.buscarFacultad = buscarFacultad;

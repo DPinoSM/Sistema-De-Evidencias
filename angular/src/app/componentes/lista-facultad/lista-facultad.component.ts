@@ -14,12 +14,15 @@ import { Facultad } from '../../interfaces/facultad.interface';
 
 export class ListaFacultadComponent implements OnInit {
   facultades: Facultad[] = [];
+  facultadOriginal: Facultad[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
   editFacultadId: number | null = null;
   mostrarFormularioAgregarFacultad: boolean = false;
   private facultadesSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(private FacultadService: FacultadService, private toastr: ToastrService) {
     this.form = new FormGroup({
@@ -81,6 +84,23 @@ export class ListaFacultadComponent implements OnInit {
     });
   }
 
+  realizarBusquedaFacultad() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.actualizarListaDeFacultades(); 
+    } else {
+
+      if (this.facultadOriginal) {
+        this.facultades = this.facultadOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
+
   actualizarListaDeFacultades() {
     if (this.facultadesSubscription) {
       this.facultadesSubscription.unsubscribe();
@@ -93,8 +113,31 @@ export class ListaFacultadComponent implements OnInit {
         })
       )
       .subscribe((data: Facultad[]) => {
-        this.facultades = data;
+        if(!this.facultadOriginal){
+        this.facultadOriginal = data;
+        }
+        this.facultades = data.filter(facultad => {
+          return (
+            this.comienzaConCadena(facultad.id_facultad.toString(), this.searchTerm) ||
+            this.comienzaConCadena(facultad.nombre_facultad, this.searchTerm)
+          );
+        });
       });
+  }
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
   }
 
   editarFacultad(id: number, nombre: string) {

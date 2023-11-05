@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import { Registro } from '../models/registro';
-import { where } from 'sequelize';
+import { Op, where } from 'sequelize';
 export const getRegistro = async(req: Request, res: Response) =>{  
     const listRegistro = await Registro.findAll({attributes:['id_registro','datos_registro','contenido_registro']});
     res.json(listRegistro)
@@ -97,3 +97,34 @@ export const deleteRegistro = async(req: Request, res: Response) =>{
 
         }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarRegistro = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const registros = await Registro.findAll({
+        attributes: ['id_registro', 'datos_registro'],
+        where: {
+          [Op.or]: [
+            { id_registro: { [Op.like]: `%${searchTerm}%` } },
+            { datos_registro: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(registros);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar registros',
+        error,
+      });
+    }
+  };
+  

@@ -10,22 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDetalle_Revisor = exports.getOneDetalle_Revisor = exports.updateDetalle_Revisor = exports.newDetalle_Revisor = exports.getDetalle_Revisor = void 0;
-const detalle_revisor_2 = require("../models/detalle_revisor");
+const detalle_revisor_1 = require("../models/detalle_revisor");
 const getDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listDetalle_Revisor = yield detalle_revisor_2.Detalle_Revisor.findAll({ attributes: ['id_detalle_revisor', 'revisado_revisor', 'estado_revisor', 'comentario_revisor'] });
+    const listDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findAll({ attributes: ['id_detalle_revisor', 'revisado_revisor', 'estado_revisor', 'comentario_revisor'] });
     res.json(listDetalle_Revisor);
 });
 exports.getDetalle_Revisor = getDetalle_Revisor;
 const newDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { revisado_revisor, estado_revisor, comentario_revisor } = req.body;
-    const idDetalle_Revisor = yield detalle_revisor_2.Detalle_Revisor.findOne({ where: { revisado_revisor: revisado_revisor } });
+    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { revisado_revisor: revisado_revisor } });
     if (idDetalle_Revisor) {
         return res.status(400).json({
             msg: 'Ya existe un Detalle de revisor creado con este valor'
         });
     }
     try {
-        yield detalle_revisor_2.Detalle_Revisor.create({
+        yield detalle_revisor_1.Detalle_Revisor.create({
             "revisado_revisor": revisado_revisor,
             "estado_revisor": estado_revisor,
             "comentario_Revisor": comentario_revisor
@@ -45,14 +45,14 @@ exports.newDetalle_Revisor = newDetalle_Revisor;
 const updateDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { revisado_revisor, estado_revisor, comentario_revisor } = req.body;
-    const idDetalle_Revisor = yield detalle_revisor_2.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
+    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
     if (!idDetalle_Revisor) {
         return res.status(400).json({
             msg: "El id del detalle revisor no existe"
         });
     }
     try {
-        yield detalle_revisor_2.Detalle_Revisor.update({
+        yield detalle_revisor_1.Detalle_Revisor.update({
             revisado_revisor: revisado_revisor,
             estado_revisor: estado_revisor,
             comentario_revisor: comentario_revisor
@@ -71,14 +71,14 @@ const updateDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
 exports.updateDetalle_Revisor = updateDetalle_Revisor;
 const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idDetalle_Revisor = yield detalle_revisor_2.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
+    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
     if (!idDetalle_Revisor) {
         return res.status(400).json({
             msg: "El ID: " + id + " del Detalle Revisor no existe dentro de la BD"
         });
     }
     try {
-        const Detalle_RevisorOne = yield detalle_revisor_2.Detalle_Revisor.findOne({ where: { id_detalle_Revisor: id } });
+        const Detalle_RevisorOne = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_Revisor: id } });
         res.json(Detalle_RevisorOne);
     }
     catch (error) {
@@ -91,14 +91,14 @@ const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
 exports.getOneDetalle_Revisor = getOneDetalle_Revisor;
 const deleteDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idDetalle_Revisor = yield detalle_revisor_2.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
+    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
     if (!idDetalle_Revisor) {
         return res.status(400).json({
             msg: "El id: " + id + " del detalle revisor no existe"
         });
     }
     try {
-        yield detalle_revisor_2.Detalle_Revisor.destroy({ where: { id_detalle_revisor: id } });
+        yield detalle_revisor_1.Detalle_Revisor.destroy({ where: { id_detalle_revisor: id } });
         return res.json({
             msg: 'Detalle revisor ' + id + ' borrado exitosamente'
         });

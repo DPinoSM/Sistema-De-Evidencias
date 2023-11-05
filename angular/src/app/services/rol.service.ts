@@ -11,46 +11,38 @@ export class RolService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene la lista de roles
   getRoles(): Observable<any> {
     return this.http.get(`${this.apiUrl}/lista`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Crea un nuevo rol
   createRol(nombreRol: string): Observable<any> {
     return this.http.post(`${this.apiUrl}`, { nombre_rol: nombreRol })
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Obtiene detalles de un rol por su ID
   getRol(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Actualiza un rol existente
   updateRol(id: number, nombreRol: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, { nombre_rol: nombreRol })
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Elimina un rol por su ID
   deleteRol(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-
   buscarRol(searchTerm: string): Observable<any> {
-    // Define los parámetros de consulta con el término de búsqueda
     const params = new HttpParams().set('searchTerm', searchTerm);
-
     return this.http.get(`${this.apiUrl}/buscar`, { params })
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Manejo de errores (igual que en tu código original)
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
 

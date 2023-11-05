@@ -6,6 +6,13 @@
         <div class="container">
           <div class="title">
             <h3 class="page-title">Listado de Facultades</h3>
+
+            <div class="search-container">
+              <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusquedaFacultad()">
+              <button class="btn " (click)="realizarBusquedaFacultad()"></button>
+              <i class="fas fa-search"></i>
+            </div>
+
             <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarFacultad(editFacultadId)">{{ 'Agregar Facultad' }}</button>
           </div>
           <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarFacultad">
@@ -37,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let facultad of facultades" style="border: 1px solid black;">
+                <tr *ngFor="let facultad of facultades | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
                   <td style="border: 1px solid black;">{{ facultad.id_facultad }}</td>
                   <td style="border: 1px solid black;">{{ facultad.nombre_facultad }}</td>
                   <td style="border: 1px solid black;">
@@ -52,6 +59,7 @@
                 </tr>
               </tbody>
             </table>
+            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
           </div>
         </div>
       </div>

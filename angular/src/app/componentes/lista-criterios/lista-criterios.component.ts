@@ -14,12 +14,16 @@ import { Criterio } from 'src/app/interfaces/criterio.interface';
 
 export class ListaCriteriosComponent implements OnInit {
   criterios: Criterio[] = [];
+  criteriosOriginal: Criterio[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   criterioEditId: number | null = null;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarCriterios: boolean = false;
   private criterioSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
+
 
   constructor(
     private criterioService: CriterioService, 
@@ -94,6 +98,22 @@ export class ListaCriteriosComponent implements OnInit {
     });
   }
 
+  realizarBusquedaCriterios() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.  actualizarListaDeCriterios(); 
+    } else {
+
+      if (this.criteriosOriginal) {
+        this.criterios = this.criteriosOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
   actualizarListaDeCriterios() {
     if (this.criterioSubscription) {
       this.criterioSubscription.unsubscribe();
@@ -107,10 +127,33 @@ export class ListaCriteriosComponent implements OnInit {
         })
       )
       .subscribe((data: Criterio[]) => {
-        this.criterios = data;
+        if(!this.criteriosOriginal){
+          this.criteriosOriginal = data;
+        }
+        this.criterios = data.filter(Criterio => {
+          return (
+            this.comienzaConCadena(Criterio.id_criterios.toString(), this.searchTerm) ||
+            this.comienzaConCadena(Criterio.nombre_criterios, this.searchTerm)
+          );
+        });
       });
   }
 
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
+  
   editarCriterio(id: number, nombre_criterios: string, codigo_criterios: number, descripcion_criterios: string, estado_criterios: any) {
     this.realizarOperacionDeCriterio(() =>
       this.criterioService.updateCriterio(id, { nombre_criterios: nombre_criterios, codigo_criterios: codigo_criterios, descripcion_criterios: descripcion_criterios, estado_criterios: estado_criterios }), 'Criterio Editado');

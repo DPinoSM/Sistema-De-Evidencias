@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs';
 
@@ -36,6 +36,14 @@ constructor(private http: HttpClient) {}
     return this.http.delete<void>(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
+
+  buscarAmbGeo(searchTerm: string): Observable<any> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get(`${this.apiUrl}/buscar`, { params })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+  
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
   

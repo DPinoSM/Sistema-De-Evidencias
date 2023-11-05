@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import { Criterio } from '../models/criterio';
-import { where } from 'sequelize';
+import { Op, where } from 'sequelize';
 export const getCriterio = async(req: Request, res: Response) =>{  
     const listCriterio = await Criterio.findAll({attributes:['id_criterios','nombre_criterios','codigo_criterios','descripcion_criterios','estado_criterios']});
     res.json(listCriterio)
@@ -101,3 +101,34 @@ export const deleteCriterio = async(req: Request, res: Response) =>{
 
         }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarCriterio = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const criterios = await Criterio.findAll({
+        attributes: ['id_criterios', 'nombre_criterios'],
+        where: {
+          [Op.or]: [
+            { id_criterios: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_criterios: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(criterios);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar roles',
+        error,
+      });
+    }
+  };
+  

@@ -14,12 +14,15 @@ import { Unidad } from 'src/app/interfaces/unidad.interface';
 
 export class ListaUnidadComponent implements OnInit {
   unidades: Unidad[] = [];
+  unidadOriginal: Unidad[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
   unidadEditId: number | null = null;
   mostrarFormularioAgregarUnidad: boolean = false;
   private unidadesSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(
     private unidadService: UnidadService, 
@@ -86,6 +89,23 @@ export class ListaUnidadComponent implements OnInit {
     });
   }
 
+  realizarBusquedaUnidad() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.actualizarListaDeUnidades(); 
+    } else {
+
+      if (this.unidadOriginal) {
+        this.unidades = this.unidadOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
+
   actualizarListaDeUnidades() {
     if (this.unidadesSubscription) {
       this.unidadesSubscription.unsubscribe();
@@ -99,8 +119,32 @@ export class ListaUnidadComponent implements OnInit {
         })
       )
       .subscribe((data: Unidad[]) => {
-        this.unidades = data;
+        if(!this.unidadOriginal){
+          this.unidadOriginal= data;
+        }
+        this.unidades= data.filter(unidad => {
+          return (
+            this.comienzaConCadena(unidad.id_unidad.toString(), this.searchTerm) ||
+            this.comienzaConCadena(unidad.nombre_unidad, this.searchTerm)
+          );
+        });
       });
+  }
+
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
   }
 
   editarUnidad(id: number, nombre_unidad: string, unidad_defecto: any) {

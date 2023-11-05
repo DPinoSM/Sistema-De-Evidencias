@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_2 = require("express");
+const express_1 = require("express");
 const criterio_1 = require("../controllers/criterio");
 // import validateToken from './validate-token';
-const router = (0, express_2.Router)();
+const router = (0, express_1.Router)();
 router.get('/lista', criterio_1.getCriterio);
 router.post('/', criterio_1.newCriterio);
 router.get('/:id', criterio_1.getOneCriterio);

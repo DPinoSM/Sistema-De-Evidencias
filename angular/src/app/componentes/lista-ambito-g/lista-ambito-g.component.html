@@ -6,6 +6,13 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Ámbitos Geográficos</h4>
+           
+          <div class="search-container">
+              <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+              <button class="btn " (click)="realizarBusqueda()"></button>
+              <i class="fas fa-search"></i>
+            </div>
+
           <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarAmbitoGeografico(ambitoGeograficoEditId)">Agregar Ámbito Geográfico</button>
         </div>
 
@@ -50,7 +57,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let ambitoGeografico of ambitosG" style="border: 1px solid black;">
+              <tr *ngFor="let ambitoGeografico of ambitosG | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
                 <td style="border: 1px solid black;">{{ ambitoGeografico.id_ambito_geografico }}</td>
                 <td style="border: 1px solid black;">{{ ambitoGeografico.nombre_ambito_geografico }}</td>
                 <td style="border: 1px solid black;">
@@ -70,6 +77,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
         </div>
       </div>
     </div>

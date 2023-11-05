@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -51,6 +51,12 @@ export class FacultadService {
       .pipe(
         catchError(err => this.handleError(err))
       );
+  }
+
+  buscarFacultad(searchTerm: string): Observable<any> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get(`${this.baseUrl}/buscar`, { params })
+      .pipe(catchError(err => this.handleError(err)));
   }
 
   // Manejo de errores

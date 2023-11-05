@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAmbitoGeografico = exports.deleteAmbitoGeografico = exports.getAmbitoGeografico = exports.getAmbitosGeograficos = exports.newAmbitoGeografico = void 0;
+exports.buscarAmbGeo = exports.updateAmbitoGeografico = exports.deleteAmbitoGeografico = exports.getAmbitoGeografico = exports.getAmbitosGeograficos = exports.newAmbitoGeografico = void 0;
 const ambito_geografico_1 = require("../models/ambito_geografico");
+const sequelize_1 = require("sequelize");
 const newAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre_ambito_geografico, estado_ambito_geografico } = req.body;
     const nomAmbitoG = yield ambito_geografico_1.AmbitoGeografico.findOne({ where: { nombre_ambito_geografico: nombre_ambito_geografico } });
@@ -109,3 +110,31 @@ const updateAmbitoGeografico = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.updateAmbitoGeografico = updateAmbitoGeografico;
+//FILTRO DE BUSQUEDA
+const buscarAmbGeo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const ambitosG = yield ambito_geografico_1.AmbitoGeografico.findAll({
+            attributes: ['id_ambito_geografico', 'nombre_ambito_geografico', 'estado_ambito_geografico'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_ambito_geografico: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_ambito_geografico: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(ambitosG);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar Ambitos geograficos',
+            error,
+        });
+    }
+});
+exports.buscarAmbGeo = buscarAmbGeo;

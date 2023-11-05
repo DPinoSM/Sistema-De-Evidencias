@@ -61,7 +61,7 @@ export const getOneRol = async(req: Request, res: Response) =>{
     const idRol = await Rol.findOne({where: {id_rol: id}})
     if (!idRol) {
         return res.status(400).json({
-            msg: "El id: " + id + " del rol no existes"
+            msg: "El id: " + id + " del rol no existe"
         })
     }
     try{
@@ -99,6 +99,8 @@ export const deleteRol = async(req: Request, res: Response) =>{
         }
 }
 
+
+//FILTRO DE BUSQUEDA
 export const buscarRol = async (req: Request, res: Response) => {
     const { searchTerm } = req.query; 
   

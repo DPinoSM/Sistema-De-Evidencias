@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import { AmbitoAcademico } from '../models/ambito_academico'; 
+import { Op } from 'sequelize';
 
 export const newAmbitoAcademico = async(req: Request, res: Response) =>{
     const { nombre_ambito_academico, estado_ambito_academico} =  req.body;
@@ -92,3 +93,33 @@ export const updateAmbitoAcademico = async(req: Request, res: Response)=>{
         })
     }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarAmbAca = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const ambitosAcademicos = await AmbitoAcademico.findAll({
+        attributes: ['id_ambito_academico','nombre_ambito_academico'],
+        where: {
+          [Op.or]: [
+            { id_ambito_academico: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_ambito_academico: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(ambitosAcademicos);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar Ambitos academicos',
+        error,
+      });
+    }
+  };

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_2 = require("express");
+const express_1 = require("express");
 const unidad_1 = require("../controllers/unidad");
 // import validateToken from './validate-token';
-const router = (0, express_2.Router)();
+const router = (0, express_1.Router)();
 router.get('/lista', unidad_1.getUnidad);
 router.post('/', unidad_1.newUnidad);
 router.get('/:id', unidad_1.getOneUnidad);

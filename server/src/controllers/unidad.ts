@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import { Unidad } from '../models/unidad';
-import { where } from 'sequelize';
+import { Op, where } from 'sequelize';
 export const getUnidad = async(req: Request, res: Response) =>{  
     const listUnidad = await Unidad.findAll({attributes:['id_unidad','nombre_unidad','unidad_defecto']});
     res.json(listUnidad)
@@ -97,3 +97,33 @@ export const deleteUnidad = async(req: Request, res: Response) =>{
 
         }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarUnidad = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const unidades = await Unidad.findAll({
+        attributes: ['id_unidad', 'nombre_unidad'],
+        where: {
+          [Op.or]: [
+            { id_unidad: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_unidad: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(unidades);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar unidades',
+        error,
+      });
+    }
+  };

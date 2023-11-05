@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCriterio = exports.getOneCriterio = exports.updateCriterio = exports.newCriterio = exports.getCriterio = void 0;
+exports.buscarCriterio = exports.deleteCriterio = exports.getOneCriterio = exports.updateCriterio = exports.newCriterio = exports.getCriterio = void 0;
 const criterio_1 = require("../models/criterio");
+const sequelize_1 = require("sequelize");
 const getCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listCriterio = yield criterio_1.Criterio.findAll({ attributes: ['id_criterios', 'nombre_criterios', 'codigo_criterios', 'descripcion_criterios', 'estado_criterios'] });
     res.json(listCriterio);
@@ -113,3 +114,31 @@ const deleteCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteCriterio = deleteCriterio;
+//FILTRO DE BUSQUEDA
+const buscarCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const criterios = yield criterio_1.Criterio.findAll({
+            attributes: ['id_criterios', 'nombre_criterios'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(criterios);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar criterios',
+            error,
+        });
+    }
+});
+exports.buscarCriterio = buscarCriterio;

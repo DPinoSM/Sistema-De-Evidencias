@@ -6,6 +6,13 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Criterios</h4>
+
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusquedaCriterios()">
+            <button class="btn " (click)="realizarBusquedaCriterios()"></button>
+            <i class="fas fa-search"></i>
+          </div>
+
           <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarCriterios(criterioEditId)">Agregar Criterio</button>
         </div>
 
@@ -69,7 +76,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let criterio of criterios" style="border: 1px solid black;">
+              <tr *ngFor="let criterio of criterios | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
                 <td style="border: 1px solid black;">{{ criterio.id_criterios }}</td>
                 <td style="border: 1px solid black;">{{ criterio.nombre_criterios }}</td>
                 <td style="border: 1px solid black;">{{ criterio.codigo_criterios }}</td>
@@ -91,6 +98,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
         </div>
       </div>
     </div>

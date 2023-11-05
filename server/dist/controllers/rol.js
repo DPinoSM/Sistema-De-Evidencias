@@ -108,15 +108,15 @@ const deleteRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteRol = deleteRol;
+//FILTRO DE BUSQUEDA
 const buscarRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { searchTerm } = req.query; // Obtén el término de búsqueda de la solicitud
+    const { searchTerm } = req.query;
     if (!searchTerm) {
         return res.status(400).json({
             msg: 'El término de búsqueda no se proporcionó',
         });
     }
     try {
-        // Utiliza una consulta de Sequelize para buscar roles por ID o nombre que coincidan con el término de búsqueda
         const roles = yield rol_1.Rol.findAll({
             attributes: ['id_rol', 'nombre_rol'],
             where: {

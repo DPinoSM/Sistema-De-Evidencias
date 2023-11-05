@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -11,33 +11,36 @@ export class UnidadService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene la lista de unidades
+
   getUnidades(): Observable<any> {
     return this.http.get(`${this.apiUrl}/lista`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Obtiene detalles de una unidad por su ID
   getUnidad(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Crea una nueva unidad
   createUnidad(data: any): Observable<any> {
     return this.http.post(this.apiUrl, data)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Actualiza una unidad existente
   updateUnidad(id: number, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Elimina una unidad por su ID
   deleteUnidad(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`)
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  
+  buscarUnidad(searchTerm: string): Observable<any> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get(`${this.apiUrl}/buscar`, { params })
       .pipe(catchError(err => this.handleError(err)));
   }
 
