@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -36,9 +37,26 @@ export class SidenavComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     
   }
+
+  isItemVisible(item: any): boolean {
+    switch (item.link) {
+      case '/usuarios':
+        return this.authService.checkRoleAndVisibility(1, [1]);
+      case '/evidencias':
+        return this.authService.checkRoleAndVisibility(5, [5]);
+      case '/debilidades':
+      case '/impacto':
+      case '/graficos':
+        return this.authService.checkRoleAndVisibility(2, [1, 2, 3, 4]);
+      default:
+        return true;
+    }
+  }
+  
+  
 }

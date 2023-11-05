@@ -14,12 +14,18 @@ import { ListaProcesosComponent } from '../componentes/lista-procesos/lista-proc
 import { ListaUsuariosComponent } from '../componentes/lista-usuarios/lista-usuarios.component';
 import { ListaRegistrosComponent } from '../componentes/lista-registros/lista-registros.component';
 import { ListaFacultadComponent } from '../componentes/lista-facultad/lista-facultad.component';
+import { DacComponent } from '../Principal/dac/dac.component';
+import { ComiteComponent } from '../Principal/comite/comite.component';
+import { ResponsableComponent } from '../Principal/responsable/responsable.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'inicio', component: InicioComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'dac', component: DacComponent },
+  { path: 'comite', component: ComiteComponent },
+  { path: 'responsable', component: ResponsableComponent },
 
   { path: 'rol', component: ListarolComponent },
   { path: 'unidad', component: ListaUnidadComponent },

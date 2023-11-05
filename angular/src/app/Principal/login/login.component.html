@@ -7,32 +7,32 @@
       <div class="form-group">
         <input
           type="text"
-          formControlName="RUT"
-          id="RUT"
+          formControlName="rut_usuario"
+          id="rut_usuario"
           class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['RUT'].errors }"
+          [ngClass]="{ 'is-invalid': submitted && f['rut_usuario'].errors }"
           placeholder="Usuario"
         />
-        <div *ngIf="submitted && f['RUT'].errors" class="invalid-feedback">
-          <div *ngIf="f['RUT'].errors['required']">
+        <div *ngIf="submitted && f['id_rut'].errors" class="invalid-feedback">
+          <div *ngIf="f['id_rut'].errors['required']">
             Usuario es requerido
           </div>
         </div>
       </div>
       <div class="form-group position-relative">
         <input
-          [type]="hide ? 'password' : 'text'"
-          formControlName="password"
-          id="password"
+          [type]="hide ? 'clave_usuario' : 'text'"
+          formControlName="clave_usuario"
+          id="clave_usuario"
           class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+          [ngClass]="{ 'is-invalid': submitted && f['clave_usuario'].errors }"
           placeholder="Contraseña"
           autocomplete="off"
         />
         <i class="fa fa-eye position-absolute eye-icon" *ngIf="hide" (click)="toggleHide()"></i>
         <i class="fa fa-eye-slash position-absolute eye-icon" *ngIf="!hide" (click)="toggleHide()"></i>
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">
+        <div *ngIf="submitted && f['clave_usuario'].errors" class="invalid-feedback">
+          <div *ngIf="f['clave_usuario'].errors['required']">
             Contraseña es requerida
           </div>
         </div>

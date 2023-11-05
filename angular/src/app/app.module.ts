@@ -24,6 +24,10 @@ import { ListaUsuariosComponent } from './componentes/lista-usuarios/lista-usuar
 import { HeaderComponent } from './dashboard/header/header.component';
 import { SidenavComponent } from './dashboard/sidenav/sidenav.component';
 import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facultad.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { DacComponent } from './Principal/dac/dac.component';
+import { ComiteComponent } from './Principal/comite/comite.component';
+import { ResponsableComponent } from './Principal/responsable/responsable.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +46,9 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     ListaUsuariosComponent,
     HeaderComponent,
     SidenavComponent,
+    DacComponent,
+    ComiteComponent,
+    ResponsableComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +57,7 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
+    NgxPaginationModule,
     CommonModule,
     ToastrModule.forRoot({
       timeOut: 2000,

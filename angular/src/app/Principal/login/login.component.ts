@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      RUT: ['', Validators.required],
-      password: ['', Validators.required],
+      rut_usuario: ['', Validators.required],
+      clave_usuario: ['', Validators.required],
     });
   }
 
@@ -46,15 +46,15 @@ export class LoginComponent implements OnInit {
 
   async login() {
     try {
-      const { RUT, password } = this.f;
-      this.authService.login(RUT.value, password.value).subscribe({
+      const { rut_usuario, clave_usuario } = this.f;
+      this.authService.login(rut_usuario.value, clave_usuario.value).subscribe({
         next: (data: LoginResponse | undefined) => {
           if (data) {
             if (data.token) {
               localStorage.setItem('authToken', data.token);
-              if (data.role) {
-                console.log('Rol del usuario:', data.role);
-                this.onLoginSuccess(data.role);
+              if (data.id_rol) {
+                console.log('Rol del usuario:', data.id_rol);
+                this.onLoginSuccess(data.id_rol);
               }
             } else {
               this.error = data.msg || 'Error inesperado en el inicio de sesión';
@@ -74,8 +74,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onLoginSuccess(role: number | undefined) {
-    if (role === 1) {
+  onLoginSuccess(id_rol: number | undefined) {
+    if (id_rol === 1) {
       this.router.navigate(['/admin']);
     } else {
       this.router.navigate(['/inicio']);

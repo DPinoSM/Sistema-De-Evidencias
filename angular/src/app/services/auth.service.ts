@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 export interface LoginResponse {
   msg: string;
   token?: string;
-  role?: number;
+  id_rol?: number;
 }
 
 @Injectable({
@@ -21,28 +21,38 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(rut: string, password: string): Observable<LoginResponse> {
-    const loginData = { rut_usuario: rut, clave_usuario: password };
+  login(rut_usuario: string, clave_usuario: string): Observable<LoginResponse> {
+    const loginData = { rut_usuario: rut_usuario, clave_usuario: clave_usuario};
     return this.http.post<LoginResponse>(`${this.apiUrl}`, loginData).pipe(
       catchError(this.handleError),
       tap((data: LoginResponse) => {
-        if (data.token && data.role) {
+        if (data.token && data.id_rol) {
           this.authToken = data.token;
-          this.userRole = data.role;
+          this.userRole = data.id_rol;
         }
       })
     );
   }
 
   isAuthenticated(): boolean {
-    // Implementa la lógica para verificar si el usuario está autenticado.
     return this.authToken !== null;
   }
 
   hasRole(expectedRole: number): boolean {
-    // Implementa la lógica para verificar si el usuario tiene el rol adecuado.
     return this.userRole === expectedRole;
   }
+
+  checkRoleAndVisibility(expectedRole: number, allowedRoles: number[]): boolean {
+    if (this.isAuthenticated() && this.userRole !== null && this.hasRole(expectedRole)) {
+      return allowedRoles.includes(this.userRole);
+    }
+    return false;
+  }
+  
+  checkIsAdmin(): boolean {
+    return this.isAuthenticated() && this.hasRole(1);
+  }
+  
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage: string;

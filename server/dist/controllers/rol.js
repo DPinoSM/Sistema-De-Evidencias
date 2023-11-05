@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRol = exports.getOneRol = exports.updateRol = exports.newRol = exports.getRol = void 0;
+exports.buscarRol = exports.deleteRol = exports.getOneRol = exports.updateRol = exports.newRol = exports.getRol = void 0;
 const rol_1 = require("../models/rol");
+const sequelize_1 = require("sequelize");
 const getRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listRol = yield rol_1.Rol.findAll({ attributes: ['id_rol', 'nombre_rol'] });
     res.json(listRol);
@@ -107,3 +108,31 @@ const deleteRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteRol = deleteRol;
+const buscarRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query; // Obtén el término de búsqueda de la solicitud
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        // Utiliza una consulta de Sequelize para buscar roles por ID o nombre que coincidan con el término de búsqueda
+        const roles = yield rol_1.Rol.findAll({
+            attributes: ['id_rol', 'nombre_rol'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(roles);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar roles',
+            error,
+        });
+    }
+});
+exports.buscarRol = buscarRol;
