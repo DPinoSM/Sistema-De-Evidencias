@@ -1,5 +1,7 @@
 import {Request, Response} from 'express';
 import { AmbitoGeografico } from '../models/ambito_geografico'; 
+import { Op } from 'sequelize';
+
 
 export const newAmbitoGeografico = async(req: Request, res: Response) =>{
     const { nombre_ambito_geografico, estado_ambito_geografico} =  req.body;
@@ -92,3 +94,33 @@ export const updateAmbitoGeografico = async(req: Request, res: Response)=>{
         })
     }
 }
+
+//FILTRO DE BUSQUEDA
+export const buscarAmbGeo = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query; 
+  
+    if (!searchTerm) {
+      return res.status(400).json({
+        msg: 'El término de búsqueda no se proporcionó',
+      });
+    }
+  
+    try {
+      const ambitosG = await AmbitoGeografico.findAll({
+        attributes: ['id_ambito_geografico','nombre_ambito_geografico', 'estado_ambito_geografico'],
+        where: {
+          [Op.or]: [
+            { id_ambito_geografico: { [Op.like]: `%${searchTerm}%` } },
+            { nombre_ambito_geografico: { [Op.like]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.json(ambitosG);
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Ocurrió un error al buscar Ambitos geograficos',
+        error,
+      });
+    }
+  };

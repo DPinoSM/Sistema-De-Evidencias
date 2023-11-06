@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -12,37 +12,37 @@ export class CriterioService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene la lista de criterios
   getCriterios(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/lista`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Crea un nuevo criterio
   createCriterio(criterioData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, criterioData)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Obtiene un criterio por su ID
   getCriterioById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Actualiza un criterio existente por su ID
   updateCriterio(id: number, criterioData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, criterioData)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Elimina un criterio por su ID
   deleteCriterio(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  // Manejo de errores
+  buscarCriterio(searchTerm: string): Observable<any> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get(`${this.apiUrl}/buscar`, { params })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
   

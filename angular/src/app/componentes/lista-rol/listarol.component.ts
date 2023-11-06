@@ -90,11 +90,9 @@ export class ListarolComponent implements OnInit {
 
       if (this.rolesOriginal) {
         this.roles = this.rolesOriginal;
-        
       }
     }
   }
-
 
   pageChanged(page: number) {
     this.currentPage = page;

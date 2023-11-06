@@ -107,6 +107,7 @@ const deleteRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteRol = deleteRol;
+//FILTRO DE BUSQUEDA
 const buscarRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = req.query;
     if (!searchTerm) {

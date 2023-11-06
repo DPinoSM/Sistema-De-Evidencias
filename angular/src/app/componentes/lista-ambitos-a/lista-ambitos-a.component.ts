@@ -14,12 +14,15 @@ import { AmbitoAcademico } from 'src/app/interfaces/ambito-academico.interface';
 })
 export class ListaAmbitosAComponent implements OnInit {
   ambitosAcademicos: AmbitoAcademico[] = [];
+  ambitoAcaOriginal: AmbitoAcademico[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   ambitoAcademicoEditId: number | null = null;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarAmbitoAcademico: boolean = false;
   private ambitoAcSubcription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(
     private ambitoAService: AmbitoAService,
@@ -89,6 +92,22 @@ export class ListaAmbitosAComponent implements OnInit {
     });
   }
 
+  realizarBusquedaAmbitoAca() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this. actualizarListaDeAmbitosAcademicos(); 
+    } else {
+
+      if (this.ambitoAcaOriginal) {
+        this.ambitosAcademicos = this.ambitoAcaOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
   actualizarListaDeAmbitosAcademicos() {
     if (this.ambitoAcSubcription){
       this.ambitoAcSubcription.unsubscribe();
@@ -101,9 +120,32 @@ export class ListaAmbitosAComponent implements OnInit {
       })
     )
     .subscribe((data: AmbitoAcademico[]) => {
-      this.ambitosAcademicos = data;
+      if(!this.ambitoAcaOriginal){
+        this.ambitoAcaOriginal = data;
+      }
+      this.ambitosAcademicos = data.filter(ambitoAcademico => {
+        return (
+          this.comienzaConCadena(ambitoAcademico.id_ambito_academico.toString(), this.searchTerm) ||
+          this.comienzaConCadena(ambitoAcademico.nombre_ambito_academico, this.searchTerm)
+        );
+      });
     });
 }
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
 
   editarAmbitoAcademico(id: number, nombre_ambito_academico: string, estado_ambito_academico: boolean) {
     this.realizarOperacionDeAmbitoA(() => 

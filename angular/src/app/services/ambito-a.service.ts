@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -12,42 +12,42 @@ export class AmbitoAService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtiene la lista de ámbitos académicos.
   getAmbitosAcademicos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/lista`)
     .pipe(catchError(this.handleError)
     );
   }
 
-  // Crea un nuevo ámbito académico.
   newAmbitoAcademico(ambitoData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, ambitoData)
     .pipe(catchError(this.handleError)
     );
   }
 
-  // Obtiene un ámbito académico por su ID.
   getAmbitoAcademico(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`)
     .pipe(catchError(this.handleError)
     );
   }
 
-  // Actualiza un ámbito académico existente por su ID.
   updateAmbitoAcademico(id: number, ambitoData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, ambitoData)
     .pipe(catchError(this.handleError)
     );
   }
 
-  // Elimina un ámbito académico por su ID.
   deleteAmbitoAcademico(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`)
     .pipe(catchError(this.handleError)
     );
   }
 
-  // Método privado para manejar errores de la respuesta HTTP.
+  buscarAmbitoAca(searchTerm: string): Observable<any> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get(`${this.apiUrl}/buscar`, { params })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
 

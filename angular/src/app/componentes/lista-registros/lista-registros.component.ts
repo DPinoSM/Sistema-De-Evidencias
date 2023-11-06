@@ -14,12 +14,16 @@ import { Registro } from 'src/app/interfaces/registro.interface';
 
 export class ListaRegistrosComponent implements OnInit {
   registros: Registro[] = [];
+  registrosOriginal: Registro[] | null = null;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarRegistro: boolean = false;
   editRegistroId: number | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   private registrosSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
+
 
   constructor(private registroService: RegistroService, private toastr: ToastrService) {
     this.form = new FormGroup({
@@ -87,6 +91,23 @@ export class ListaRegistrosComponent implements OnInit {
     });
   }
 
+  realizarBusquedaRegistro() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.actualizarListaDeRegistros(); 
+    } else {
+
+      if (this.registrosOriginal) {
+        this.registros = this.registrosOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
+
   actualizarListaDeRegistros() {
     if (this.registrosSubscription) {
       this.registrosSubscription.unsubscribe();
@@ -99,9 +120,34 @@ export class ListaRegistrosComponent implements OnInit {
         })
       )
       .subscribe((data: Registro[]) => {
-        this.registros = data;
+        if(!this.registrosOriginal){
+          this.registrosOriginal = data;
+        }
+        this.registros = data.filter(registro => {
+          return (
+            this.comienzaConCadena(registro.id_registro.toString(), this.searchTerm) ||
+            this.comienzaConCadena(registro.datos_registro, this.searchTerm)
+          );
+        });
+
       });
   }
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
+  
 
   editRegistro(id: number, datos: string, contenido: string) {
     this.realizarOperacionDeRegistro(() =>

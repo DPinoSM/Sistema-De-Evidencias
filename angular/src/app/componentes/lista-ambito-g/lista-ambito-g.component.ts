@@ -13,12 +13,15 @@ import { Subscription } from 'rxjs';
 })
 export class ListaAmbitoGComponent implements OnInit {
   ambitosG: AmbitoGeografico[] = [];
+  ambitosGeoOriginal: AmbitoGeografico[] | null = null;
   errorMsg: string | undefined;
   form: FormGroup;
   ambitoGeograficoEditId: number | null = null;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarAmbitoGeografico: boolean = false;
   private ambitoGeSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(
     private ambitoGeograficoService: AmbitoGeograficoService,
@@ -90,6 +93,24 @@ export class ListaAmbitoGComponent implements OnInit {
     });
   }
 
+  realizarBusqueda() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.getAmbitosGeograficos(); 
+    } else {
+
+      if (this.ambitosGeoOriginal) {
+        this.ambitosG = this.ambitosGeoOriginal;
+        
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+
+
   getAmbitosGeograficos() {
     if (this.ambitoGeSubscription) {
       this.ambitoGeSubscription.unsubscribe();
@@ -103,8 +124,31 @@ export class ListaAmbitoGComponent implements OnInit {
         })
       )
       .subscribe((data: AmbitoGeografico[]) => {
-        this.ambitosG = data;
+        if(!this.ambitosGeoOriginal)
+          this.ambitosGeoOriginal = data;
+
+          this.ambitosG = data.filter(ambitoGeografico => {
+            return (
+              this.comienzaConCadena(ambitoGeografico.id_ambito_geografico.toString(), this.searchTerm) ||
+              this.comienzaConCadena(ambitoGeografico.nombre_ambito_geografico, this.searchTerm)
+            );
+          });
       });
+  }
+
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+  
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+  
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
   }
 
   editarAmbitoGeografico(id: number, nombre_ambito_geografico: string, estado_ambito_geografico: boolean) {
@@ -130,6 +174,8 @@ export class ListaAmbitoGComponent implements OnInit {
     }
   }
 
+ 
+
   private realizarOperacionDeAmbitoG(operacion: () => any, mensajeExitoso: string) {
     operacion().subscribe({
       next: (respuesta: any) => {
@@ -146,3 +192,4 @@ export class ListaAmbitoGComponent implements OnInit {
     });
   }
 }
+

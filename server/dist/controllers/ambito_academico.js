@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAmbitoAcademico = exports.deleteAmbitoAcademico = exports.getAmbitoAcademico = exports.getAmbitosAcademicos = exports.newAmbitoAcademico = void 0;
+exports.buscarAmbAca = exports.updateAmbitoAcademico = exports.deleteAmbitoAcademico = exports.getAmbitoAcademico = exports.getAmbitosAcademicos = exports.newAmbitoAcademico = void 0;
 const ambito_academico_1 = require("../models/ambito_academico");
+const sequelize_1 = require("sequelize");
 const newAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre_ambito_academico, estado_ambito_academico } = req.body;
     const nomAmbito = yield ambito_academico_1.AmbitoAcademico.findOne({ where: { nombre_ambito_academico: nombre_ambito_academico } });
@@ -109,3 +110,31 @@ const updateAmbitoAcademico = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.updateAmbitoAcademico = updateAmbitoAcademico;
+//FILTRO DE BUSQUEDA
+const buscarAmbAca = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const ambitosAcademicos = yield ambito_academico_1.AmbitoAcademico.findAll({
+            attributes: ['id_ambito_academico', 'nombre_ambito_academico'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_ambito_academico: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_ambito_academico: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(ambitosAcademicos);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar Ambitos academicos',
+            error,
+        });
+    }
+});
+exports.buscarAmbAca = buscarAmbAca;

@@ -6,6 +6,13 @@
       <div class="container">
         <div class="title">
           <h4>Listado de Unidades</h4>
+
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusquedaUnidad()">
+            <button class="btn " (click)="realizarBusquedaUnidad()"></button>
+            <i class="fas fa-search"></i>
+          </div>
+
           <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarUnidad(unidadEditId)">{{ 'Agregar Unidad' }}</button>
         </div>
 
@@ -50,7 +57,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let unidad of unidades" style="border: 1px solid black;">
+              <tr *ngFor="let unidad of unidades  | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
                 <td style="border: 1px solid black;">{{ unidad.id_unidad }}</td>
                 <td style="border: 1px solid black;">{{ unidad.nombre_unidad }}</td>
                 <td style="border: 1px solid black;">
@@ -70,6 +77,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
         </div>
       </div>
     </div>
