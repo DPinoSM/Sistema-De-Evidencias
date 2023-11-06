@@ -2,6 +2,8 @@
     border: 1px solid white;
 }
 
+
+
 .sidenav-content{
     color: white;
     width: 230px;
@@ -14,6 +16,7 @@
     list-style: none;
     height: 100%;
     padding: 0%;
+    margin: 0;
     margin-bottom: 0%;
 }
 
@@ -21,6 +24,7 @@
     display: flex;
     align-items: center;
     height: 50px;
+    transition: background-color 0.3s;
 }
 
 .nav-list-open .nav-list-item:hover{
@@ -53,4 +57,10 @@ a {
     height: auto; 
     margin: -30px; 
     align-self: flex-end;
+}
+
+.page-content {
+    
+    flex: 1;
+    padding: auto; 
   }

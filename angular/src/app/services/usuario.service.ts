@@ -12,9 +12,10 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/lista`)
+    return this.http.get(`${this.apiUrl}/lista?include=rol,unidad`)
       .pipe(catchError(err => this.handleError(err)));
   }
+  
 
   getUser(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`)

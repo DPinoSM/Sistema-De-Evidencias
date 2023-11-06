@@ -5,6 +5,8 @@ import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/interfaces/usuario.interface';
+import { Rol } from 'src/app/interfaces/rol.interface';
+import { RolService } from 'src/app/services/rol.service';
 
 @Component({
   selector: 'app-lista-usuarios',
@@ -14,6 +16,7 @@ import { User } from 'src/app/interfaces/usuario.interface';
 
 export class ListaUsuariosComponent implements OnInit {
   usuarios: User[] = [];
+  roles: Rol[] = [];
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarUsuario: boolean = false;
@@ -21,7 +24,7 @@ export class ListaUsuariosComponent implements OnInit {
   form: FormGroup;
   private usuarioSubscription!: Subscription;
 
-  constructor(private usuarioService: UsuarioService, private toastr: ToastrService) {
+  constructor(private usuarioService: UsuarioService,private rolService: RolService,  private toastr: ToastrService) {
     this.form = new FormGroup({
       rut_usuario: new FormControl(null, [Validators.required]),
       nombre_usuario: new FormControl('', [Validators.required]),
@@ -31,14 +34,21 @@ export class ListaUsuariosComponent implements OnInit {
       correo_usuario: new FormControl('', [Validators.required]),
       estado_usuario: new FormControl(null, [Validators.required]),
       id_rol: new FormControl(null, [Validators.required]), 
-      id_unidad: new FormControl(null,[Validators.required])
+      id_unidad: new FormControl(null, [Validators.required])
     });
   }
 
   ngOnInit() {
     this.getUsers();
+    this.getRoles();
   }
 
+  getRoles() {
+    this.rolService.getRoles().subscribe((roles) => {
+        this.roles = roles;
+    });
+}
+  
   mostrarAgregarEditarUsuario(id: number | null) {
     if (id !== null) {
       this.usuarioEditId = id;
@@ -75,7 +85,7 @@ export class ListaUsuariosComponent implements OnInit {
       const estado_usuario = this.form.get('estado_usuario')?.value;
       const id_rol = this.form.get('id_rol')?.value; 
       const id_unidad = this.form.get('id_unidad')?.value; 
-  
+
       if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
         this.toastr.error('El usuario o Correo ya existe ', 'Error');
       } else if (this.usuarioEditId) {
@@ -90,17 +100,14 @@ export class ListaUsuariosComponent implements OnInit {
             clave_usuario: clave_usuario,
             correo_usuario: correo_usuario,
             estado_usuario: estado_usuario,
-            id_rol: id_rol, 
-            id_unidad: id_unidad, 
+            id_rol: id_rol,
+            id_unidad: id_unidad,
           }), 'Usuario Creado');
       }
     }
     this.mostrarFormularioAgregarUsuario = false;
     this.cancelarEdicionUsuario()
   }
-  
-
-  
 
   obtenerUsuario(id: number) {
     this.usuarioService.getUser(id).subscribe((usuario) => {
@@ -112,6 +119,8 @@ export class ListaUsuariosComponent implements OnInit {
         this.form.get('clave_usuario')?.setValue(usuario.clave_usuario);
         this.form.get('correo_usuario')?.setValue(usuario.correo_usuario);
         this.form.get('estado_usuario')?.setValue(usuario.estado_usuario);
+        this.form.get('nombre_rol')?.setValue(usuario.nombre_rol);
+        this.form.get('nombre_unidad')?.setValue(usuario.nombre_unidad);
         this.form.get('id_rol')?.setValue(usuario.id_rol);
         this.form.get('id_unidad')?.setValue(usuario.id_unidad);
       }
@@ -137,7 +146,7 @@ export class ListaUsuariosComponent implements OnInit {
 
   editarUsuario(id: number, rut_usuario: string, nombre_usuario: string, 
     apellido1_usuario: string, apellido2_usuario: string, clave_usuario: string, 
-    correo_usuario: string, estado_usuario: boolean, id_rol: number, id_unidad:number) {
+    correo_usuario: string, estado_usuario: boolean, id_rol: number, id_unidad: number) {
     this.realizarOperacionDeUsuario(() =>
       this.usuarioService.updateUser(id, {
         rut_usuario: rut_usuario,
@@ -148,7 +157,7 @@ export class ListaUsuariosComponent implements OnInit {
         correo_usuario: correo_usuario,
         estado_usuario: estado_usuario,
         id_rol: id_rol,
-        id_unidad: id_unidad
+        id_unidad: id_unidad,
       }), 'Usuario Editado');
   }
 
