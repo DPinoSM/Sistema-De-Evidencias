@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRegistro = exports.getOneRegistro = exports.updateRegistro = exports.newRegistro = exports.getRegistro = void 0;
+exports.buscarRegistro = exports.deleteRegistro = exports.getOneRegistro = exports.updateRegistro = exports.newRegistro = exports.getRegistro = void 0;
 const registro_1 = require("../models/registro");
+const sequelize_1 = require("sequelize");
 const getRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listRegistro = yield registro_1.Registro.findAll({ attributes: ['id_registro', 'datos_registro', 'contenido_registro'] });
     res.json(listRegistro);
@@ -109,3 +110,31 @@ const deleteRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteRegistro = deleteRegistro;
+//FILTRO DE BUSQUEDA
+const buscarRegistro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const registros = yield registro_1.Registro.findAll({
+            attributes: ['id_registro', 'datos_registro'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_registro: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { datos_registro: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(registros);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar registros',
+            error,
+        });
+    }
+});
+exports.buscarRegistro = buscarRegistro;

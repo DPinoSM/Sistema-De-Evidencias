@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUnidad = exports.getOneUnidad = exports.updateUnidad = exports.newUnidad = exports.getUnidad = void 0;
+exports.buscarUnidad = exports.deleteUnidad = exports.getOneUnidad = exports.updateUnidad = exports.newUnidad = exports.getUnidad = void 0;
 const unidad_1 = require("../models/unidad");
+const sequelize_1 = require("sequelize");
 const getUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listUnidad = yield unidad_1.Unidad.findAll({ attributes: ['id_unidad', 'nombre_unidad', 'unidad_defecto'] });
     res.json(listUnidad);
@@ -109,3 +110,31 @@ const deleteUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.deleteUnidad = deleteUnidad;
+//FILTRO DE BUSQUEDA
+const buscarUnidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El término de búsqueda no se proporcionó',
+        });
+    }
+    try {
+        const unidades = yield unidad_1.Unidad.findAll({
+            attributes: ['id_unidad', 'nombre_unidad'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_unidad: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_unidad: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(unidades);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar unidades',
+            error,
+        });
+    }
+});
+exports.buscarUnidad = buscarUnidad;

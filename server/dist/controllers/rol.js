@@ -70,7 +70,7 @@ const getOneRol = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const idRol = yield rol_1.Rol.findOne({ where: { id_rol: id } });
     if (!idRol) {
         return res.status(400).json({
-            msg: "El id: " + id + " del rol no existes"
+            msg: "El id: " + id + " del rol no existe"
         });
     }
     try {

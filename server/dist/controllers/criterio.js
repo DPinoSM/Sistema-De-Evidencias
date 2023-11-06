@@ -127,8 +127,8 @@ const buscarCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function*
             attributes: ['id_criterios', 'nombre_criterios'],
             where: {
                 [sequelize_1.Op.or]: [
-                    { id_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
-                    { nombre_rol: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { id_criterios: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { nombre_criterios: { [sequelize_1.Op.like]: `%${searchTerm}%` } },
                 ],
             },
         });
@@ -136,7 +136,7 @@ const buscarCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         return res.status(500).json({
-            msg: 'Ocurrió un error al buscar criterios',
+            msg: 'Ocurrió un error al buscar roles',
             error,
         });
     }
