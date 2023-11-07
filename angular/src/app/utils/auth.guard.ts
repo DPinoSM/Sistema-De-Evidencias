@@ -9,16 +9,44 @@ export class AuthGuard {
 
   constructor(private router: Router) { }
 
-  canActivate = (
+  canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> => {
-    const token = localStorage.getItem('token')
-    if(token == undefined) {
-      this.router.navigate(['/login'])
-      return false
-    }
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
-    return true;
+    const token = localStorage.getItem('token');
+    const rol = localStorage.getItem('rol');
+    
+    if (token && rol) {
+      const requiredRole = route.data['rol'];
+
+      if (requiredRole && requiredRole === rol) {
+        return true;
+      } else {
+        switch (rol) {
+          case '1':
+            this.router.navigate(['/admin']);
+            break;
+          case '2':
+            this.router.navigate(['/dac']);
+            break;
+          case '3':
+            this.router.navigate(['/comite']);
+            break;
+          case '4':
+            this.router.navigate(['/responsable']);
+            break;
+          case '5':
+            this.router.navigate(['/inicio'], { state: { url: state.url } });
+            break;
+          default:
+            this.router.navigate(['/login']);
+            break;
+        }
+      }
+    } else {
+      this.router.navigate(['/login'], { state: { url: state.url } });
+    }
+    return false;
   }
 }

@@ -118,10 +118,11 @@ export const loginUser = async (req: Request, res: Response) => {
                 rut_usuario,
                 role: usuario.id_rol,
             },
-            process.env.SECRET_KEY || 'PRUEBA1',
+            process.env.SECRET_KEY || 'HS384',
             { expiresIn: '5m' }
         );
 
+        // Enviar el token y el rol como parte de la respuesta JSON
         res.json({ token, rol: usuario.id_rol });
     } catch (error) {
         console.error('Error en el controlador loginUser:', error);
@@ -131,6 +132,7 @@ export const loginUser = async (req: Request, res: Response) => {
         });
     }
 };
+
 
 export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params;

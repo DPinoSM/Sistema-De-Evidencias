@@ -25,7 +25,7 @@ export class ListaProcesosComponent implements OnInit{
     private toastr: ToastrService
   ) {
     this.form = new FormGroup({
-      codigo_procesos: new FormControl('', [Validators.required]),
+      codigo_procesos: new FormControl(null, [Validators.required]),
       nombre_procesos: new FormControl('', [Validators.required]),
       estado_procesos: new FormControl(null, [Validators.required])
     });
@@ -52,10 +52,6 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
-  nombreRegistroExistente(codigo: number): boolean {
-    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
-  }
-
   crearEditarProceso() {
     if (this.form.valid) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
@@ -63,16 +59,16 @@ export class ListaProcesosComponent implements OnInit{
       const estado_procesos = this.form.get('estado_procesos')?.value;
   
       if (this.codigoExistente(codigo_procesos)) {
-        this.toastr.error('Este Codigo ya existe', 'Error');
-      }else if (this.procesoEditId) {
+          this.toastr.error('Este Codigo ya existe', 'Error');
+        } else if (this.procesoEditId) {
         this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
-        } else {
+      } else {
+          this.errorMsg = undefined;
           this.realizarOperacionDeProceso(() =>
             this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
         }
     }
     this.mostrarFormularioAgregarProcesos = false;
-    this.cancelarEdicion()
     this.cancelarEdicion()
   }
   

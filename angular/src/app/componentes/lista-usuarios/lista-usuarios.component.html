@@ -81,7 +81,9 @@
                 <div class="col">
                   <div class="form-group mt-2">
                     <label for="id_unidad">Unidad</label>
-                    <input type="number" id="id_unidad" class="form-control" formControlName="id_unidad" required>
+                    <select id="id_unidad" class="form-control" formControlName="id_unidad" required>
+                    <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">{{ unidad.nombre_unidad }}</option>
+                  </select>
                     <div class="error-message error-text" *ngIf="form.get('id_unidad')?.invalid && (form.get('id_unidad')?.dirty || form.get('id_unidad')?.touched)">
                       El ID de Unidad es obligatorio.
                     </div>
@@ -149,7 +151,7 @@
               </tr>
             </tbody>
           </table>
-          </div>
+        </div>
         </div>
       </div>
   </main>

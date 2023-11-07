@@ -72,7 +72,6 @@ export class ListaUnidadComponent implements OnInit {
       }
     this.mostrarFormularioAgregarUnidad = false;
     this.cancelarEdicion()
-    this.cancelarEdicion()
   }
   
 

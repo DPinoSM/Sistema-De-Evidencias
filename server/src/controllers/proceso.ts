@@ -79,7 +79,7 @@ export const deleteProceso = async(req: Request, res: Response) =>{
 
 export const updateProceso = async(req: Request, res: Response)=>{
     const {id} = req.params;
-    
+    const {codigo_procesos, nombre_procesos, estado_procesos} = req.body;
     const idProceso = await Proceso.findOne({where: {id_procesos: id}})
 
     if(!idProceso) {
@@ -88,19 +88,18 @@ export const updateProceso = async(req: Request, res: Response)=>{
         })
     }
     try{
-        const {codigo_procesos,nombre_procesos,estado_procesos} = req.body;
         await Proceso.update({
             nombre_procesos: nombre_procesos,
             codigo_procesos: codigo_procesos,
             estado_procesos: estado_procesos
-
-        },{where: {id_procesos: id}
+            },
+            {where: {id_procesos: id}
     })
-        res.json({
-            msg: "Se ha actualizado el proceso: "
+    return res.json({
+            msg: 'Proceso ' + id + ' actualizado correctamente'
         })
     }catch (error){
-        res.status(400).json({
+        return res.status(400).json({
             msg: "Ha ocurrido un error",
             error
         })

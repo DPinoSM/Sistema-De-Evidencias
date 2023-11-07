@@ -17,7 +17,7 @@ export class ProcesosService {
   }
 
   createProceso(procesoData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/`, procesoData)
+    return this.http.post<any>(`${this.apiUrl}`, procesoData)
         .pipe(catchError(err => this.handleError(err)));
   }
 
