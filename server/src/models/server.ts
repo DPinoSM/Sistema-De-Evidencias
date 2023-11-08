@@ -12,6 +12,7 @@ import routerAmbitoGeografico from '../routes/ambito_geografico';
 import routerCarrera from '../routes/carrera';
 import routerEstado from '../routes/estado';
 import routerImpacto from '../routes/impacto';
+import routerDac from '../routes/detalle_dac';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
@@ -24,6 +25,8 @@ import { AmbitoGeografico } from './ambito_geografico';
 import { Carrera } from './carrera';
 import { Estado } from './estado';
 import { Impacto } from './impacto';
+import { Detalle_DAC } from './detalle_dac';
+
 
 class Server {
     private app: Application;
@@ -54,6 +57,7 @@ class Server {
         this.app.use('/api/carrera', routerCarrera);
         this.app.use('/api/estado', routerEstado);
         this.app.use('/api/impacto', routerImpacto);
+        this.app.use('/api/dac', routerDac);
     }
     midlewares() {
         //parseo body
@@ -75,6 +79,7 @@ class Server {
             await Carrera.sync()
             await Estado.sync()
             await Impacto.sync()
+            await Detalle_DAC.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }

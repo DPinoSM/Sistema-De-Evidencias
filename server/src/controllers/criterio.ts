@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import { Criterio } from '../models/criterio';
-import { Op, where } from 'sequelize';
+import { Op } from 'sequelize';
 
 export const getCriterio = async(req: Request, res: Response) =>{  
     const listCriterio = await Criterio.findAll({attributes:['id_criterios','nombre_criterios','codigo_criterios','descripcion_criterios','estado_criterios']});
