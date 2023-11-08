@@ -16,7 +16,7 @@ import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
 import { Registro } from './registro';
-import {Criterio} from './criterio';
+import { Criterio} from './criterio';
 import { Proceso } from './proceso';
 import { AmbitoAcademico } from './ambito_academico';
 import { Facultad } from './facultad';

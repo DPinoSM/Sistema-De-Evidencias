@@ -27,8 +27,8 @@ export class ListaRegistrosComponent implements OnInit {
 
   constructor(private registroService: RegistroService, private toastr: ToastrService) {
     this.form = new FormGroup({
-      datos: new FormControl('', [Validators.required]),
-      contenido: new FormControl('', [Validators.required])
+      datos_registro: new FormControl('', [Validators.required]),
+      contenido_registro: new FormControl('', [Validators.required])
     });
   }
 
@@ -55,38 +55,49 @@ export class ListaRegistrosComponent implements OnInit {
   }
 
 
-  nombreRegistroExistente(datos: string): boolean {
-    return this.registros.some(registro => registro.datos_registro === datos);
+  nombreRegistroExistente(datos_registro: string): boolean {
+    return this.registros.some(registro => registro.datos_registro === datos_registro);
   }
   
   createNewRegistro() {
     if (this.form.valid) {
-      const datosRegistro = this.form.get('datos')?.value;
-      const contenidoRegistro = this.form.get('contenido')?.value;
-  
-      if (this.nombreRegistroExistente(datosRegistro)) {
-          this.toastr.error('El nombre de ese registro ya esta en uso', 'Error');
-        } else if (this.editRegistroId) {
-        this.editRegistro(this.editRegistroId, datosRegistro, contenidoRegistro);
+      const datos_registro = this.form.get('datos_registro')?.value;
+    
+      if (this.editRegistroId) {
+        const registroEditado: any = {
+          id_registro: this.editRegistroId,
+        };
+        if (this.form.get('datos_registro')?.dirty) {
+          registroEditado['datos_registro'] = datos_registro;
+        }
+        registroEditado['contenido_registro'] = this.form.get('contenido_registro')?.value;
+        
+        this.editRegistro(this.editRegistroId, registroEditado);
       } else {
-        
+        const contenido_registro = this.form.get('contenido_registros')?.value;
+        if (this.nombreRegistroExistente(datos_registro)) {
+          this.toastr.error('El nombre de ese registro ya esta en uso', 'Error');
+        } else {
           this.realizarOperacionDeRegistro(() =>
-            this.registroService.createRegistro({ datos_registro: datosRegistro, contenido_registro: contenidoRegistro }), 'Registro Creado');
-        
+            this.registroService.createRegistro({ 
+              datos_registro: datos_registro, 
+              contenido_registro: contenido_registro 
+            }), 
+            'Registro Creado');
+        }
       }
     }
-  
     this.mostrarFormularioAgregarRegistro = false;
     this.cancelarEdicionRegistro()
-    this.cancelarEdicionRegistro()
   }
+  
   
 
   getRegistroById(id: number) {
     this.registroService.getRegistroById(id).subscribe((registro) => {
       if (registro) {
-        this.form.get('datos')?.setValue(registro.datos_registro);
-        this.form.get('contenido')?.setValue(registro.contenido_registro);    
+        this.form.get('datos_registro')?.setValue(registro.datos_registro);
+        this.form.get('contenido_registro')?.setValue(registro.contenido_registro);    
       }
     });
   }
@@ -149,9 +160,9 @@ export class ListaRegistrosComponent implements OnInit {
   }
   
 
-  editRegistro(id: number, datos: string, contenido: string) {
+  editRegistro(id: number, registroEditado: any) {
     this.realizarOperacionDeRegistro(() =>
-      this.registroService.updateRegistro(id, { datos_registro: datos, contenido_registro: contenido }), 'Registro Editado');
+      this.registroService.updateRegistro(id, registroEditado), 'Registro Editado');
   }
 
   eliminarRegistro(id: number) {

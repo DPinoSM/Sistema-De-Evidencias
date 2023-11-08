@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
-import { Proceso } from '../models/proceso'; 
+import { Proceso } from '../models/proceso';
+import { Op, where } from 'sequelize'; 
 
 export const newProceso = async(req: Request, res: Response) =>{
     const { nombre_procesos, codigo_procesos, estado_procesos} =  req.body;
@@ -38,13 +39,15 @@ export const getProcesos = async(req: Request, res: Response) =>{
 }
 export const getProceso = async(req: Request, res: Response) =>{
     const {id} = req.params;
-    const idProcesos = await Proceso.findOne({attributes: ['codigo_procesos','nombre_procesos'],where: {id_procesos: id}});
+    const idProcesos = await Proceso.findOne({where: {id_procesos: id}});
     if(!idProcesos) {
         return res.status(400).json({
-            msg: "El proceso indicado no existe"
+            msg: "El id: " + id + "del proceso no existe"
         })
     }
     try{
+
+        const idProcesos = await Proceso.findOne({where: {id_procesos: id}});
         res.json(idProcesos)
     }catch (error){
         res.status(400).json({
@@ -61,13 +64,14 @@ export const deleteProceso = async(req: Request, res: Response) =>{
 
     if(!idProceso) {
         return res.status(400).json({
-            msg: "El proceso no existe"
+            msg: "El id: " + id + "del proceso no existe"
         })
     }
     try{
         await Proceso.destroy({where: {id_procesos: id}})
-        res.json({
-            msg: "Se ha eliminado el proceso: "
+        
+        return res.json({
+            msg: "Proceso " + id + "borrado correctamente"
         })
     }catch (error){
         res.status(400).json({

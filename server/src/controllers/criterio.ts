@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import { Criterio } from '../models/criterio';
 import { Op, where } from 'sequelize';
+
 export const getCriterio = async(req: Request, res: Response) =>{  
     const listCriterio = await Criterio.findAll({attributes:['id_criterios','nombre_criterios','codigo_criterios','descripcion_criterios','estado_criterios']});
     res.json(listCriterio)
@@ -8,6 +9,7 @@ export const getCriterio = async(req: Request, res: Response) =>{
 export const newCriterio = async(req: Request, res: Response) =>{
     const {nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios} =  req.body;
     const idCriterio = await Criterio.findOne({where: {nombre_criterios: nombre_criterios}})
+    
     if(idCriterio) {
         return res.status(400).json({
             msg: 'Ya existe un Criterio con ese nombre'
@@ -34,6 +36,7 @@ export const updateCriterio = async(req: Request, res: Response) => {
     const {id} = req.params;
     const {nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios} = req.body;
     const idCriterio = await Criterio.findOne({where: {id_criterios: id}})
+    
     if (!idCriterio) {
         return res.status(400).json({
             msg: "El id del criterio no existe"
@@ -64,7 +67,7 @@ export const getOneCriterio = async(req: Request, res: Response) =>{
     const idCriterio = await Criterio.findOne({where: {id_criterios: id}})
     if (!idCriterio) {
         return res.status(400).json({
-            msg: "El id: " + id + " del criterio no existes"
+            msg: "El id: " + id + " del criterio no existe"
         })
     }
     try{
@@ -95,14 +98,14 @@ export const deleteCriterio = async(req: Request, res: Response) =>{
         })
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al actualizar el criterio: '+id,
+                msg: 'Ha ocurrido un error al eliminar el criterio: '+id,
                 error
             })
 
         }
 }
 
-//FILTRO DE BUSQUEDA
+
 export const buscarCriterio = async (req: Request, res: Response) => {
     const { searchTerm } = req.query; 
   

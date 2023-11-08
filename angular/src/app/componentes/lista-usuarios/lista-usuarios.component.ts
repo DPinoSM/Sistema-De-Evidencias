@@ -18,6 +18,7 @@ import { UnidadService } from 'src/app/services/unidad.service';
 
 export class ListaUsuariosComponent implements OnInit {
   usuarios: User[] = [];
+  usuariosOriginal: User[] | null = null;
   roles: Rol[] = [];
   unidades: Unidad[] = [];
   errorMsg: string | undefined;
@@ -26,6 +27,8 @@ export class ListaUsuariosComponent implements OnInit {
   usuarioEditId: number | null = null;
   form: FormGroup;
   private usuarioSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(
     private usuarioService: UsuarioService, 
@@ -166,6 +169,37 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
+
+  realizarBusqueda() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.getUsers (); 
+    } else {
+
+      if (this.usuariosOriginal) {
+        this.usuarios = this.usuariosOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+    
   getUsers() {
     if (this.usuarioSubscription) {
       this.usuarioSubscription.unsubscribe();
@@ -179,7 +213,16 @@ export class ListaUsuariosComponent implements OnInit {
         })
       )
       .subscribe((data: User[]) => {
-        this.usuarios = data;
+        if (!this.usuariosOriginal) {
+          this.usuariosOriginal = data;
+        }
+        
+        this.usuarios = data.filter(usuario => {
+          return (
+            this.comienzaConCadena(usuario.rut_usuario.toString(), this.searchTerm) ||
+            this.comienzaConCadena(usuario.correo_usuario, this.searchTerm)
+          );
+        });
       });
   }
 

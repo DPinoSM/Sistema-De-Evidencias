@@ -16,8 +16,8 @@ export class ProcesosService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  createProceso(procesoData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, procesoData)
+  createProceso(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, data)
         .pipe(catchError(err => this.handleError(err)));
   }
 
@@ -26,8 +26,8 @@ export class ProcesosService {
         .pipe(catchError(err => this.handleError(err)));
   }
 
-  updateProceso(id: number, procesoData: any): Observable<any>{
-    return this.http.put<any>(`${this.apiUrl}/${id}`, procesoData)
+  updateProceso(id: number, data: any): Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${id}`, data)
         .pipe(catchError(err => this.handleError(err)));
   }
 

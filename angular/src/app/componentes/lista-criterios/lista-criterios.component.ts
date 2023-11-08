@@ -65,23 +65,41 @@ export class ListaCriteriosComponent implements OnInit {
       const descripcion_criterios = this.form.get('descripcion_criterios')?.value;
       const estado_criterios = this.form.get('estado_criterios')?.value;
   
-      if (this.codigoCriterioExistente(codigo_criterios)) {
-          this.toastr.error('Codigo de criterio ya utilizado', 'Error');
-        } else if (this.criterioEditId) {
-        this.editarCriterio(this.criterioEditId, nombre_criterios, codigo_criterios, descripcion_criterios, estado_criterios);
+      if (this.criterioEditId) {
+        const criterioEditado: any = {
+          id_criterios: this.criterioEditId,
+        };
+  
+        if (this.form.get('codigo_criterios')?.dirty) {
+          criterioEditado['codigo_criterios'] = codigo_criterios;
+        }
+        criterioEditado['nombre_criterios'] = nombre_criterios;
+        criterioEditado['descripcion_criterios'] = descripcion_criterios;
+        criterioEditado['estado_criterios'] = estado_criterios;
+  
+        this.editarCriterio(this.criterioEditId, criterioEditado);
       } else {
-        
+        if (this.codigoCriterioExistente(codigo_criterios)) {
+          this.toastr.error('Código de criterio ya utilizado', 'Error');
+        } else {
           this.errorMsg = undefined;
           this.realizarOperacionDeCriterio(() =>
-            this.criterioService.createCriterio({ nombre_criterios: nombre_criterios, codigo_criterios: codigo_criterios, descripcion_criterios: descripcion_criterios, estado_criterios: estado_criterios }), 'Criterio Creado');
-        
+            this.criterioService.createCriterio({
+              codigo_criterios: codigo_criterios,
+              nombre_criterios: nombre_criterios,
+              descripcion_criterios: descripcion_criterios,
+              estado_criterios: estado_criterios
+            }),
+            'Criterio Creado'
+          );
+        }
       }
     }
   
     this.mostrarFormularioAgregarCriterios = false;
-    this.cancelarEdicion()
-    this.cancelarEdicion()
+    this.cancelarEdicion();
   }
+  
   
   codigoCriterioExistente(codigo_criterios: number): boolean {
     return this.criterios.some(criterio => criterio.codigo_criterios === codigo_criterios);
@@ -155,9 +173,9 @@ export class ListaCriteriosComponent implements OnInit {
     }
   }
   
-  editarCriterio(id: number, nombre_criterios: string, codigo_criterios: number, descripcion_criterios: string, estado_criterios: any) {
+  editarCriterio(id: number, criterioEditado: any) {
     this.realizarOperacionDeCriterio(() =>
-      this.criterioService.updateCriterio(id, { nombre_criterios: nombre_criterios, codigo_criterios: codigo_criterios, descripcion_criterios: descripcion_criterios, estado_criterios: estado_criterios }), 'Criterio Editado');
+      this.criterioService.updateCriterio(id, criterioEditado), 'Criterio Editado');
   }
 
   cambiarEstadoCriterio(id: number) {
