@@ -9,4 +9,5 @@ router.post('/', unidad_1.newUnidad);
 router.get('/:id', unidad_1.getOneUnidad);
 router.delete('/:id', unidad_1.deleteUnidad);
 router.put('/:id', unidad_1.updateUnidad);
+router.get('/buscar', unidad_1.buscarUnidad);
 exports.default = router;

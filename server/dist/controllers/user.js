@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.deleteUser = exports.getUser = exports.loginUser = exports.getUsers = exports.newUser = void 0;
+exports.buscarUsuario = exports.updateUser = exports.deleteUser = exports.getUser = exports.loginUser = exports.getUsers = exports.newUser = void 0;
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const rol_1 = require("../models/rol");
 const unidad_1 = require("../models/unidad");
+const sequelize_1 = require("sequelize");
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
@@ -202,3 +203,29 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateUser = updateUser;
+const buscarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { searchTerm } = req.query;
+    if (!searchTerm) {
+        return res.status(400).json({
+            msg: 'El termino de busqueda no se proporcionó',
+        });
+    }
+    try {
+        const users = yield user_1.User.findAll({
+            attributes: ['id_usuario', 'nombre_usuario'],
+            where: {
+                [sequelize_1.Op.or]: [
+                    { id_usuario: { [sequelize_1.Op.like]: `%{searchTerm}%` } },
+                    { nombre_usuario: { [sequelize_1.Op.like]: `%{searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(users);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar Usuarios',
+        });
+    }
+});
+exports.buscarUsuario = buscarUsuario;

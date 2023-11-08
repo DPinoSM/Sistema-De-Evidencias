@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getAmbitoAcademico, newAmbitoAcademico, getAmbitosAcademicos,deleteAmbitoAcademico, updateAmbitoAcademico} from '../controllers/ambito_academico';
+import {getAmbitoAcademico, newAmbitoAcademico, getAmbitosAcademicos,deleteAmbitoAcademico, updateAmbitoAcademico, buscarAmbAca} from '../controllers/ambito_academico';
 // import validateToken from './validate-token';
 const router = Router();
 router.get('/lista',getAmbitosAcademicos);
@@ -7,4 +7,5 @@ router.post('/',newAmbitoAcademico);
 router.get('/:id',getAmbitoAcademico);
 router.delete('/:id',deleteAmbitoAcademico);
 router.put('/:id',updateAmbitoAcademico);
+router.get('/buscar', buscarAmbAca);
 export default router;

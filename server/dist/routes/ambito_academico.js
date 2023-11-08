@@ -9,4 +9,5 @@ router.post('/', ambito_academico_1.newAmbitoAcademico);
 router.get('/:id', ambito_academico_1.getAmbitoAcademico);
 router.delete('/:id', ambito_academico_1.deleteAmbitoAcademico);
 router.put('/:id', ambito_academico_1.updateAmbitoAcademico);
+router.get('/buscar', ambito_academico_1.buscarAmbAca);
 exports.default = router;

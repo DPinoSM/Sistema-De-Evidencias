@@ -9,4 +9,5 @@ router.post('/', ambito_geografico_1.newAmbitoGeografico);
 router.get('/:id', ambito_geografico_1.getAmbitoGeografico);
 router.delete('/:id', ambito_geografico_1.deleteAmbitoGeografico);
 router.put('/:id', ambito_geografico_1.updateAmbitoGeografico);
+router.get('buscar', ambito_geografico_1.buscarAmbGeo);
 exports.default = router;

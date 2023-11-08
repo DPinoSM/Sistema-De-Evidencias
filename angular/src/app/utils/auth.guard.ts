@@ -13,31 +13,30 @@ export class AuthGuard {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
     const token = localStorage.getItem('token');
-    const rol = localStorage.getItem('rol');
-    
-    if (token && rol) {
+    const rol = Number(localStorage.getItem('rol')); 
+
+    if (token && !isNaN(rol)) {
       const requiredRole = route.data['rol'];
 
-      if (requiredRole && requiredRole === rol) {
-        return true;
+      if (!isNaN(requiredRole) && requiredRole === rol) {
+        return true; 
       } else {
         switch (rol) {
-          case '1':
+          case 1:
             this.router.navigate(['/admin']);
             break;
-          case '2':
-            this.router.navigate(['/dac']);
+          case 2:
+            this.router.navigate(['/dac']); 
             break;
-          case '3':
+          case 3:
             this.router.navigate(['/comite']);
             break;
-          case '4':
+          case 4:
             this.router.navigate(['/responsable']);
             break;
-          case '5':
-            this.router.navigate(['/inicio'], { state: { url: state.url } });
+          case 5:
+            this.router.navigate(['/inicio']);
             break;
           default:
             this.router.navigate(['/login']);
@@ -47,6 +46,6 @@ export class AuthGuard {
     } else {
       this.router.navigate(['/login'], { state: { url: state.url } });
     }
-    return false;
+    return false; 
   }
 }

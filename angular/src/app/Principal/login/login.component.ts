@@ -5,6 +5,7 @@ import { ErrorService } from '../../services/error.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../interfaces/login.interface';
+import { LoginResponse } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -40,8 +41,9 @@ export class LoginComponent implements OnInit {
   
     this.loading = true;
     this._authService.login(user).subscribe({
-      next: () => {
-        this.router.navigate(['/admin']); 
+      next: (response: LoginResponse) => {
+        localStorage.setItem('rol', response.rol.toString()); 
+        this.redirectBasedOnRole(response.rol);
       },
       error: (e: HttpErrorResponse) => {
         this._errorService.msjError(e);
@@ -49,5 +51,27 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-  
+  redirectBasedOnRole(rol: number) {
+    switch (rol) {
+      case 1:
+        this.router.navigate(['/admin']);
+        break;
+      case 2:
+        this.router.navigate(['/dac']); 
+        break;
+      case 3:
+        this.router.navigate(['/comite']);
+        break;
+      case 4:
+        this.router.navigate(['/responsable']);
+        break;
+      case 5:
+        this.router.navigate(['/inicio']);
+        break;
+      default:
+        this.router.navigate(['/login']);
+        break;
+    }
+  }
 }
+

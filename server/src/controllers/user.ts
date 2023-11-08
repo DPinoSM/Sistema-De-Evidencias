@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Rol } from '../models/rol';
 import { Unidad } from '../models/unidad';
+import { Op } from 'sequelize';
 
 export const newUser = async (req: Request, res: Response) => {
     try {
@@ -235,4 +236,33 @@ export const updateUser = async (req: Request, res: Response) => {
             error,
         });
     }
+}
+
+export const buscarUsuario = async (req: Request, res: Response) =>{
+    const { searchTerm } = req.query;
+
+    if (!searchTerm){
+        return res.status(400).json({
+            msg: 'El termino de busqueda no se proporcionó',
+        });
+    }
+
+    try {
+        const users = await User.findAll({
+            attributes: ['id_usuario', 'nombre_usuario'],
+            where: {
+                [Op.or]: [
+                    { id_usuario: { [Op.like]: `%{searchTerm}%` } },
+                    { nombre_usuario: { [Op.like]: `%{searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(users);
+    }   catch (error){
+        return res.status(500).json({
+            msg:'Ocurrió un error al buscar Usuarios',
+        });
+    }
 };
+
+

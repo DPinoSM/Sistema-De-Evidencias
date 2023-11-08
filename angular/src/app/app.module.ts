@@ -74,7 +74,6 @@ import { AddTokenInterceptor } from './utils/add-token.interceptor';
     NgbModule,
   ],
   providers: [
-    AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddTokenInterceptor,

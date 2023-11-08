@@ -9,4 +9,5 @@ router.post('/', facultad_1.newFacultad);
 router.get('/:id', facultad_1.getFacultad);
 router.delete('/:id', facultad_1.deleteFacultad);
 router.put('/:id', facultad_1.updateFacultad);
+router.get('/buscar', facultad_1.buscarFacultad);
 exports.default = router;

@@ -17,15 +17,17 @@ import { ListaFacultadComponent } from '../componentes/lista-facultad/lista-facu
 import { DacComponent } from '../Principal/dac/dac.component';
 import { ComiteComponent } from '../Principal/comite/comite.component';
 import { ResponsableComponent } from '../Principal/responsable/responsable.component';
+import { AuthGuard } from '../utils/auth.guard';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent},
-  { path: 'admin', component: AdminComponent },
-  { path: 'dac', component: DacComponent},
-  { path: 'comite', component: ComiteComponent},
-  { path: 'responsable', component: ResponsableComponent },
-  { path: 'inicio', component: InicioComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'dac', component: DacComponent, canActivate: [AuthGuard], data: { rol: 2 } },
+  { path: 'comite', component: ComiteComponent, canActivate: [AuthGuard], data: { rol: 3 } },
+  { path: 'responsable', component: ResponsableComponent, canActivate: [AuthGuard], data: { rol: 4 } },
+  { path: 'inicio', component: InicioComponent, canActivate: [AuthGuard], data: { rol: 5 } },
 
 
   { path: 'rol', component: ListarolComponent },

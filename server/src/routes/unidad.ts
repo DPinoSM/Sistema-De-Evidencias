@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getUnidad, newUnidad, getOneUnidad,deleteUnidad, updateUnidad} from '../controllers/unidad';
+import {getUnidad, newUnidad, getOneUnidad,deleteUnidad, updateUnidad, buscarUnidad} from '../controllers/unidad';
 // import validateToken from './validate-token';
 const router = Router();
 router.get('/lista',getUnidad);
@@ -7,4 +7,5 @@ router.post('/',newUnidad);
 router.get('/:id',getOneUnidad);
 router.delete('/:id',deleteUnidad);
 router.put('/:id',updateUnidad);
+router.get('/buscar',buscarUnidad);
 export default router;
