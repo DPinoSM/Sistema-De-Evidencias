@@ -31,40 +31,17 @@ export class LoginComponent implements OnInit {
       this.toastr.error('Todos los campos son obligatorios', 'Error');
       return;
     }
-
+  
     // Creamos el body
     const user: User = {
       rut_usuario: this.rut_usuario,
       clave_usuario: this.clave_usuario,
     };
-
+  
     this.loading = true;
     this._authService.login(user).subscribe({
-      next: (response) => {
-        const { token, rol } = response;
-        localStorage.setItem('token', token);
-        localStorage.setItem('rol', rol);
-
-        switch (rol) {
-          case '1':
-            this.router.navigate(['/admin']);
-            break;
-          case '2':
-            this.router.navigate(['/dac']);
-            break;
-          case '3':
-            this.router.navigate(['/comite']);
-            break;
-          case '4':
-            this.router.navigate(['/responsable']);
-            break;
-          case '5':
-            this.router.navigate(['/inicio']);
-            break;
-          default:
-            this.router.navigate(['/login'], { state: { url: this.router.url } });
-            break;
-        }
+      next: () => {
+        this.router.navigate(['/admin']); 
       },
       error: (e: HttpErrorResponse) => {
         this._errorService.msjError(e);
@@ -72,4 +49,5 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+  
 }

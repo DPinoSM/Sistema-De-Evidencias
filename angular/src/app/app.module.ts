@@ -30,7 +30,6 @@ import { ListaFacultadComponent } from './componentes/lista-facultad/lista-facul
 import { DacComponent } from './Principal/dac/dac.component';
 import { ComiteComponent } from './Principal/comite/comite.component';
 import { ResponsableComponent } from './Principal/responsable/responsable.component';
-import { SpinnerComponent } from './shared/spinner/spinner.component';
 
 
 //interceptores
@@ -56,8 +55,7 @@ import { AddTokenInterceptor } from './utils/add-token.interceptor';
     SidenavComponent,
     DacComponent,
     ComiteComponent,
-    ResponsableComponent,
-    SpinnerComponent
+    ResponsableComponent
   ],
   imports: [
     BrowserModule,
