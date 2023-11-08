@@ -120,7 +120,7 @@ export const loginUser = async (req: Request, res: Response) => {
                 role: usuario.id_rol,
             },
             process.env.SECRET_KEY || 'HS384',
-            { expiresIn: '5m' }
+            { expiresIn: '40' }
         );
 
         // Enviar el token y el rol como parte de la respuesta JSON
