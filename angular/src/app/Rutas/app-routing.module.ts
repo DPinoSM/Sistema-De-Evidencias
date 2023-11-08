@@ -30,15 +30,15 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent, canActivate: [AuthGuard], data: { rol: 5 } },
 
 
-  { path: 'rol', component: ListarolComponent },
-  { path: 'unidad', component: ListaUnidadComponent },
-  { path: 'registro', component: ListaRegistrosComponent },
-  { path: 'ambitoA', component: ListaAmbitosAComponent },
-  { path: 'criterio', component: ListaCriteriosComponent },
-  { path: 'process', component: ListaProcesosComponent },
-  { path: 'ambitoG', component: ListaAmbitoGComponent },
-  { path: 'usuarios', component: ListaUsuariosComponent},
-  { path: 'facultad', component: ListaFacultadComponent}
+  { path: 'rol', component: ListarolComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'unidad', component: ListaUnidadComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'registro', component: ListaRegistrosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'ambitoA', component: ListaAmbitosAComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'criterio', component: ListaCriteriosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'process', component: ListaProcesosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'ambitoG', component: ListaAmbitoGComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard], data: { rol: 1 }},
+  { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }}
   
 ];
 
