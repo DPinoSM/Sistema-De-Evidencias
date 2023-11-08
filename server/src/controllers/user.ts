@@ -188,6 +188,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
     try {
         const {
+            rut_usuario,
             nombre_usuario,
             apellido1_usuario,
             apellido2_usuario,
@@ -213,6 +214,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
         await User.update(
             {
+                rut_usuario,
                 nombre_usuario,
                 apellido1_usuario,
                 apellido2_usuario,

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const detalle_dac_1 = require("../controllers/detalle_dac");
+//import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/lista', detalle_dac_1.getDetalle_DAC);
+router.post('/', detalle_dac_1.newDetalle_DAC);
+router.get('/:id', detalle_dac_1.getOneDetalle_DAC);
+router.delete('/:id', detalle_dac_1.deleteDetalle_DAC);
+router.put('/:id', detalle_dac_1.updateDetalle_DAC);
+exports.default = router;

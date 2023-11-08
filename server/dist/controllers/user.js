@@ -168,7 +168,7 @@ exports.deleteUser = deleteUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const { nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
+        const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
         const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
         if (!idUser) {
             return res.status(400).json({
@@ -180,6 +180,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             attributes: ['id_rol', 'nombre_rol'],
         });
         yield user_1.User.update({
+            rut_usuario,
             nombre_usuario,
             apellido1_usuario,
             apellido2_usuario,
