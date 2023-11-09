@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { getRol, newRol, getOneRol, deleteRol, updateRol, buscarRol } from '../controllers/rol';
-// import validateToken from './validate-token';
+import validateToken from './validate-token';
 const router = Router();
-router.get('/lista', getRol);
-router.post('/', newRol);
-router.get('/:id', getOneRol);
-router.delete('/:id', deleteRol);
-router.put('/:id', updateRol);
-router.get('/buscar', buscarRol); 
+router.get('/lista',validateToken,  getRol);
+router.post('/', validateToken, newRol);
+router.get('/:id',validateToken,  getOneRol);
+router.delete('/:id',validateToken,  deleteRol);
+router.put('/:id', validateToken, updateRol);
+router.get('/buscar', validateToken, buscarRol); 
 export default router;

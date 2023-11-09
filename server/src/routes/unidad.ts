@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {getUnidad, newUnidad, getOneUnidad,deleteUnidad, updateUnidad, buscarUnidad} from '../controllers/unidad';
-// import validateToken from './validate-token';
+import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',getUnidad);
-router.post('/',newUnidad);
-router.get('/:id',getOneUnidad);
-router.delete('/:id',deleteUnidad);
-router.put('/:id',updateUnidad);
-router.get('/buscar',buscarUnidad);
+router.get('/lista',validateToken, getUnidad);
+router.post('/',validateToken, newUnidad);
+router.get('/:id',validateToken, getOneUnidad);
+router.delete('/:id',validateToken, deleteUnidad);
+router.put('/:id',validateToken, updateUnidad);
+router.get('/buscar',validateToken, buscarUnidad);
 export default router;

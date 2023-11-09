@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import {getProceso,getProcesos, newProceso ,deleteProceso, updateProceso} from '../controllers/proceso';
-// import validateToken from './validate-token';
+import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',getProcesos);
-router.post('/',newProceso);
-router.get('/:id',getProceso);
-router.delete('/:id',deleteProceso);
-router.put('/:id',updateProceso);
+router.get('/lista',validateToken, getProcesos);
+router.post('/',validateToken, newProceso);
+router.get('/:id',validateToken, getProceso);
+router.delete('/:id',validateToken, deleteProceso);
+router.put('/:id',validateToken, updateProceso);
 export default router;

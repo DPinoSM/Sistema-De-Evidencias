@@ -1,12 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const detalle_dac_1 = require("../controllers/detalle_dac");
-//import validateToken from './validate-token';
+const validate_token_1 = __importDefault(require("./validate-token"));
 const router = (0, express_1.Router)();
-router.get('/lista', detalle_dac_1.getDetalle_DAC);
-router.post('/', detalle_dac_1.newDetalle_DAC);
-router.get('/:id', detalle_dac_1.getOneDetalle_DAC);
-router.delete('/:id', detalle_dac_1.deleteDetalle_DAC);
-router.put('/:id', detalle_dac_1.updateDetalle_DAC);
+router.get('/lista', validate_token_1.default, detalle_dac_1.getDetalle_DAC);
+router.post('/', validate_token_1.default, detalle_dac_1.newDetalle_DAC);
+router.get('/:id', validate_token_1.default, detalle_dac_1.getOneDetalle_DAC);
+router.delete('/:id', validate_token_1.default, detalle_dac_1.deleteDetalle_DAC);
+router.put('/:id', validate_token_1.default, detalle_dac_1.updateDetalle_DAC);
 exports.default = router;

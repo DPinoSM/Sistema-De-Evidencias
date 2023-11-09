@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import {getEstado, newEstado, getOneEstado,deleteEstado, updateEstado} from '../controllers/estado';
-// import validateToken from './validate-token';
+import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',getEstado);
-router.post('/',newEstado);
-router.get('/:id',getOneEstado);
-router.delete('/:id',deleteEstado);
-router.put('/:id',updateEstado);
+router.get('/lista',validateToken, getEstado);
+router.post('/',validateToken, newEstado);
+router.get('/:id',validateToken, getOneEstado);
+router.delete('/:id',validateToken, deleteEstado);
+router.put('/:id',validateToken, updateEstado);
 export default router;
