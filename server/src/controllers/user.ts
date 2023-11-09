@@ -20,11 +20,6 @@ export const newUser = async (req: Request, res: Response) => {
             id_unidad,
         } = req.body;
 
-        // Obtén la lista de roles disponibles
-        const roles = await Rol.findAll({
-            attributes: ['id_rol', 'nombre_rol'],
-        });
-
         const hashedPassword = await bcrypt.hash(clave_usuario, 10);
 
         const rutUsuario = await User.findOne({ where: { rut_usuario } });
@@ -51,8 +46,7 @@ export const newUser = async (req: Request, res: Response) => {
 
         return res.json({
             msg: 'Usuario creado correctamente',
-            usuario: usuarioConRelaciones,
-            roles, // Envía la lista de roles
+            usuario: usuarioConRelaciones, 
         });
     } catch (error) {
         console.error('Error en el controlador newUser:', error);
@@ -210,11 +204,6 @@ export const updateUser = async (req: Request, res: Response) => {
             });
         }
 
-        // Obtén la lista de roles disponibles
-        const roles = await Rol.findAll({
-            attributes: ['id_rol', 'nombre_rol'],
-        });
-
         await User.update(
             {
                 rut_usuario,
@@ -232,7 +221,6 @@ export const updateUser = async (req: Request, res: Response) => {
 
         res.json({
             msg: `Se ha actualizado al usuario: ${id}`,
-            roles, // Envía la lista de roles
         });
     } catch (error) {
         console.error('Error en el controlador updateUser:', error);

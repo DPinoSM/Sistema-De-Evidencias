@@ -22,10 +22,6 @@ const sequelize_1 = require("sequelize");
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
-        // Obtén la lista de roles disponibles
-        const roles = yield rol_1.Rol.findAll({
-            attributes: ['id_rol', 'nombre_rol'],
-        });
         const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
         const rutUsuario = yield user_1.User.findOne({ where: { rut_usuario } });
         if (rutUsuario) {
@@ -48,7 +44,6 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json({
             msg: 'Usuario creado correctamente',
             usuario: usuarioConRelaciones,
-            roles, // Envía la lista de roles
         });
     }
     catch (error) {
@@ -177,10 +172,6 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 msg: `El id ${id} de usuario no existe`,
             });
         }
-        // Obtén la lista de roles disponibles
-        const roles = yield rol_1.Rol.findAll({
-            attributes: ['id_rol', 'nombre_rol'],
-        });
         yield user_1.User.update({
             rut_usuario,
             nombre_usuario,
@@ -194,7 +185,6 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }, { where: { id_usuario: id } });
         res.json({
             msg: `Se ha actualizado al usuario: ${id}`,
-            roles, // Envía la lista de roles
         });
     }
     catch (error) {
