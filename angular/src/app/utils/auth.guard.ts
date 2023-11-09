@@ -18,9 +18,13 @@ export class AuthGuard {
   // Constructor de la clase que recibe el servicio 'Router' como dependencia.
 
   canActivate(
+    //Esto te proporciona información sobre la ruta que el usuario intenta acceder, 
+    //como los parámetros de la ruta, los datos de la ruta y otros detalles relacionados con la ruta actual.
     route: ActivatedRouteSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    // Método 'canActivate' que se ejecuta cuando se intenta acceder a una ruta protegida.
+    //manejar tanto lógica sincrónica como asincrónica. 
+    //Puede devolver directamente true o false o una URL (UrlTree) para redirigir al usuario.
+
 
     const token = localStorage.getItem('token');
     const rol = Number(localStorage.getItem('rol'));
