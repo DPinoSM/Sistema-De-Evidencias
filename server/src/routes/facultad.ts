@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {getFacultades, newFacultad, getFacultad, deleteFacultad, updateFacultad} from '../controllers/facultad';
-// import validateToken from './validate-token';
+import {getFacultades, newFacultad, getFacultad, deleteFacultad, updateFacultad, buscarFacultad} from '../controllers/facultad';import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',getFacultades);
-router.post('/',newFacultad);
-router.get('/:id',getFacultad);
-router.delete('/:id',deleteFacultad);
-router.put('/:id',updateFacultad);
+router.get('/lista',validateToken, getFacultades);
+router.post('/',validateToken, newFacultad);
+router.get('/:id',validateToken, getFacultad);
+router.delete('/:id',validateToken, deleteFacultad);
+router.put('/:id',validateToken, updateFacultad);
+router.get('/buscar',validateToken, buscarFacultad);
 export default router;

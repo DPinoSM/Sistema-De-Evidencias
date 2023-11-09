@@ -7,6 +7,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/interfaces/usuario.interface';
 import { Rol } from 'src/app/interfaces/rol.interface';
 import { RolService } from 'src/app/services/rol.service';
+import { Unidad } from 'src/app/interfaces/unidad.interface';
+import { UnidadService } from 'src/app/services/unidad.service';
 
 @Component({
   selector: 'app-lista-usuarios',
@@ -16,15 +18,24 @@ import { RolService } from 'src/app/services/rol.service';
 
 export class ListaUsuariosComponent implements OnInit {
   usuarios: User[] = [];
+  usuariosOriginal: User[] | null = null;
   roles: Rol[] = [];
+  unidades: Unidad[] = [];
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarUsuario: boolean = false;
   usuarioEditId: number | null = null;
   form: FormGroup;
   private usuarioSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
-  constructor(private usuarioService: UsuarioService,private rolService: RolService,  private toastr: ToastrService) {
+  constructor(
+    private usuarioService: UsuarioService, 
+    private rolService: RolService, 
+    private unidadService: UnidadService, 
+    private toastr: ToastrService) 
+    {
     this.form = new FormGroup({
       rut_usuario: new FormControl(null, [Validators.required]),
       nombre_usuario: new FormControl('', [Validators.required]),
@@ -38,16 +49,27 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
+
   ngOnInit() {
     this.getUsers();
     this.getRoles();
+    this.getUnidades();
   }
+
+ 
 
   getRoles() {
     this.rolService.getRoles().subscribe((roles) => {
         this.roles = roles;
     });
-}
+  }
+  
+  getUnidades() {
+    this.unidadService.getUnidades().subscribe((unidades) => {
+      this.unidades = unidades;
+    });
+  }
+
   
   mostrarAgregarEditarUsuario(id: number | null) {
     if (id !== null) {
@@ -77,36 +99,56 @@ export class ListaUsuariosComponent implements OnInit {
   crearOEditarUsuario() {
     if (this.form.valid) {
       const rut_usuario = this.form.get('rut_usuario')?.value;
-      const nombre_usuario = this.form.get('nombre_usuario')?.value;
-      const apellido1_usuario = this.form.get('apellido1_usuario')?.value;
-      const apellido2_usuario = this.form.get('apellido2_usuario')?.value;
-      const clave_usuario = this.form.get('clave_usuario')?.value;
       const correo_usuario = this.form.get('correo_usuario')?.value;
-      const estado_usuario = this.form.get('estado_usuario')?.value;
-      const id_rol = this.form.get('id_rol')?.value; 
-      const id_unidad = this.form.get('id_unidad')?.value; 
-
-      if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
-        this.toastr.error('El usuario o Correo ya existe ', 'Error');
-      } else if (this.usuarioEditId) {
-        this.editarUsuario(this.usuarioEditId, rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad);
+  
+      if (this.usuarioEditId) {
+        const usuarioEditado: any = {
+          id_usuario: this.usuarioEditId,
+        };
+        if (this.form.get('rut_usuario')?.dirty) {
+          usuarioEditado['rut_usuario'] = rut_usuario;
+        }
+        if (this.form.get('correo_usuario')?.dirty) {
+          usuarioEditado['correo_usuario'] = correo_usuario;
+        }
+        usuarioEditado['nombre_usuario'] = this.form.get('nombre_usuario')?.value;
+        usuarioEditado['apellido1_usuario'] = this.form.get('apellido1_usuario')?.value;
+        usuarioEditado['apellido2_usuario'] = this.form.get('apellido2_usuario')?.value;
+        usuarioEditado['clave_usuario'] = this.form.get('clave_usuario')?.value;
+        usuarioEditado['estado_usuario'] = this.form.get('estado_usuario')?.value;
+        usuarioEditado['id_rol'] = this.form.get('id_rol')?.value;
+        usuarioEditado['id_unidad'] = this.form.get('id_unidad')?.value;
+  
+        this.editarUsuario(this.usuarioEditId, usuarioEditado);
       } else {
-        this.realizarOperacionDeUsuario(() =>
-          this.usuarioService.newUser({
-            rut_usuario: rut_usuario,
-            nombre_usuario: nombre_usuario,
-            apellido1_usuario: apellido1_usuario,
-            apellido2_usuario: apellido2_usuario,
-            clave_usuario: clave_usuario,
-            correo_usuario: correo_usuario,
-            estado_usuario: estado_usuario,
-            id_rol: id_rol,
-            id_unidad: id_unidad,
-          }), 'Usuario Creado');
+        const nombre_usuario = this.form.get('nombre_usuario')?.value;
+        const apellido1_usuario = this.form.get('apellido1_usuario')?.value;
+        const apellido2_usuario = this.form.get('apellido2_usuario')?.value;
+        const clave_usuario = this.form.get('clave_usuario')?.value;
+        const estado_usuario = this.form.get('estado_usuario')?.value;
+        const id_rol = this.form.get('id_rol')?.value;
+        const id_unidad = this.form.get('id_unidad')?.value;
+  
+        if (this.usuarioExistenteEnRut(rut_usuario) || this.usuarioExistenteEnCorreo(correo_usuario)) {
+          this.toastr.error('El usuario o Correo ya existe ', 'Error');
+        } else {
+          this.realizarOperacionDeUsuario(() =>
+            this.usuarioService.newUser({
+              rut_usuario: rut_usuario,
+              nombre_usuario: nombre_usuario,
+              apellido1_usuario: apellido1_usuario,
+              apellido2_usuario: apellido2_usuario,
+              clave_usuario: clave_usuario,
+              correo_usuario: correo_usuario,
+              estado_usuario: estado_usuario,
+              id_rol: id_rol,
+              id_unidad: id_unidad,
+            }), 'Usuario Creado');
+        }
       }
     }
     this.mostrarFormularioAgregarUsuario = false;
-    this.cancelarEdicionUsuario()
+    this.cancelarEdicionUsuario();
   }
 
   obtenerUsuario(id: number) {
@@ -127,6 +169,37 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
+  comienzaConCadena(cadena: string, input: string): boolean {
+    if (!cadena || !input) {
+      return true; 
+    }
+
+    cadena = cadena.toLowerCase();
+    input = input.toLowerCase();
+
+    if (!isNaN(Number(input))) {
+      return cadena === input;
+    } else {
+      return cadena.includes(input);
+    }
+  }
+
+  realizarBusqueda() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.getUsers (); 
+    } else {
+
+      if (this.usuariosOriginal) {
+        this.usuarios = this.usuariosOriginal;
+      }
+    }
+  }
+
+  pageChanged(page: number) {
+    this.currentPage = page;
+  }
+    
   getUsers() {
     if (this.usuarioSubscription) {
       this.usuarioSubscription.unsubscribe();
@@ -140,27 +213,24 @@ export class ListaUsuariosComponent implements OnInit {
         })
       )
       .subscribe((data: User[]) => {
-        this.usuarios = data;
+        if (!this.usuariosOriginal) {
+          this.usuariosOriginal = data;
+        }
+        
+        this.usuarios = data.filter(usuario => {
+          return (
+            this.comienzaConCadena(usuario.rut_usuario.toString(), this.searchTerm) ||
+            this.comienzaConCadena(usuario.correo_usuario, this.searchTerm)
+          );
+        });
       });
   }
 
-  editarUsuario(id: number, rut_usuario: string, nombre_usuario: string, 
-    apellido1_usuario: string, apellido2_usuario: string, clave_usuario: string, 
-    correo_usuario: string, estado_usuario: boolean, id_rol: number, id_unidad: number) {
+  editarUsuario(id: number, usuarioEditado: any) {
     this.realizarOperacionDeUsuario(() =>
-      this.usuarioService.updateUser(id, {
-        rut_usuario: rut_usuario,
-        nombre_usuario: nombre_usuario,
-        apellido1_usuario: apellido1_usuario,
-        apellido2_usuario: apellido2_usuario,
-        clave_usuario: clave_usuario,
-        correo_usuario: correo_usuario,
-        estado_usuario: estado_usuario,
-        id_rol: id_rol,
-        id_unidad: id_unidad,
-      }), 'Usuario Editado');
+      this.usuarioService.updateUser(id, usuarioEditado), 'Usuario Editado');
   }
-
+  
   eliminarUsuario(id: number) {
     this.realizarOperacionDeUsuario(() => this.usuarioService.deleteUser(id), 'Usuario Eliminado');
   }

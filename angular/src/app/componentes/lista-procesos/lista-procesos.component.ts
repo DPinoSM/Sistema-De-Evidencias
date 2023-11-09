@@ -11,7 +11,7 @@ import { Proceso } from 'src/app/interfaces/proceso.interface';
   templateUrl: './lista-procesos.component.html',
   styleUrls: ['./lista-procesos.component.css', '../../../shared-styles.css']
 })
-export class ListaProcesosComponent implements OnInit{
+export class ListaProcesosComponent implements OnInit {
   procesos: Proceso[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
@@ -19,13 +19,15 @@ export class ListaProcesosComponent implements OnInit{
   sideNavStatus: boolean = false;
   mostrarFormularioAgregarProcesos: boolean = false;
   private procesoSubscription!: Subscription;
+  currentPage: number = 1;
+  searchTerm: string = '';
 
   constructor(
-    private procesoService: ProcesosService, 
+    private procesoService: ProcesosService,
     private toastr: ToastrService
   ) {
     this.form = new FormGroup({
-      codigo_procesos: new FormControl('', [Validators.required]),
+      codigo_procesos: new FormControl(null, [Validators.required]),
       nombre_procesos: new FormControl('', [Validators.required]),
       estado_procesos: new FormControl(null, [Validators.required])
     });
@@ -52,32 +54,48 @@ export class ListaProcesosComponent implements OnInit{
     this.form.reset();
   }
 
-  nombreRegistroExistente(codigo: number): boolean {
-    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
-  }
-
   crearEditarProceso() {
     if (this.form.valid) {
       const codigo_procesos = this.form.get('codigo_procesos')?.value;
-      const nombre_procesos = this.form.get('nombre_procesos')?.value;
-      const estado_procesos = this.form.get('estado_procesos')?.value;
   
-      if (this.codigoExistente(codigo_procesos)) {
-        this.toastr.error('Este Codigo ya existe', 'Error');
-      }else if (this.procesoEditId) {
-        this.editarProceso(this.procesoEditId, codigo_procesos, nombre_procesos, estado_procesos);
+      if (this.procesoEditId) {
+        const procesoEditado: any = {
+          id_procesos: this.procesoEditId,
+        };
+  
+        if (this.form.get('codigo_procesos')?.dirty) {
+          procesoEditado['codigo_procesos'] = codigo_procesos;
+        }
+        procesoEditado['nombre_procesos'] = this.form.get('nombre_procesos')?.value;
+        procesoEditado['estado_procesos'] = this.form.get('estado_procesos')?.value;
+  
+        this.editarProceso(this.procesoEditId, procesoEditado);
+      } else {
+        const nombre_procesos = this.form.get('nombre_procesos')?.value;
+        const estado_procesos = this.form.get('estado_procesos')?.value;
+  
+        if (this.codigoExistente(codigo_procesos)) {
+          this.toastr.error('El código de ese proceso ya está en uso', 'Error');
         } else {
           this.realizarOperacionDeProceso(() =>
-            this.procesoService.createProceso({ codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Creado');
+            this.procesoService.createProceso({
+              codigo_procesos: codigo_procesos,
+              nombre_procesos: nombre_procesos,
+              estado_procesos: estado_procesos
+            }),
+            'Proceso Creado'
+          );
         }
+      }
     }
+  
     this.mostrarFormularioAgregarProcesos = false;
-    this.cancelarEdicion()
-    this.cancelarEdicion()
+    this.cancelarEdicion();
   }
   
-  codigoExistente(codigo: number): boolean {
-    return this.procesos.some(proceso => proceso.codigo_procesos === codigo);
+
+  codigoExistente(codigo_procesos: number): boolean {
+    return this.procesos.some(proceso => proceso.codigo_procesos === codigo_procesos);
   }
 
   obtenerProceso(id: number) {
@@ -88,6 +106,19 @@ export class ListaProcesosComponent implements OnInit{
         this.form.get('estado_procesos')?.setValue(proceso.estado_procesos);
       }
     });
+  }
+
+  realizarBusquedaProcesos() {
+    if (this.searchTerm) {
+      this.currentPage = 1;
+      this.actualizarListaDeProcesos();
+    } else {
+      this.actualizarListaDeProcesos();
+    }
+  }
+
+  pageChanged(event: any): void {
+    this.currentPage = event.page;
   }
 
   actualizarListaDeProcesos() {
@@ -103,16 +134,14 @@ export class ListaProcesosComponent implements OnInit{
         })
       )
       .subscribe((data: Proceso[]) => {
-        //console.log(data);
         this.procesos = data;
       });
   }
 
-  editarProceso(id: number, codigo_procesos: number, nombre_procesos: string, estado_procesos: any) {
+  editarProceso(id: number, procesoEditado: any ) {
     this.realizarOperacionDeProceso(() =>
-      this.procesoService.updateProceso(id, { codigo_procesos: codigo_procesos, nombre_procesos: nombre_procesos, estado_procesos: estado_procesos }), 'Proceso Editado');
+      this.procesoService.updateProceso(id, procesoEditado ), 'Proceso Editado');
   }
-
 
   cambiarEstadoProceso(id: number) {
     const proceso = this.procesos.find(p => p.id_procesos === id);

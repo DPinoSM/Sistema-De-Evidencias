@@ -81,7 +81,9 @@
                 <div class="col">
                   <div class="form-group mt-2">
                     <label for="id_unidad">Unidad</label>
-                    <input type="number" id="id_unidad" class="form-control" formControlName="id_unidad" required>
+                    <select id="id_unidad" class="form-control" formControlName="id_unidad" required>
+                    <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">{{ unidad.nombre_unidad }}</option>
+                  </select>
                     <div class="error-message error-text" *ngIf="form.get('id_unidad')?.invalid && (form.get('id_unidad')?.dirty || form.get('id_unidad')?.touched)">
                       El ID de Unidad es obligatorio.
                     </div>
@@ -107,6 +109,10 @@
         </div>
 
         <div class="table-container mt-4">
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por Rut o Correo" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+            <button class="btn" (click)="realizarBusqueda()"><i class="fas fa-search"></i></button>
+          </div>
           <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
             <thead>
               <tr>
@@ -123,7 +129,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let usuario of usuarios" style="border: 1px solid black;">
+              <tr *ngFor="let usuario of usuarios | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
                 <td style="border: 1px solid black;">{{ usuario.id_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.rut_usuario }}</td>
                 <td style="border: 1px solid black;">{{ usuario.nombre_usuario }}</td>
@@ -149,7 +155,8 @@
               </tr>
             </tbody>
           </table>
-          </div>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+        </div>
         </div>
       </div>
   </main>

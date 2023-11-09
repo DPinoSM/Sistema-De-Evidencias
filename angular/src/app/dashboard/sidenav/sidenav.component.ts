@@ -8,22 +8,23 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SidenavComponent implements OnInit {
   @Input() sideNavStatus: boolean = false;
+  userRole: number = 0;
 
   list = [
     {
       name: 'Usuarios',
       icon: 'fa-solid fa-user',
-      link: '/usuarios', 
+      link: '/usuarios',
     },
     {
       name: 'Evidencias',
       icon: 'fa-solid fa-file-alt',
-      link: '/evidencias', 
+      link: '/evidencias',
     },
     {
       name: 'Debilidades',
       icon: 'fa-solid fa-exclamation-circle',
-      link: '/debilidades', 
+      link: '/debilidades',
     },
     {
       name: 'Impacto',
@@ -33,30 +34,32 @@ export class SidenavComponent implements OnInit {
     {
       name: 'Gráficos',
       icon: 'fa-solid fa-chart-bar',
-      link: '/graficos', 
+      link: '/graficos',
     },
   ];
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    
+    const storedUserRole = localStorage.getItem('rol');
+    if (storedUserRole) {
+      this.userRole = parseInt(storedUserRole, 10);
+    }
   }
 
-  //isItemVisible(item: any): boolean {
-    //switch (item.link) {
-      //case '/usuarios':
-        //return this.authService.checkRoleAndVisibility(1, [1]);
-      //case '/evidencias':
-        //return this.authService.checkRoleAndVisibility(5, [5]);
-      //case '/debilidades':
-      //case '/impacto':
-      //case '/graficos':
-        //return this.authService.checkRoleAndVisibility(2, [1, 2, 3, 4]);
-      //default:
-        //return true;
-    //}
-  //}
+  isItemVisible(item: any): boolean {
+    if (item.link === '/usuarios') {
+      // Cambia la ruta y el nombre en función del rol del usuario.
+      item.link = this.userRole === 1 ? '/usuarios' : '/perfil';
+      item.name = this.userRole === 1 ? 'Usuarios' : 'Perfil';
+    }
+    return [1, 2, 3, 4, 5].includes(this.userRole);
+  }
+  
+  
+  
+  
+  
   
   
 }

@@ -1,10 +1,11 @@
 import {Router} from 'express';
-import {getAmbitoAcademico, newAmbitoAcademico, getAmbitosAcademicos,deleteAmbitoAcademico, updateAmbitoAcademico} from '../controllers/ambito_academico';
-// import validateToken from './validate-token';
+import {getAmbitoAcademico, newAmbitoAcademico, getAmbitosAcademicos,deleteAmbitoAcademico, updateAmbitoAcademico, buscarAmbAca} from '../controllers/ambito_academico';
+import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',getAmbitosAcademicos);
-router.post('/',newAmbitoAcademico);
-router.get('/:id',getAmbitoAcademico);
-router.delete('/:id',deleteAmbitoAcademico);
-router.put('/:id',updateAmbitoAcademico);
+router.get('/lista',validateToken,getAmbitosAcademicos);
+router.post('/', validateToken, newAmbitoAcademico);
+router.get('/:id', validateToken, getAmbitoAcademico);
+router.delete('/:id',validateToken, deleteAmbitoAcademico);
+router.put('/:id',validateToken, updateAmbitoAcademico);
+router.get('/buscar',validateToken, buscarAmbAca);
 export default router;

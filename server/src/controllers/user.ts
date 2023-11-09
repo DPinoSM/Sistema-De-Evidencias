@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Rol } from '../models/rol';
 import { Unidad } from '../models/unidad';
+import { Op } from 'sequelize';
 
 export const newUser = async (req: Request, res: Response) => {
     try {
@@ -118,10 +119,11 @@ export const loginUser = async (req: Request, res: Response) => {
                 rut_usuario,
                 role: usuario.id_rol,
             },
-            process.env.SECRET_KEY || 'PRUEBA1',
+            process.env.SECRET_KEY || 'HS384',
             { expiresIn: '5m' }
         );
 
+        // Enviar el token y el rol como parte de la respuesta JSON
         res.json({ token, rol: usuario.id_rol });
     } catch (error) {
         console.error('Error en el controlador loginUser:', error);
@@ -131,6 +133,7 @@ export const loginUser = async (req: Request, res: Response) => {
         });
     }
 };
+
 
 export const getUser = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -185,6 +188,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
     try {
         const {
+            rut_usuario,
             nombre_usuario,
             apellido1_usuario,
             apellido2_usuario,
@@ -210,6 +214,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
         await User.update(
             {
+                rut_usuario,
                 nombre_usuario,
                 apellido1_usuario,
                 apellido2_usuario,
@@ -233,4 +238,33 @@ export const updateUser = async (req: Request, res: Response) => {
             error,
         });
     }
+}
+
+export const buscarUsuario = async (req: Request, res: Response) =>{
+    const { searchTerm } = req.query;
+
+    if (!searchTerm){
+        return res.status(400).json({
+            msg: 'El termino de busqueda no se proporcionó',
+        });
+    }
+
+    try {
+        const users = await User.findAll({
+            attributes: ['id_usuario', 'nombre_usuario'],
+            where: {
+                [Op.or]: [
+                    { id_usuario: { [Op.like]: `%{searchTerm}%` } },
+                    { nombre_usuario: { [Op.like]: `%{searchTerm}%` } },
+                ],
+            },
+        });
+        return res.json(users);
+    }   catch (error){
+        return res.status(500).json({
+            msg:'Ocurrió un error al buscar Usuarios',
+        });
+    }
 };
+
+

@@ -17,25 +17,28 @@ import { ListaFacultadComponent } from '../componentes/lista-facultad/lista-facu
 import { DacComponent } from '../Principal/dac/dac.component';
 import { ComiteComponent } from '../Principal/comite/comite.component';
 import { ResponsableComponent } from '../Principal/responsable/responsable.component';
+import { AuthGuard } from '../utils/auth.guard';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'inicio', component: InicioComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'dac', component: DacComponent },
-  { path: 'comite', component: ComiteComponent },
-  { path: 'responsable', component: ResponsableComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'dac', component: DacComponent, canActivate: [AuthGuard], data: { rol: 2 } },
+  { path: 'comite', component: ComiteComponent, canActivate: [AuthGuard], data: { rol: 3 } },
+  { path: 'responsable', component: ResponsableComponent, canActivate: [AuthGuard], data: { rol: 4 } },
+  { path: 'inicio', component: InicioComponent, canActivate: [AuthGuard], data: { rol: 5 } },
 
-  { path: 'rol', component: ListarolComponent },
-  { path: 'unidad', component: ListaUnidadComponent },
-  { path: 'registro', component: ListaRegistrosComponent },
-  { path: 'ambitoA', component: ListaAmbitosAComponent },
-  { path: 'criterio', component: ListaCriteriosComponent },
-  { path: 'process', component: ListaProcesosComponent },
-  { path: 'ambitoG', component: ListaAmbitoGComponent },
-  { path: 'usuarios', component: ListaUsuariosComponent},
-  { path: 'facultad', component: ListaFacultadComponent}
+
+  { path: 'rol', component: ListarolComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'unidad', component: ListaUnidadComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'registro', component: ListaRegistrosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'ambitoA', component: ListaAmbitosAComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'criterio', component: ListaCriteriosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'process', component: ListaProcesosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'ambitoG', component: ListaAmbitoGComponent, canActivate: [AuthGuard], data: { rol: 1 } },
+  { path: 'usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard], data: { rol: 1 }},
+  { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }}
   
 ];
 

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,15 +9,17 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   @Output() SideNavToggled = new EventEmitter<boolean>();
   menuStatus: boolean = false;
-  isAdmin: boolean = false;
+  userRole: number = 0; 
 
   constructor(
-    private authService: AuthService,
-    private router: Router) {
-    //this.isAdmin = this.authService.checkIsAdmin();
-  }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    const storedUserRole = localStorage.getItem('rol');
+    if (storedUserRole) {
+      this.userRole = parseInt(storedUserRole, 10);
+    }
   }
 
   SideNavToggle() {
@@ -28,6 +29,6 @@ export class HeaderComponent implements OnInit {
 
   logOut() {
     localStorage.removeItem('token');
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 }

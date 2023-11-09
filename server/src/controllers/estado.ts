@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import { Estado } from '../models/estado';
-import { where } from 'sequelize';
+
 export const getEstado = async(req: Request, res: Response) =>{  
     const listEstado = await Estado.findAll({attributes:['id_estado','online_presencial']});
     res.json(listEstado)

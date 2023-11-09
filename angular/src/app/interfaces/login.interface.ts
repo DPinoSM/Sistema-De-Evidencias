@@ -1,7 +1,6 @@
 
-
 export interface User {
-    rut_usuario: string;
+    rut_usuario: number;
     clave_usuario: string;
-    id_rol?: number;
+    rol?: number;
 }

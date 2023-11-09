@@ -77,7 +77,7 @@ const getOneCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const idCriterio = yield criterio_1.Criterio.findOne({ where: { id_criterios: id } });
     if (!idCriterio) {
         return res.status(400).json({
-            msg: "El id: " + id + " del criterio no existes"
+            msg: "El id: " + id + " del criterio no existe"
         });
     }
     try {
@@ -108,13 +108,12 @@ const deleteCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al actualizar el criterio: ' + id,
+            msg: 'Ha ocurrido un error al eliminar el criterio: ' + id,
             error
         });
     }
 });
 exports.deleteCriterio = deleteCriterio;
-//FILTRO DE BUSQUEDA
 const buscarCriterio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = req.query;
     if (!searchTerm) {
