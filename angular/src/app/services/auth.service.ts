@@ -40,7 +40,7 @@ export class AuthService {
   }
   // Método 'login' que realiza una solicitud POST al servidor para iniciar sesión y devuelve un observable de tipo 'LoginResponse'.
 
-  // La solicitud se hace a la URL compuesta por 'ApiUrl' y 'ApiiUrl' seguido de '/login' y se envía el objeto 'user' en el cuerpo de la solicitud.
+  
 
   // Después de recibir la respuesta exitosa, se utiliza 'tap' para almacenar el token y el rol en el almacenamiento local del navegador.
 }

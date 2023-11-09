@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 // Importamos 'Injectable' de '@angular/core' para marcar la clase como un servicio que puede ser inyectado en otros componentes.
 
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree, Router } from '@angular/router';
 // Importamos varias clases necesarias para crear un guardia de ruta, como 'ActivatedRouteSnapshot', 'RouterStateSnapshot', 'UrlTree' y 'Router'.
 
 import { Observable } from 'rxjs';
@@ -19,7 +19,6 @@ export class AuthGuard {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // Método 'canActivate' que se ejecuta cuando se intenta acceder a una ruta protegida.
 
@@ -60,7 +59,7 @@ export class AuthGuard {
       }
     } else {
       // Si no hay token o el rol no es un número válido, se redirige al usuario a la página de inicio de sesión.
-      this.router.navigate(['/login'], { state: { url: state.url } });
+      this.router.navigate(['/login']);
     }
     return false;
     // Se devuelve 'false' para denegar el acceso.
