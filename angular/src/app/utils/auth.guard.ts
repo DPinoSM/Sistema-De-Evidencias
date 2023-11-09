@@ -1,33 +1,48 @@
 import { Injectable } from '@angular/core';
+// Importamos 'Injectable' de '@angular/core' para marcar la clase como un servicio que puede ser inyectado en otros componentes.
+
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+// Importamos varias clases necesarias para crear un guardia de ruta, como 'ActivatedRouteSnapshot', 'RouterStateSnapshot', 'UrlTree' y 'Router'.
+
 import { Observable } from 'rxjs';
+// Importamos 'Observable' de 'rxjs' para trabajar con observables.
 
 @Injectable({
   providedIn: 'root'
 })
+// Marcamos la clase 'AuthGuard' como un servicio que se proporcionará en la raíz de la aplicación.
+
 export class AuthGuard {
 
   constructor(private router: Router) { }
+  // Constructor de la clase que recibe el servicio 'Router' como dependencia.
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    // Método 'canActivate' que se ejecuta cuando se intenta acceder a una ruta protegida.
+
     const token = localStorage.getItem('token');
-    const rol = Number(localStorage.getItem('rol')); 
+    const rol = Number(localStorage.getItem('rol'));
+    // Se obtienen el token y el rol del usuario almacenados en el almacenamiento local.
 
     if (token && !isNaN(rol)) {
+      // Si hay un token y el rol es un número válido.
       const requiredRole = route.data['rol'];
+      // Se obtiene el rol requerido de los datos de la ruta.
 
       if (!isNaN(requiredRole) && requiredRole === rol) {
-        return true; 
+        return true;
+        // Si el rol requerido coincide con el rol del usuario, se permite el acceso.
       } else {
+        // Si el rol requerido no coincide con el rol del usuario, se redirige según el rol actual del usuario.
         switch (rol) {
           case 1:
             this.router.navigate(['/admin']);
             break;
           case 2:
-            this.router.navigate(['/dac']); 
+            this.router.navigate(['/dac']);
             break;
           case 3:
             this.router.navigate(['/comite']);
@@ -44,8 +59,10 @@ export class AuthGuard {
         }
       }
     } else {
+      // Si no hay token o el rol no es un número válido, se redirige al usuario a la página de inicio de sesión.
       this.router.navigate(['/login'], { state: { url: state.url } });
     }
-    return false; 
+    return false;
+    // Se devuelve 'false' para denegar el acceso.
   }
 }
