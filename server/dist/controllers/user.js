@@ -69,6 +69,7 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 'nombre_usuario',
                 'apellido1_usuario',
                 'apellido2_usuario',
+                'clave_usuario',
                 'correo_usuario',
                 'estado_usuario',
             ],
@@ -109,7 +110,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({
             rut_usuario,
             role: usuario.id_rol,
-        }, process.env.SECRET_KEY || 'HS384', { expiresIn: '5m' });
+        }, process.env.SECRET_KEY || 'HS384', { expiresIn: '60m' });
         // Enviar el token y el rol como parte de la respuesta JSON
         res.json({ token, rol: usuario.id_rol });
     }
@@ -170,6 +171,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { rut_usuario, nombre_usuario, apellido1_usuario, apellido2_usuario, clave_usuario, correo_usuario, estado_usuario, id_rol, id_unidad, } = req.body;
         const idUser = yield user_1.User.findOne({ where: { id_usuario: id } });
+        const hashedPassword = yield bcrypt_1.default.hash(clave_usuario, 10);
         if (!idUser) {
             return res.status(400).json({
                 msg: `El id ${id} de usuario no existe`,
@@ -184,7 +186,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             nombre_usuario,
             apellido1_usuario,
             apellido2_usuario,
-            clave_usuario,
+            clave_usuario: hashedPassword,
             correo_usuario,
             estado_usuario,
             id_rol,

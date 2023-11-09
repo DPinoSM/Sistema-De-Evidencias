@@ -21,7 +21,7 @@ import { LoginResponse } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
   // Declaración de propiedades del componente.
   loading: boolean = false;
-  rut_usuario: number = 0; 
+  rut_usuario: number | null = null; 
   clave_usuario: string = '';
 
   constructor(
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     // Validación de que el usuario haya ingresado datos.
-    if ( isNaN(this.rut_usuario) || this.clave_usuario == '') {
+    if ( this.rut_usuario === null || isNaN(this.rut_usuario) || this.clave_usuario == '') {
        // Se muestra un mensaje de error si los campos de usuario o contraseña están vacíos.
       this.toastr.error('Todos los campos son obligatorios', 'Error');
       return;

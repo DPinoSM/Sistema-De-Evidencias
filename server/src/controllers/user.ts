@@ -72,6 +72,7 @@ export const getUsers = async (req: Request, res: Response) => {
                 'nombre_usuario',
                 'apellido1_usuario',
                 'apellido2_usuario',
+                'clave_usuario',
                 'correo_usuario',
                 'estado_usuario',
             ],
@@ -120,7 +121,7 @@ export const loginUser = async (req: Request, res: Response) => {
                 role: usuario.id_rol,
             },
             process.env.SECRET_KEY || 'HS384',
-            { expiresIn: '5m' }
+            { expiresIn: '60m' }
         );
 
         // Enviar el token y el rol como parte de la respuesta JSON
@@ -201,6 +202,8 @@ export const updateUser = async (req: Request, res: Response) => {
 
         const idUser = await User.findOne({ where: { id_usuario: id } });
 
+        const hashedPassword = await bcrypt.hash(clave_usuario, 10);
+
         if (!idUser) {
             return res.status(400).json({
                 msg: `El id ${id} de usuario no existe`,
@@ -218,7 +221,7 @@ export const updateUser = async (req: Request, res: Response) => {
                 nombre_usuario,
                 apellido1_usuario,
                 apellido2_usuario,
-                clave_usuario,
+                clave_usuario: hashedPassword,
                 correo_usuario,
                 estado_usuario,
                 id_rol,
