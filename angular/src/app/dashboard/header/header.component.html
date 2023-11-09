@@ -2,28 +2,30 @@
     <div class="side-nav-button p-2 me-3 text-light" (click)="SideNavToggle()">
         <i class="fa-solid fa-bars"></i>
     </div>
-    <a class="navbar-brand px-4" href="/admin">Administración</a>
+    <a class="navbar-brand px-4" href="/admin">
+        {{ userRole === 1 ? 'Administración' : 'Sistema de Evidencias' }}
+    </a>
     <div class="navbar-collapse">
         <ul class="navbar-nav me-auto">
-            <li  class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 1">
                 <a class="nav-link" href="/rol">Roles</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 1">
                 <a class="nav-link" href="/unidad">Unidades</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/criterio">Criterios</a>
+            <li class="nav-item" *ngIf="userRole === 1">
+                <a class ="nav-link" href="/criterio">Criterios</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 1">
                 <a class="nav-link" href="/registro">Tipos de Registros</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 1">
                 <a class="nav-link" href="/process">Procesos</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 1">
                 <a class="nav-link" href="/facultad">Facultades</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" *ngIf="userRole === 1">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                     Ambitos
                 </a>
