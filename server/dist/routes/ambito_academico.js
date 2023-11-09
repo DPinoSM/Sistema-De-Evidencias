@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_2 = require("express");
+const express_1 = require("express");
 const ambito_academico_1 = require("../controllers/ambito_academico");
 // import validateToken from './validate-token';
-const router = (0, express_2.Router)();
+const router = (0, express_1.Router)();
 router.get('/lista', ambito_academico_1.getAmbitosAcademicos);
 router.post('/', ambito_academico_1.newAmbitoAcademico);
 router.get('/:id', ambito_academico_1.getAmbitoAcademico);
