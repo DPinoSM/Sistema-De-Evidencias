@@ -20,9 +20,9 @@ import { LoginResponse } from '../../services/auth.service';
 
 export class LoginComponent implements OnInit {
   // Declaración de propiedades del componente.
-  loading: boolean = false; // Variable para mostrar un indicador de carga.
-  rut_usuario: string = ''; // Almacena el nombre de usuario.
-  clave_usuario: string = ''; // Almacena la contraseña del usuario.
+  loading: boolean = false;
+  rut_usuario: number = 0; 
+  clave_usuario: string = '';
 
   constructor(
     private toastr: ToastrService, // Servicio para mostrar notificaciones emergentes (toasts).
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     // Validación de que el usuario haya ingresado datos.
-    if (this.rut_usuario == '' || this.clave_usuario == '') {
+    if ( isNaN(this.rut_usuario) || this.clave_usuario == '') {
        // Se muestra un mensaje de error si los campos de usuario o contraseña están vacíos.
       this.toastr.error('Todos los campos son obligatorios', 'Error');
       return;
