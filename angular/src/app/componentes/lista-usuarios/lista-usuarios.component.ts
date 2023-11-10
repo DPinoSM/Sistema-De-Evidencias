@@ -220,7 +220,7 @@ export class ListaUsuariosComponent implements OnInit {
         this.usuarios = data.filter(usuario => {
           return (
             this.comienzaConCadena(usuario.rut_usuario.toString(), this.searchTerm) ||
-            this.comienzaConCadena(usuario.correo_usuario, this.searchTerm)
+            this.comienzaConCadena(usuario.nombre_usuario, this.searchTerm)
           );
         });
       });

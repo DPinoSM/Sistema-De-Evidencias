@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import { Facultad } from '../models/facultad';
 import { Op } from 'sequelize';
+
 export const getFacultades = async(req: Request, res: Response) =>{  
     const listFacultad = await Facultad.findAll({attributes:['id_facultad','nombre_facultad']});
     res.json(listFacultad)
