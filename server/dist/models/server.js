@@ -27,6 +27,9 @@ const carrera_1 = __importDefault(require("../routes/carrera"));
 const estado_1 = __importDefault(require("../routes/estado"));
 const impacto_1 = __importDefault(require("../routes/impacto"));
 const detalle_dac_1 = __importDefault(require("../routes/detalle_dac"));
+const detalle_comite_1 = __importDefault(require("../routes/detalle_comite"));
+const debilidades_1 = __importDefault(require("../routes/debilidades"));
+const detalle_revisor_1 = __importDefault(require("../routes/detalle_revisor"));
 const rol_1 = require("./rol");
 const user_2 = require("./user");
 const unidad_2 = require("./unidad");
@@ -40,6 +43,9 @@ const carrera_2 = require("./carrera");
 const estado_2 = require("./estado");
 const impacto_2 = require("./impacto");
 const detalle_dac_2 = require("./detalle_dac");
+const detalle_comite_2 = require("./detalle_comite");
+const debilidades_2 = require("./debilidades");
+const detalle_revisor_2 = require("./detalle_revisor");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -68,6 +74,9 @@ class Server {
         this.app.use('/api/estado', estado_1.default);
         this.app.use('/api/impacto', impacto_1.default);
         this.app.use('/api/dac', detalle_dac_1.default);
+        this.app.use('/api/comite', detalle_comite_1.default);
+        this.app.use('/api/debilidades', debilidades_1.default);
+        this.app.use('api/revisor', detalle_revisor_1.default);
     }
     midlewares() {
         //parseo body
@@ -91,6 +100,9 @@ class Server {
                 yield estado_2.Estado.sync();
                 yield impacto_2.Impacto.sync();
                 yield detalle_dac_2.Detalle_DAC.sync();
+                yield detalle_comite_2.Detalle_Comite.sync();
+                yield debilidades_2.Debilidades.sync();
+                yield detalle_revisor_2.Detalle_Revisor.sync();
             }
             catch (error) {
                 console.error('No se ha podido conectar a la base de datos');

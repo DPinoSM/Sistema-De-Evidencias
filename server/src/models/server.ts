@@ -13,6 +13,9 @@ import routerCarrera from '../routes/carrera';
 import routerEstado from '../routes/estado';
 import routerImpacto from '../routes/impacto';
 import routerDac from '../routes/detalle_dac';
+import routerComite from '../routes/detalle_comite';
+import routerDebilidades from '../routes/debilidades';
+import routerRevisor from '../routes/detalle_revisor';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
@@ -26,6 +29,10 @@ import { Carrera } from './carrera';
 import { Estado } from './estado';
 import { Impacto } from './impacto';
 import { Detalle_DAC } from './detalle_dac';
+import { Detalle_Comite} from './detalle_comite';
+import { Debilidades} from './debilidades';
+import { Detalle_Revisor } from './detalle_revisor';
+import router from '../routes/roles';
 
 
 class Server {
@@ -58,6 +65,9 @@ class Server {
         this.app.use('/api/estado', routerEstado);
         this.app.use('/api/impacto', routerImpacto);
         this.app.use('/api/dac', routerDac);
+        this.app.use('/api/comite', routerComite);
+        this.app.use('/api/debilidades', routerDebilidades);
+        this.app.use('api/revisor', routerRevisor)
     }
     midlewares() {
         //parseo body
@@ -80,6 +90,9 @@ class Server {
             await Estado.sync()
             await Impacto.sync()
             await Detalle_DAC.sync()
+            await Detalle_Comite.sync()
+            await Debilidades.sync()
+            await Detalle_Revisor.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }
