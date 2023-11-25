@@ -10,7 +10,7 @@ export const newDetalle_DAC = async(req: Request, res: Response) =>{
     const id_Detalle_DAC = await Detalle_DAC.findOne({where: {revisado_dac: revisado_dac}})
     if(id_Detalle_DAC) {
         return res.status(400).json({
-            msg: 'Ya existe una revisión de dac con este valor' 
+            msg: 'Ya existe una revisión del DAC con este valor' 
         })
     }
     try{
@@ -20,11 +20,11 @@ export const newDetalle_DAC = async(req: Request, res: Response) =>{
             "comentario_dac": comentario_dac
         })
         return res.json({
-            msg: 'Detalle de DAC creado correctamente'       
+            msg: 'Detalle DAC creado correctamente'       
         })
     } catch (error){
         res.status(400).json({
-            msg: 'Ocurrio un error al crear el Detalle DAC',
+            msg: 'Ocurrio un error al crear el detalle DAC',
             error
         })
     }
@@ -35,7 +35,7 @@ export const updateDetalle_DAC = async(req: Request, res: Response) => {
     const id_Detalle_DAC = await Detalle_DAC.findOne({where: {id_detalle_dac: id}})
     if (!id_Detalle_DAC) {
         return res.status(400).json({
-            msg: "La ID de Detalle DAC no exise"
+            msg: "La ID de detalle DAC no existe"
         })
     }
     try{
@@ -47,11 +47,11 @@ export const updateDetalle_DAC = async(req: Request, res: Response) => {
             {where: {id_detalle_dac: id}}
         )
         return res.json({
-            msg:'el Detalle DAC  con ID:' + id + ' se ha actualizado correctamente'
+            msg:'El detalle DAC con ID:' + id + ' se ha actualizado correctamente'
         })
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al actualizar el Detalle DAC: '+id,
+                msg: 'Ha ocurrido un error al actualizar el detalle DAC: '+id,
                 error
             })
 
@@ -62,7 +62,7 @@ export const getOneDetalle_DAC = async(req: Request, res: Response) =>{
     const id_Detalle_DAC= await Detalle_DAC.findOne({where: {id_detalle_dac: id}})
     if (!id_Detalle_DAC) {
         return res.status(400).json({
-            msg: "El ID: " + id + " del detalle DAC no existe dentro de la BD"
+            msg: "El ID: " + id + " del detalle DAC no existe dentro de la base de datos"
         })
     }
     try{
@@ -70,7 +70,7 @@ export const getOneDetalle_DAC = async(req: Request, res: Response) =>{
         res.json(Detalle_DACOne)
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al encontrar el Detalle DAC: '+id,
+                msg: 'Ha ocurrido un error al encontrar el detalle DAC: '+id,
                 error
             })
         }
@@ -80,18 +80,18 @@ export const deleteDetalle_DAC = async(req: Request, res: Response) =>{
     const id_Detalle_DAC = await Detalle_DAC.findOne({where: {id_detalle_dac: id}})
     if (!id_Detalle_DAC) {
         return res.status(400).json({
-            msg: "El ID: " + id + " del Detalle DAC no existe"
+            msg: "El ID: " + id + " del detalle DAC no existe"
         })
     }
     try{
         await Detalle_DAC.destroy({where: {id_detalle_dac: id}}
         )
         return res.json({
-            msg:'El Detalle DAC con ID: ' + id + ' ha sido borrada exitosamente'
+            msg:'El detalle DAC con ID: ' + id + ' ha sido borrada exitosamente'
         })
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al actualizar el Detalle DAC: '+id,
+                msg: 'Ha ocurrido un error al actualizar el detalle DAC: '+id,
                 error
             })
 

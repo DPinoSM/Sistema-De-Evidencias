@@ -12,7 +12,7 @@ export const newDetalle_Revisor = async(req: Request, res: Response) =>{
     const idDetalle_Revisor = await Detalle_Revisor.findOne({where: {revisado_revisor: revisado_revisor}})
     if(idDetalle_Revisor) {
         return res.status(400).json({
-            msg: 'Ya existe un Detalle de revisor creado con este valor' 
+            msg: 'Ya existe un detalle de revisor creado con este valor' 
         })
     }
     try{
@@ -22,11 +22,11 @@ export const newDetalle_Revisor = async(req: Request, res: Response) =>{
             "comentario_Revisor": comentario_revisor
         })
         return res.json({
-            msg: 'Detalle del revisor creado correctamente'       
+            msg: 'detalle del revisor creado correctamente'       
         })
     } catch (error){
         res.status(400).json({
-            msg: 'Ocurrio un error al crear al Detalle del revisor',
+            msg: 'Ocurrio un error al crear el detalle del revisor',
             error
         })
     }
@@ -49,11 +49,11 @@ export const updateDetalle_Revisor = async(req: Request, res: Response) => {
             {where: {id_detalle_revisor: id}}
         )
         return res.json({
-            msg:'El Detalle del Revisor' + id + ' se ha actualizado correctamente'
+            msg:'El detalle del revisor' + id + ' se ha actualizado correctamente'
         })
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al actualizar el Detalle Revisor: '+id,
+                msg: 'Ha ocurrido un error al actualizar el detalle revisor: '+id,
                 error
             })
 
@@ -64,7 +64,7 @@ export const getOneDetalle_Revisor = async(req: Request, res: Response) =>{
     const idDetalle_Revisor = await Detalle_Revisor.findOne({where: {id_detalle_revisor: id}})
     if (!idDetalle_Revisor) {
         return res.status(400).json({
-            msg: "El ID: " + id + " del Detalle Revisor no existe dentro de la BD"
+            msg: "El ID: " + id + " del detalle revisor no existe dentro de la base de datos"
         })
     }
     try{
@@ -72,7 +72,7 @@ export const getOneDetalle_Revisor = async(req: Request, res: Response) =>{
         res.json(Detalle_RevisorOne)
         }catch (error){
             return res.status(400).json({
-                msg: 'Ha ocurrido un error al encontrar el Detalle Revuisor: '+id,
+                msg: 'Ha ocurrido un error al encontrar el Detalle Revisor: '+id,
                 error
             })
         }

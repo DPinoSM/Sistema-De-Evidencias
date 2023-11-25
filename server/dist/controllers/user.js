@@ -105,7 +105,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({
             rut_usuario,
             role: usuario.id_rol,
-        }, process.env.SECRET_KEY || 'HS384', { expiresIn: '60m' });
+        }, process.env.SECRET_KEY || 'HS384', { expiresIn: '40m' });
         // Enviar el token y el rol como parte de la respuesta JSON
         res.json({ token, rol: usuario.id_rol });
     }

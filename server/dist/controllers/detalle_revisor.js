@@ -21,7 +21,7 @@ const newDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { revisado_revisor: revisado_revisor } });
     if (idDetalle_Revisor) {
         return res.status(400).json({
-            msg: 'Ya existe un Detalle de revisor creado con este valor'
+            msg: 'Ya existe un detalle de revisor creado con este valor'
         });
     }
     try {
@@ -31,12 +31,12 @@ const newDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, funct
             "comentario_Revisor": comentario_revisor
         });
         return res.json({
-            msg: 'Detalle del revisor creado correctamente'
+            msg: 'detalle del revisor creado correctamente'
         });
     }
     catch (error) {
         res.status(400).json({
-            msg: 'Ocurrio un error al crear al Detalle del revisor',
+            msg: 'Ocurrio un error al crear el detalle del revisor',
             error
         });
     }
@@ -58,12 +58,12 @@ const updateDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
             comentario_revisor: comentario_revisor
         }, { where: { id_detalle_revisor: id } });
         return res.json({
-            msg: 'El Detalle del Revisor' + id + ' se ha actualizado correctamente'
+            msg: 'El detalle del revisor' + id + ' se ha actualizado correctamente'
         });
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al actualizar el Detalle Revisor: ' + id,
+            msg: 'Ha ocurrido un error al actualizar el detalle revisor: ' + id,
             error
         });
     }
@@ -74,7 +74,7 @@ const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
     if (!idDetalle_Revisor) {
         return res.status(400).json({
-            msg: "El ID: " + id + " del Detalle Revisor no existe dentro de la BD"
+            msg: "El ID: " + id + " del detalle revisor no existe dentro de la base de datos"
         });
     }
     try {
@@ -83,7 +83,7 @@ const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al encontrar el Detalle Revuisor: ' + id,
+            msg: 'Ha ocurrido un error al encontrar el Detalle Revisor: ' + id,
             error
         });
     }
