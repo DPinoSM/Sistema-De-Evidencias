@@ -56,7 +56,7 @@ class Server {
         this.app.use('/api/users', routesUser);
         this.app.use('/api/unidad', routerUnidad);
         this.app.use('/api/registro', routerRegistro);
-        this.app.use('/api/criterio', routerCriterio);
+        this.app.use('/api/criterios', routerCriterio);
         this.app.use('/api/proceso', routerProceso);
         this.app.use('/api/ambitoacademico', routerAmbitoAcademico);
         this.app.use('/api/facultad', routerFacultad);
@@ -67,7 +67,7 @@ class Server {
         this.app.use('/api/dac', routerDac);
         this.app.use('/api/comite', routerComite);
         this.app.use('/api/debilidades', routerDebilidades);
-        this.app.use('api/revisor', routerRevisor)
+        this.app.use('/api/revisor', routerRevisor)
     }
     midlewares() {
         //parseo body

@@ -1,30 +1,62 @@
 //JONATHAN MOLINA 
 //CONTROLLERS DEBILIDADES
-import {Request, Response} from 'express';
+import e, {Request, Response} from 'express';
 import { Debilidades } from '../models/debilidades';
+import { Criterio } from '../models/criterio';
 
-export const getDebilidades = async(req: Request, res: Response) =>{  
-    const listDebilidades = await Debilidades.findAll({attributes:['id_debilidades','descripcion_debilidades','estado_debilidades','id_criterios']});
-    res.json(listDebilidades)
-}
-export const newDebilidades = async(req: Request, res: Response) =>{
-    const  {descripcion_debilidades,estado_debilidades, id_criterios} =  req.body;
-    const id_Debilidades = await Debilidades.findOne({where: {descripcion_debilidades: descripcion_debilidades}})
-    if(id_Debilidades) {
-        return res.status(400).json({
-            msg: 'Ya existe una descripcion de debilidad creado con este valor' 
-        })
+export const getDebilidades = async(req: Request, res: Response) =>{   
+    try {
+        const listDebilidades = await Debilidades.findAll({
+            attributes:[
+                'id_debilidades',
+                'descripcion_debilidades',
+                'estado_debilidades',
+            ],
+            include: [
+                {model: Criterio, attributes: ['nombre_criterios']},
+            ],
+        });
+    
+        res.json(listDebilidades)
+    } catch (error){
+        console.error('Error en el controlador getDebilidades: ', error);
+        res.status(500).json({
+            msg: 'Ocurrio un error en el servidor',
+            error,
+        });
     }
-    try{
-         await Debilidades.create({
-            "descripcion_debilidades": descripcion_debilidades,
-            "estado_debilidades": estado_debilidades,
-            "id_criterios": id_criterios
-        })
+};
+
+export const newDebilidades = async(req: Request, res: Response) =>{
+    try {
+        const  {
+            descripcion_debilidades,
+            estado_debilidades, 
+            id_criterios
+        } =  req.body;
+
+        const id_Debilidades = await Debilidades.findOne({where: {descripcion_debilidades}});
+
+        if(id_Debilidades) {
+            return res.status(400).json({
+                msg: 'Ya existe una descripcion de debilidad creado con este valor' 
+            })
+        }
+        
+        const newDebilidades = await Debilidades.create({
+                descripcion_debilidades,
+                estado_debilidades,
+                id_criterios
+            });
+
+        const debilidadesConRelaciones = await newDebilidades.reload();
+
         return res.json({
-            msg: 'Descripción de la debilidad creado correctamente'       
+            msg: 'Descripción de la debilidad creado correctamente',
+            debilidad: debilidadesConRelaciones,      
         })
     } catch (error){
+        console.log('Error en el controlador newDebilidades', error);
         res.status(400).json({
             msg: 'Ocurrio un error al crear la descripción de la debilidad',
             error
@@ -42,9 +74,9 @@ export const updateDebilidades = async(req: Request, res: Response) => {
     }
     try{
         await Debilidades.update({
-            descripcion_debilidades: descripcion_debilidades,
-            estado_debilidades: estado_debilidades,
-            id_criterios: id_criterios
+            descripcion_debilidades,
+            estado_debilidades,
+            id_criterios
             },
             {where: {id_debilidades: id}}
         )

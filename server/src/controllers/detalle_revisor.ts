@@ -19,7 +19,7 @@ export const newDetalle_Revisor = async(req: Request, res: Response) =>{
          await Detalle_Revisor.create({
             "revisado_revisor": revisado_revisor,
             "estado_revisor": estado_revisor,
-            "comentario_Revisor": comentario_revisor
+            "comentario_revisor": comentario_revisor
         })
         return res.json({
             msg: 'detalle del revisor creado correctamente'       

@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class CriterioService {
 
-  private apiUrl = 'http://localhost:3000/api/criterio';
+  private apiUrl = 'http://localhost:3000/api/criterios';
 
   constructor(private http: HttpClient) { }
 

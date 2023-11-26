@@ -11,30 +11,52 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDebilidades = exports.getOneDebilidades = exports.updateDebilidades = exports.newDebilidades = exports.getDebilidades = void 0;
 const debilidades_1 = require("../models/debilidades");
+const criterio_1 = require("../models/criterio");
 const getDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listDebilidades = yield debilidades_1.Debilidades.findAll({ attributes: ['id_debilidades', 'descripcion_debilidades', 'estado_debilidades', 'id_criterios'] });
-    res.json(listDebilidades);
+    try {
+        const listDebilidades = yield debilidades_1.Debilidades.findAll({
+            attributes: [
+                'id_debilidades',
+                'descripcion_debilidades',
+                'estado_debilidades',
+            ],
+            include: [
+                { model: criterio_1.Criterio, attributes: ['nombre_criterios'] },
+            ],
+        });
+        res.json(listDebilidades);
+    }
+    catch (error) {
+        console.error('Error en el controlador getDebilidades: ', error);
+        res.status(500).json({
+            msg: 'Ocurrio un error en el servidor',
+            error,
+        });
+    }
 });
 exports.getDebilidades = getDebilidades;
 const newDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { descripcion_debilidades, estado_debilidades, id_criterios } = req.body;
-    const id_Debilidades = yield debilidades_1.Debilidades.findOne({ where: { descripcion_debilidades: descripcion_debilidades } });
-    if (id_Debilidades) {
-        return res.status(400).json({
-            msg: 'Ya existe una descripcion de debilidad creado con este valor'
-        });
-    }
     try {
-        yield debilidades_1.Debilidades.create({
-            "descripcion_debilidades": descripcion_debilidades,
-            "estado_debilidades": estado_debilidades,
-            "id_criterios": id_criterios
+        const { descripcion_debilidades, estado_debilidades, id_criterios } = req.body;
+        const id_Debilidades = yield debilidades_1.Debilidades.findOne({ where: { descripcion_debilidades } });
+        if (id_Debilidades) {
+            return res.status(400).json({
+                msg: 'Ya existe una descripcion de debilidad creado con este valor'
+            });
+        }
+        const newDebilidades = yield debilidades_1.Debilidades.create({
+            descripcion_debilidades,
+            estado_debilidades,
+            id_criterios
         });
+        const debilidadesConRelaciones = yield newDebilidades.reload();
         return res.json({
-            msg: 'Descripción de la debilidad creado correctamente'
+            msg: 'Descripción de la debilidad creado correctamente',
+            debilidad: debilidadesConRelaciones,
         });
     }
     catch (error) {
+        console.log('Error en el controlador newDebilidades', error);
         res.status(400).json({
             msg: 'Ocurrio un error al crear la descripción de la debilidad',
             error
@@ -53,9 +75,9 @@ const updateDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     try {
         yield debilidades_1.Debilidades.update({
-            descripcion_debilidades: descripcion_debilidades,
-            estado_debilidades: estado_debilidades,
-            id_criterios: id_criterios
+            descripcion_debilidades,
+            estado_debilidades,
+            id_criterios
         }, { where: { id_debilidades: id } });
         return res.json({
             msg: 'La debilidad con ID:' + id + ' se ha actualizado correctamente'

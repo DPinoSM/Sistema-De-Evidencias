@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Criterio = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-exports.Criterio = connection_1.default.define('criterio', {
+exports.Criterio = connection_1.default.define('criterios', {
     "id_criterios": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     "nombre_criterios": { type: sequelize_1.DataTypes.STRING },
     "codigo_criterios": { type: sequelize_1.DataTypes.INTEGER },

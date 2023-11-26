@@ -65,7 +65,7 @@ class Server {
         this.app.use('/api/users', user_1.default);
         this.app.use('/api/unidad', unidad_1.default);
         this.app.use('/api/registro', registro_1.default);
-        this.app.use('/api/criterio', criterio_1.default);
+        this.app.use('/api/criterios', criterio_1.default);
         this.app.use('/api/proceso', proceso_1.default);
         this.app.use('/api/ambitoacademico', ambito_academico_1.default);
         this.app.use('/api/facultad', facultad_1.default);
@@ -76,7 +76,7 @@ class Server {
         this.app.use('/api/dac', detalle_dac_1.default);
         this.app.use('/api/comite', detalle_comite_1.default);
         this.app.use('/api/debilidades', debilidades_1.default);
-        this.app.use('api/revisor', detalle_revisor_1.default);
+        this.app.use('/api/revisor', detalle_revisor_1.default);
     }
     midlewares() {
         //parseo body

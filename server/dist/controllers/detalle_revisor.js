@@ -28,7 +28,7 @@ const newDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, funct
         yield detalle_revisor_1.Detalle_Revisor.create({
             "revisado_revisor": revisado_revisor,
             "estado_revisor": estado_revisor,
-            "comentario_Revisor": comentario_revisor
+            "comentario_revisor": comentario_revisor
         });
         return res.json({
             msg: 'detalle del revisor creado correctamente'
