@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { getEvidencias, newEvidencia, getEvidencia, deleteEvidencia, updateEvidencia, buscarEvidencia } from '../controllers/evidencias';
+import validateToken from './validate-token';
+const router = Router();
+router.get('/lista',validateToken,  getEvidencias);
+router.post('/', validateToken, newEvidencia);
+router.get('/:id',validateToken,  getEvidencia);
+router.delete('/:id',validateToken,  deleteEvidencia);
+router.put('/:id', validateToken, updateEvidencia);
+router.get('/buscar', validateToken, buscarEvidencia); 
+export default router;

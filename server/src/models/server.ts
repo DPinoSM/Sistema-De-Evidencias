@@ -16,6 +16,7 @@ import routerDac from '../routes/detalle_dac';
 import routerComite from '../routes/detalle_comite';
 import routerDebilidades from '../routes/debilidades';
 import routerRevisor from '../routes/detalle_revisor';
+import routerEvidencias from '../routes/evidencias';
 import { Rol } from './rol';
 import { User } from './user';
 import { Unidad } from './unidad';
@@ -32,6 +33,7 @@ import { Detalle_DAC } from './detalle_dac';
 import { Detalle_Comite} from './detalle_comite';
 import { Debilidades} from './debilidades';
 import { Detalle_Revisor } from './detalle_revisor';
+import { Evidencias } from './evidencias';
 import router from '../routes/roles';
 
 
@@ -67,7 +69,8 @@ class Server {
         this.app.use('/api/dac', routerDac);
         this.app.use('/api/comite', routerComite);
         this.app.use('/api/debilidades', routerDebilidades);
-        this.app.use('/api/revisor', routerRevisor)
+        this.app.use('/api/revisor', routerRevisor);
+        this.app.use('/api/evidencias', routerEvidencias);
     }
     midlewares() {
         //parseo body
@@ -93,6 +96,7 @@ class Server {
             await Detalle_Comite.sync()
             await Debilidades.sync()
             await Detalle_Revisor.sync()
+            await Evidencias.sync()
         }catch (error){
             console.error('No se ha podido conectar a la base de datos');
         }
