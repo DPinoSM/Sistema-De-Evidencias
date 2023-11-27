@@ -92,12 +92,14 @@ export class NewEvidenciaComponent implements OnInit {
     private impactoService: ImpactoService,
     private estadoService: EstadoService,
     private authService: AuthService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder
+    ) 
+    {
       this.form = this.fb.group({
         numero_folio: ['', Validators.required],
         fecha_evidencia: ['', Validators.required],
-        rut_usuario: ['', Validators.required],
-        correo_usuario: ['', Validators.required],
+        rut_usuario: [null, Validators.required],
+        correo_usuario: [null, Validators.required],
         id_unidad: [null, Validators.required],
         id_proceso: [null, Validators.required],
         id_tipo_registro: [null, Validators.required],
@@ -120,7 +122,19 @@ export class NewEvidenciaComponent implements OnInit {
         asistentes_externo_administrativos: [null],
         asistentes_externo_docentes: [null],
         asistentes_externo_estudiantes: [null],
-        adjuntar_imagenes: [null],  
+        adjuntar_imagenes: [null],
+        fecha_creacion: ['', Validators.required],
+        fecha_actualizacion: ['', Validators.required],
+        id_detalle_revisor: [null, Validators.required],
+        id_detalle_dac: [null, Validators.required],
+        id_detalle_comite: [null, Validators.required],
+        id_usuario: [null, Validators.required],
+        id_registro: [null, Validators.required],
+        id_carrera: [null, Validators.required],
+        id_facultad: [null, Validators.required],
+        id_procesos: [null, Validators.required],
+        id_impacto: [null, Validators.required],
+        id_estado: [null, Validators.required],
       });
     }
     
@@ -142,12 +156,15 @@ export class NewEvidenciaComponent implements OnInit {
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
+    // Obtén la información del usuario logueado
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
 
     if (usuarioLogeadoInfo) {
-      this.rut_usuario = usuarioLogeadoInfo.rut;
-      this.correo_usuario = usuarioLogeadoInfo.correo;
-      console.log(this.rut_usuario, this.correo_usuario);
+      // Asigna los valores al formulario al inicio
+      this.form.patchValue({
+        rut_usuario: usuarioLogeadoInfo.rut,
+        correo_usuario: usuarioLogeadoInfo.correo
+      });
     }
   }
 
@@ -296,6 +313,30 @@ export class NewEvidenciaComponent implements OnInit {
       this.images.splice(index, 1);
     }
   }
+
+  // Método para crear una nueva evidencia
+crearEvidencia() {
+  if (this.form.valid) {
+    this.form.patchValue({
+      rut_usuario: this.rut_usuario,
+      correo_usuario: this.correo_usuario
+    });
+
+    const nuevaEvidencia: Evidencia = this.form.value;
+    this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
+      next: (response) => {
+        console.log('Evidencia creada con éxito', response);
+        this.form.reset();
+      },
+      error: (error) => {
+        console.error('Error al crear la evidencia', error);
+      }
+    });
+  } else {
+    console.error('Formulario no válido. Verifica los campos.');
+  }
+}
+
 }
 
 

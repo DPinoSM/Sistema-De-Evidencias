@@ -35,11 +35,14 @@ export class AuthService {
   getUsuarioLogeadoInfo(): { rut: number; correo: string } | null {
     const rut = localStorage.getItem('rut_usuario');
     const correo = localStorage.getItem('correo_usuario');
-
-    if (rut && correo) {
-      return { rut: +rut, correo };
+  
+    if (rut !== null && correo !== null) {
+      return { rut: +rut, correo: correo || '' }; 
     }
-
+  
     return null;
   }
+  
+
+  
 }

@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +19,6 @@ import { LoginComponent } from './Principal/login/login.component';
 import { AdminComponent } from './Principal/admin/admin.component';
 import { InicioComponent } from './Principal/inicio/inicio.component';
 import { ListarolComponent } from './componentes/lista-rol/listarol.component';
-import { AuthService } from './services/auth.service';
 import { ListaAmbitosAComponent } from './componentes/lista-ambitos-a/lista-ambitos-a.component';
 import { ListaUnidadComponent } from './componentes/lista-unidad/lista-unidad.component';
 import { ListaCriteriosComponent } from './componentes/lista-criterios/lista-criterios.component';
@@ -65,6 +67,9 @@ import { NewEvidenciaComponent } from './componentes/new-evidencia/new-evidencia
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
