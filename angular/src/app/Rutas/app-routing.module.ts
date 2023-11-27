@@ -18,6 +18,8 @@ import { DacComponent } from '../Principal/dac/dac.component';
 import { ComiteComponent } from '../Principal/comite/comite.component';
 import { ResponsableComponent } from '../Principal/responsable/responsable.component';
 import { AuthGuard } from '../utils/auth.guard';
+import { ListaEvidenciasComponent } from '../componentes/lista-evidencias/lista-evidencias.component';
+import { NewEvidenciaComponent } from '../componentes/new-evidencia/new-evidencia.component';
 
 
 const routes: Routes = [
@@ -38,7 +40,9 @@ const routes: Routes = [
   { path: 'process', component: ListaProcesosComponent, canActivate: [AuthGuard], data: { rol: 1 } },
   { path: 'ambitoG', component: ListaAmbitoGComponent, canActivate: [AuthGuard], data: { rol: 1 } },
   { path: 'usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard], data: { rol: 1 }},
-  { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }}
+  { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }},
+  { path: 'evidencias', component: ListaEvidenciasComponent},
+  { path: 'Cevidencias', component: NewEvidenciaComponent}
   
 ];
 

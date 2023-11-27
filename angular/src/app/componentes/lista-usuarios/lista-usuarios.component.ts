@@ -34,7 +34,8 @@ export class ListaUsuariosComponent implements OnInit {
     private usuarioService: UsuarioService, 
     private rolService: RolService, 
     private unidadService: UnidadService, 
-    private toastr: ToastrService) 
+    private toastr: ToastrService
+    ) 
     {
     this.form = new FormGroup({
       rut_usuario: new FormControl(null, [Validators.required]),

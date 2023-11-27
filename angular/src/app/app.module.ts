@@ -34,6 +34,8 @@ import { ResponsableComponent } from './Principal/responsable/responsable.compon
 
 //interceptores
 import { AddTokenInterceptor } from './utils/add-token.interceptor';
+import { ListaEvidenciasComponent } from './componentes/lista-evidencias/lista-evidencias.component';
+import { NewEvidenciaComponent } from './componentes/new-evidencia/new-evidencia.component';
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import { AddTokenInterceptor } from './utils/add-token.interceptor';
     SidenavComponent,
     DacComponent,
     ComiteComponent,
-    ResponsableComponent
+    ResponsableComponent,
+    ListaEvidenciasComponent,
+    NewEvidenciaComponent
   ],
   imports: [
     BrowserModule,

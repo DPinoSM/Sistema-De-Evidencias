@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -60,8 +60,18 @@ export class FacultadService {
   }
 
   // Manejo de errores
-  private handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);
-    return 'Error en la solicitud. Por favor, inténtalo de nuevo más tarde.';
+
+    let errorMessage = 'Error en la solicitud. Por favor, inténtalo de nuevo más tarde.';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error del lado del cliente: ${error.error.message}`;
+    } else if (error.status === 404) {
+      errorMessage = 'No se encontró el recurso solicitado.';
+    } else if (error.status === 500) {
+      errorMessage = 'Error del servidor interno. Por favor, inténtalo más tarde.';
+    }
+
+    return throwError(() => errorMessage);
   }
 }

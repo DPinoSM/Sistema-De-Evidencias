@@ -65,3 +65,24 @@ a {
     flex: 1;
     padding: auto; 
   }
+
+
+  .sub-menu {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 5px; 
+  }
+  
+  .sub-menu li {
+    margin-left: 20px;
+  }
+  
+  .nav-list-item.sub-menu-open {
+    margin-bottom: 5px; 
+  }
+  
+  .nav-list-item.sub-menu-open:hover {
+    background-color: transparent; 
+    border-radius: 0;
+  }
+  

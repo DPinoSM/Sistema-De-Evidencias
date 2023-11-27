@@ -87,7 +87,7 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-    const { rut_usuario, clave_usuario } = req.body;
+    const { rut_usuario, clave_usuario, correo_usuario } = req.body;
 
     try {
         // Validación de usuario
@@ -112,6 +112,7 @@ export const loginUser = async (req: Request, res: Response) => {
         const token = jwt.sign(
             {
                 rut_usuario,
+                correo_usuario,
                 role: usuario.id_rol,
             },
             process.env.SECRET_KEY || 'HS384',
@@ -119,7 +120,7 @@ export const loginUser = async (req: Request, res: Response) => {
         );
 
         // Enviar el token y el rol como parte de la respuesta JSON
-        res.json({ token, rol: usuario.id_rol });
+        res.json({ token, rol: usuario.id_rol, rut_usuario, correo_usuario });
     } catch (error) {
         console.error('Error en el controlador loginUser:', error);
         res.status(500).json({
