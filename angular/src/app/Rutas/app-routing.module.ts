@@ -20,6 +20,7 @@ import { ResponsableComponent } from '../Principal/responsable/responsable.compo
 import { AuthGuard } from '../utils/auth.guard';
 import { ListaEvidenciasComponent } from '../componentes/lista-evidencias/lista-evidencias.component';
 import { NewEvidenciaComponent } from '../componentes/new-evidencia/new-evidencia.component';
+import { ListaDebilidadComponent } from '../componentes/lista-debilidad/lista-debilidad.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
   { path: 'ambitoG', component: ListaAmbitoGComponent, canActivate: [AuthGuard], data: { rol: 1 } },
   { path: 'usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard], data: { rol: 1 }},
   { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }},
+  { path: 'debilidad', component: ListaDebilidadComponent, canActivate: [AuthGuard], data: { rol: 1}},
   { path: 'evidencias', component: ListaEvidenciasComponent},
   { path: 'Cevidencias', component: NewEvidenciaComponent}
   

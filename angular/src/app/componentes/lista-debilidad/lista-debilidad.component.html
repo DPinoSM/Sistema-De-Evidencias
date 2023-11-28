@@ -1,0 +1,97 @@
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+        <div class="container">
+          <div class="title">
+            <h4>Listado de Debilidades</h4>
+            <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarDebilidad(debilidadEditId)">{{ 'Agregar Debilidad' }}</button>
+          </div>
+          <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarDebilidad">
+            <div class="form-container">
+              <h3>{{ debilidadEditId ? 'Editar Debilidad' : 'Agregar Debilidad' }}</h3>
+              <form [formGroup]="form" (ngSubmit)="crearOEditarDebilidad()">
+                    <div class="form-group mt-3">
+                      <label for="descripcion_debilidades">Descripción de la Debilidad</label>
+                      <input type="text" id="descripcion_debilidades" class="form-control" formControlName="descripcion_debilidades" required>
+                      <div class="error-message error-text" *ngIf="form.get('descripcion_debilidades')?.invalid && (form.get('descripcion_debilidades')?.dirty || form.get('descripcion_debilidades')?.touched)">
+                        La Descripción de la Debilidad es obligatoria.
+                      </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="id_criterios">Criterio</label>
+                        <select id="id_criterios" class="form-control" formControlName="id_criterios" required>
+                            <option *ngFor="let criterio of criterios" [value]="criterio.id_criterios">{{ criterio.nombre_criterios }}</option>
+                          </select>                          
+                        <div class="error-message error-text" *ngIf="form.get('id_criterios')?.invalid && (form.get('id_criterios')?.dirty || form.get('id_criterios')?.touched)">
+                          El Criterio es obligatorio.
+                        </div>
+                      </div>
+                      <div class="form-group mt-3" *ngIf="!debilidadEditId">
+                        <label for="estado_debilidades">Estado de las Debilidades</label>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="estado_debilidades" formControlName="estado_debilidades">
+                          <label class="form-check-label" for="estado_debilidades">Activo</label>
+                        </div>
+                        <div class="error-message error-text" *ngIf="form.get('estado_debilidades')?.invalid && (form.get('estado_debilidades')?.dirty || form.get('estado_debilidades')?.touched)">
+                          El Estado de las Debilidades es obligatorio.
+                        </div>
+                      </div>
+                      
+                      
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicionDebilidad()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">{{ debilidadEditId ? 'Guardar' : 'Aceptar' }}</button>
+                      </div>
+                      <div class="error-message" *ngIf="errorMsg">
+                        {{ errorMsg }}
+                      </div>
+                    </form>
+            </div>
+          </div>
+          <div class="table-container mt-4">
+            <div class="search-container">
+              <input type="text" placeholder="Buscar por Descripción" [(ngModel)]="searchTerm" (input)="realizarBusquedaDebilidad()">
+              <button class="btn" (click)="realizarBusquedaDebilidad()"><i class="fas fa-search"></i></button>
+            </div>
+            <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+              <thead>
+                <tr>
+                  <th scope="col">ID Debilidad</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Criterio</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let debilidad of debilidades | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+                  <td style="border: 1px solid black;">{{ debilidad.id_debilidades }}</td>
+                  <td style="border: 1px solid black;">{{ debilidad.descripcion_debilidades }}</td>
+                  <td style="border: 1px solid black;">{{ debilidad.criterio?debilidad.criterio.nombre_criterios : ''}}</td>
+                  <td style="border: 1px solid black;">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" [checked]="debilidad.estado_debilidades" (change)="cambiarEstadoDebilidad(debilidad.id_debilidades)">
+                      <label class="form-check-label"></label>
+                    </div>
+                  </td>
+                  
+                  <td style="border: 1px solid black;">
+                    <button type="button" class="btn" (click)="mostrarAgregarEditarDebilidad(debilidad.id_debilidades)">
+                      <i class="fas fa-edit icon-no-bg"></i>
+                    </button>
+                    <button type="button" class="btn ms-2" (click)="eliminarDebilidad(debilidad.id_debilidades)">
+                      <i class="fa fa-trash icon-no-bg"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

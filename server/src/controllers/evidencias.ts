@@ -7,6 +7,7 @@ import { Detalle_DAC } from '../models/detalle_dac';
 import { Detalle_Comite } from '../models/detalle_comite';
 import { User } from '../models/user';
 import { Debilidades } from '../models/debilidades';
+import { Criterio } from '../models/criterio';
 import { AmbitoGeografico } from '../models/ambito_geografico';
 import { AmbitoAcademico } from '../models/ambito_academico';
 import { Registro } from '../models/registro';
@@ -46,6 +47,7 @@ export const newEvidencia = async (req: Request, res: Response) => {
             id_detalle_comite,
             id_usuario,
             id_debilidades,
+            id_criterios,
             id_unidad,
             id_ambito_geografico,
             id_ambito_academico,
@@ -93,6 +95,7 @@ export const newEvidencia = async (req: Request, res: Response) => {
             id_detalle_comite,
             id_usuario,
             id_debilidades,
+            id_criterios,
             id_unidad,
             id_ambito_geografico,
             id_ambito_academico,
@@ -153,6 +156,7 @@ export const getEvidencias = async (req: Request, res: Response) => {
                 { model: Detalle_Comite, attributes: ['revisado_comite','comentario_comite'] },
                 { model: User, attributes: ['nombre_usuario'] },
                 { model: Debilidades, attributes: ['descripcion_debilidades'] },
+                { model: Criterio, attributes: ['nombre_criterios'] },
                 { model: Unidad, attributes: ['nombre_unidad'] },
                 { model: AmbitoGeografico, attributes: ['nombre_ambito_geografico']},
                 { model: AmbitoAcademico, attributes: ['nombre_ambito_academico']},
@@ -255,6 +259,7 @@ export const updateEvidencia = async (req: Request, res: Response) => {
             id_detalle_comite,
             id_usuario,
             id_debilidades,
+            id_criterios,
             id_unidad,
             id_ambito_geografico,
             id_ambito_academico,
@@ -303,6 +308,7 @@ export const updateEvidencia = async (req: Request, res: Response) => {
                 id_detalle_comite,
                 id_usuario,
                 id_debilidades,
+                id_criterios,
                 id_unidad,
                 id_ambito_geografico,
                 id_ambito_academico,

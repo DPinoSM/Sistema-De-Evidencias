@@ -20,6 +20,7 @@ const facultad_1 = require("./facultad");
 const proceso_1 = require("./proceso");
 const impacto_1 = require("./impacto");
 const estado_1 = require("./estado");
+const criterio_1 = require("./criterio");
 exports.Evidencias = connection_1.default.define('evidencias', {
     id_evidencias: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     numero_folio: { type: sequelize_1.DataTypes.STRING },
@@ -49,6 +50,7 @@ exports.Evidencias = connection_1.default.define('evidencias', {
     id_detalle_comite: { type: sequelize_1.DataTypes.INTEGER },
     id_usuario: { type: sequelize_1.DataTypes.INTEGER },
     id_debilidades: { type: sequelize_1.DataTypes.INTEGER },
+    ID_criterios: { type: sequelize_1.DataTypes.INTEGER },
     id_unidad: { type: sequelize_1.DataTypes.INTEGER },
     id_ambito_geografico: { type: sequelize_1.DataTypes.INTEGER },
     id_ambito_academico: { type: sequelize_1.DataTypes.INTEGER },
@@ -67,6 +69,7 @@ exports.Evidencias.belongsTo(detalle_dac_1.Detalle_DAC, { foreignKey: 'id_detall
 exports.Evidencias.belongsTo(detalle_comite_1.Detalle_Comite, { foreignKey: 'id_detalle_comite' });
 exports.Evidencias.belongsTo(user_1.User, { foreignKey: 'id_usuario' });
 exports.Evidencias.belongsTo(debilidades_1.Debilidades, { foreignKey: 'id_debilidades' });
+exports.Evidencias.belongsTo(criterio_1.Criterio, { foreignKey: 'id_criterios' });
 exports.Evidencias.belongsTo(unidad_1.Unidad, { foreignKey: 'id_unidad' });
 exports.Evidencias.belongsTo(ambito_geografico_1.AmbitoGeografico, { foreignKey: 'id_ambito_geografico' });
 exports.Evidencias.belongsTo(ambito_academico_1.AmbitoAcademico, { foreignKey: 'id_ambito_academico' });

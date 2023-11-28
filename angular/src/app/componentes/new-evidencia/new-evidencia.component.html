@@ -32,7 +32,6 @@
                     <label for="numero_folio">N° Folio:</label>
                     <input type="text" formControlName="numero_folio" class="form-control" />
                   </div>
-                  <div class="row mb-3">
                     <div class="col">
                       <label for="fecha_evidencia">Fecha Actual:</label>
                       <input matInput [matDatepicker]="picker" formControlName="fecha_evidencia" class="form-control" />
@@ -40,8 +39,6 @@
                       <mat-datepicker #picker></mat-datepicker>
                     </div>
                   </div>
-
-                </div>
 
                 <!-- RUT y Correo del Usuario -->
                 <div class="row mb-3">
@@ -78,9 +75,11 @@
                 <!-- Tipo Registro y N° Plan de Mejora -->
                 <div class="row mb-3">
                   <div class="col">
-                    <label for="id_tipo_registro">Tipo Registro:</label>
-                    <select formControlName="id_tipo_registro" class="form-control">
-                      <!-- Agrega las opciones para Tipo Registro -->
+                    <label for="id_registro">Tipo Registro:</label>
+                    <select formControlName="id_registro" class="form-control">
+                      <option *ngFor="let r of registro" [value]="r.id_registro">
+                        {{ r.datos_registro }}
+                      </option>
                     </select>
                   </div>
                   <div class="col">
@@ -111,13 +110,13 @@
                 </div>
                 <div class="row mb-3">
                   <div class="col">
-                    <label for="id_criterio">Criterio:</label>
-                    <select formControlName="id_criterio" class="form-control">
-                      <option *ngFor="let criterio of criterio" [value]="criterio.id_criterios">
+                    <label for="id_criterios">Criterio:</label>
+                    <select formControlName="id_criterios" class="form-control">
+                      <option *ngFor="let criterio of criterios" [value]="criterio.id_criterios">
                         {{ criterio.nombre_criterios }}
                       </option>
                     </select>
-                  </div>
+                  </div >
                   <div class="col">
                     <label for="id_debilidades">Debilidades:</label>
                     <select formControlName="id_debilidades" class="form-control">
@@ -127,6 +126,46 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_facultad">Facultad:</label>
+                    <select formControlName="id_facultad" class="form-control">
+                      <option *ngFor="let facultad of facultad" [value]="facultad.id_facultad">
+                        {{ facultad.nombre_facultad }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="id_carrera">Carrera:</label>
+                    <select formControlName="id_carrera" class="form-control">
+                      <option *ngFor="let carrera of carrera" [value]="carrera.id_carrera">
+                        {{ carrera.nombre_carrera }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_impacto">Impacto:</label>
+                    <select formControlName="id_impacto" class="form-control">
+                      <option *ngFor="let impacto of impacto" [value]="impacto.id_impacto">
+                        {{ impacto.interno_externo }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="id_estado">Estado:</label>
+                    <select formControlName="id_estado" class="form-control">
+                      <option *ngFor="let estado of estado" [value]="estado.id_estado">
+                        {{ estado.online_presencial }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+
                 <!-- Descripcion -->
                 <div class="row mb-3">
                   <div class="col">
@@ -262,13 +301,22 @@
                 </div>
               </div>
 
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="fecha_creacion">Fecha Creación:</label>
+                  <input matInput [matDatepicker]="pickerFechaCreacion" formControlName="fecha_creacion" class="form-control" />
+                  <mat-datepicker-toggle matSuffix [for]="pickerFechaCreacion"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFechaCreacion></mat-datepicker>
+                </div>
+              </div>
+
               <!-- Botones Cancelar y Enviar -->
               <div class="row">
                 <div class="col">
                   <button type="button" class="btn btn-secondary m-4">
                     Cancelar
                   </button>
-                  <button (click)="crearEvidencia()">Enviar Evidencia</button>
+                  <button (click)="crearEvidencia()" class="btn btn-secondary m-4">Enviar Evidencia</button>
                 </div>
               </div>
             </div>

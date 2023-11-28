@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -24,7 +23,7 @@ export class SidenavComponent implements OnInit {
     {
       name: 'Debilidades',
       icon: 'fa-solid fa-exclamation-circle',
-      link: '/debilidades',
+      link: '/debilidad',
     },
     {
       name: 'Impacto',
