@@ -1,4 +1,4 @@
 export interface Estado {
     id_estado: number;
-    online_presencial: boolean;
+    online_presencial: string;
   }
