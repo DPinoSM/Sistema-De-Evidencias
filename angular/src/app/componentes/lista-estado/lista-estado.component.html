@@ -1,1 +1,72 @@
-<p>lista-estado works!</p>
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+        <div class="container">
+          <div class="title">
+            <h3 class="page-title">Listado de Estados</h3>
+            
+            <div class="search-container">
+              <input type="text" placeholder="Buscar por ID o descripción" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+              <button class="btn " (click)="realizarBusqueda()"></button>
+              <i class="fas fa-search"></i>
+            </div>
+            
+            <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarEstado(editEstadoId)">{{ 'Agregar Estado' }}</button>          
+          </div>
+  
+          <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarEstado">
+            <div class="form-container">
+              <h3>{{ editEstadoId ? 'Editar Estado' : 'Agregar Estado' }}</h3>
+              <form [formGroup]="form" (ngSubmit)="crearNuevoEstado()">
+                <div class="form-group">
+                  <label for="online_presencial">Descripción del Estado</label>
+                  <input type="text" id="online_presencial" class="form-control" formControlName="online_presencial" required>
+                  <div class="error-message error-text" *ngIf="form.get('online_presencial')?.invalid && (form.get('online_presencial')?.dirty || form.get('online_presencial')?.touched)">
+                    La Descripción del Estado es obligatoria.
+                  </div>
+                </div>
+                
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
+                  <button type="submit" class="btn btn-primary ">{{ editEstadoId ? 'Guardar' : 'Aceptar' }}</button>
+                </div>
+                <div class="error-message" *ngIf="errorMsg">
+                  {{ errorMsg }}
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="table-container mt-4">
+            <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+              <thead>
+                <tr>
+                  <th scope="col">ID Estado</th>
+                  <th scope="col">Descripción del Estado</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let estado of estados | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+  
+                  <td style="border: 1px solid black;">{{ estado.id_estado }}</td>
+                  <td style="border: 1px solid black;">{{ estado.online_presencial }}</td>
+                  <td style="border: 1px solid black;">
+                    <button type="button" class="btn" (click)="mostrarFormularioAgregarEditarEstado(estado.id_estado)">
+                      <i class="fas fa-edit icon-no-bg"></i>
+                    </button>
+                    <button type="button" class="btn ms-2" (click)="eliminarEstado(estado.id_estado)">
+                      <i class="fa fa-trash icon-no-bg"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
