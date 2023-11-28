@@ -20,6 +20,8 @@ export const newEvidencia = async (req: Request, res: Response) => {
     try {
         const {
             numero_folio,
+            correo_usuario,
+            rut_usuario,
             fecha_evidencia,
             numero_de_mejoras,
             descripcion,
@@ -30,6 +32,15 @@ export const newEvidencia = async (req: Request, res: Response) => {
             nombre_corto_evidencia,
             fecha_creacion,
             fecha_actualizacion,
+            asistentes_internos_autoridades,
+            asistentes_internos_administrativos,
+            asistentes_internos_docentes,
+            asistentes_internos_estudiantes,
+            asistentes_externos_autoridades,
+            asistentes_externos_administrativos,
+            asistentes_externos_docentes,
+            asistentes_externos_estudiantes,
+            archivo_adjunto,
             id_detalle_revisor,
             id_detalle_dac,
             id_detalle_comite,
@@ -56,6 +67,8 @@ export const newEvidencia = async (req: Request, res: Response) => {
 
         const newEvidencia = await Evidencias.create({
             numero_folio,
+            correo_usuario,
+            rut_usuario,
             fecha_evidencia,
             numero_de_mejoras,
             descripcion,
@@ -66,6 +79,15 @@ export const newEvidencia = async (req: Request, res: Response) => {
             nombre_corto_evidencia,
             fecha_creacion,
             fecha_actualizacion,
+            asistentes_internos_autoridades,
+            asistentes_internos_administrativos,
+            asistentes_internos_docentes,
+            asistentes_internos_estudiantes,
+            asistentes_externos_autoridades,
+            asistentes_externos_administrativos,
+            asistentes_externos_docentes,
+            asistentes_externos_estudiantes,
+            archivo_adjunto,
             id_detalle_revisor,
             id_detalle_dac,
             id_detalle_comite,
@@ -103,6 +125,8 @@ export const getEvidencias = async (req: Request, res: Response) => {
             attributes: [
                 'id_evidencias',
                 'numero_folio',
+                'correo_usuario',
+                'rut_usuario',
                 'fecha_evidencia',
                 'numero_de_mejoras',
                 'descripcion',
@@ -112,7 +136,16 @@ export const getEvidencias = async (req: Request, res: Response) => {
                 'palabra_clave',
                 'nombre_corto_evidencia',
                 'fecha_creacion',
-                'fecha_actualizacion'
+                'fecha_actualizacion',
+                'asistentes_internos_autoridades',
+                'asistentes_internos_administrativos',
+                'asistentes_internos_docentes',
+                'asistentes_internos_estudiantes',
+                'asistentes_externos_autoridades',
+                'asistentes_externos_administrativos',
+                'asistentes_externos_docentes',
+                'asistentes_externos_estudiantes',
+                'archivo_adjunto'
             ],
             include: [
                 { model: Detalle_Revisor, attributes: ['revisado_revisor','comentario_revisor'] },
@@ -168,7 +201,7 @@ export const deleteEvidencia = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        const idUEvidencia = await User.findOne({ where: { id_evidencia: id } });
+        const idUEvidencia = await Evidencias.findOne({ where: { id_evidencias: id } });
 
         if (!idUEvidencia) {
             return res.status(400).json({
@@ -196,6 +229,8 @@ export const updateEvidencia = async (req: Request, res: Response) => {
     try {
         const {
             numero_folio,
+            correo_usuario,
+            rut_usuario,
             fecha_evidencia,
             numero_de_mejoras,
             descripcion,
@@ -206,6 +241,15 @@ export const updateEvidencia = async (req: Request, res: Response) => {
             nombre_corto_evidencia,
             fecha_creacion,
             fecha_actualizacion,
+            asistentes_internos_autoridades,
+            asistentes_internos_administrativos,
+            asistentes_internos_docentes,
+            asistentes_internos_estudiantes,
+            asistentes_externos_autoridades,
+            asistentes_externos_administrativos,
+            asistentes_externos_docentes,
+            asistentes_externos_estudiantes,
+            archivo_adjunto,
             id_detalle_revisor,
             id_detalle_dac,
             id_detalle_comite,
@@ -233,6 +277,8 @@ export const updateEvidencia = async (req: Request, res: Response) => {
         await Evidencias.update(
             {
                 numero_folio,
+                correo_usuario,
+                rut_usuario,
                 fecha_evidencia,
                 numero_de_mejoras,
                 descripcion,
@@ -243,6 +289,15 @@ export const updateEvidencia = async (req: Request, res: Response) => {
                 nombre_corto_evidencia,
                 fecha_creacion,
                 fecha_actualizacion,
+                asistentes_internos_autoridades,
+                asistentes_internos_administrativos,
+                asistentes_internos_docentes,
+                asistentes_internos_estudiantes,
+                asistentes_externos_autoridades,
+                asistentes_externos_administrativos,
+                asistentes_externos_docentes,
+                asistentes_externos_estudiantes,
+                archivo_adjunto,
                 id_detalle_revisor,
                 id_detalle_dac,
                 id_detalle_comite,
