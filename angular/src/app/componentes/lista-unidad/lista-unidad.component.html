@@ -1,19 +1,22 @@
 <div class="container-fluid g-0">
   <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
   <main>
-    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+      [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
     <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
       <div class="container">
         <div class="title">
           <h4>Listado de Unidades</h4>
 
           <div class="search-container">
-            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusquedaUnidad()">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm"
+              (input)="realizarBusquedaUnidad()">
             <button class="btn " (click)="realizarBusquedaUnidad()"></button>
             <i class="fas fa-search"></i>
           </div>
 
-          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarUnidad(unidadEditId)">{{ 'Agregar Unidad' }}</button>
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarUnidad(unidadEditId)">{{ 'Agregar
+            Unidad' }}</button>
         </div>
 
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarUnidad">
@@ -23,11 +26,12 @@
               <div class="form-group">
                 <label for="nombre_unidad">Nombre de la Unidad</label>
                 <input type="text" id="nombre_unidad" class="form-control" formControlName="nombre_unidad" required>
-                <div class="error-message error-text" *ngIf="form.get('nombre_unidad')?.invalid && (form.get('nombre_unidad')?.dirty || form.get('nombre_unidad')?.touched)">
+                <div class="error-message error-text"
+                  *ngIf="form.get('nombre_unidad')?.invalid && (form.get('nombre_unidad')?.dirty || form.get('nombre_unidad')?.touched)">
                   El Nombre de la Unidad es obligatorio.
                 </div>
               </div>
-              
+
               <div *ngIf="!unidadEditId" class="form-group">
                 <label for="unidad_defecto">Estado de la Unidad</label>
                 <div class="form-check form-switch">
@@ -57,12 +61,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let unidad of unidades  | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+              <tr *ngFor="let unidad of unidades  | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                style="border: 1px solid black;">
                 <td style="border: 1px solid black;">{{ unidad.id_unidad }}</td>
                 <td style="border: 1px solid black;">{{ unidad.nombre_unidad }}</td>
                 <td style="border: 1px solid black;">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" [checked]="unidad.unidad_defecto" (change)="cambiarEstadoUnidad(unidad.id_unidad)">
+                    <input class="form-check-input" type="checkbox" [checked]="unidad.unidad_defecto"
+                      (change)="cambiarEstadoUnidad(unidad.id_unidad)">
                     <label class="form-check-label"></label>
                   </div>
                 </td>
@@ -77,7 +83,8 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+            nextLabel="Siguiente"></pagination-controls>
         </div>
       </div>
     </div>

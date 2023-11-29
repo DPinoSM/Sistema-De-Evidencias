@@ -1,4 +1,7 @@
 /* styles.css */
+.sidenav-content{
+    position: fixed;
+}
 .image-container {
     position: fixed;
     top: 4rem;
