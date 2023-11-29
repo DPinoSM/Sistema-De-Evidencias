@@ -128,7 +128,7 @@ export class NewEvidenciaComponent implements OnInit {
         asistentes_externo_docentes: [null, Validators.required],//
         asistentes_externo_estudiantes: [null, Validators.required],//
         adjuntar_imagenes: [null, Validators.required],//
-        fecha_creacion: [new Date(), Validators.required]//
+        fecha_creacion: [{ value: new Date(), disabled: true }, Validators.required],//
       });
     }
     
@@ -151,14 +151,12 @@ export class NewEvidenciaComponent implements OnInit {
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
-    // Obtén la información del usuario logueado
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
 
     if (usuarioLogeadoInfo) {
-      // Asigna los valores al formulario al inicio
       this.form.patchValue({
         rut_usuario: usuarioLogeadoInfo.rut,
-        correo_usuario: usuarioLogeadoInfo.correo
+        correo_usuario: usuarioLogeadoInfo.correo,
       });
     }
   }

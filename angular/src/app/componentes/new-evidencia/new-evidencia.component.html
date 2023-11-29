@@ -51,6 +51,17 @@
                     <div>{{ form.get('correo_usuario')?.value }}</div>
                   </div>
                 </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_usuario">Nombre:</label>
+                    <select formControlName="id_usuario" class="form-control">
+                      <option *ngFor="let Usuario of usuarios" [value]="Usuario.id_usuario">
+                        {{ Usuario.nombre_usuario }}
+                      </option>
+                    </select>
+                  </div>
+                  </div>
                 
                 <!-- Unidad y Proceso -->
                 <div class="row mb-3">
@@ -304,11 +315,12 @@
               <div class="row mb-3">
                 <div class="col">
                   <label for="fecha_creacion">Fecha Creación:</label>
-                  <input matInput [matDatepicker]="pickerFechaCreacion" formControlName="fecha_creacion" class="form-control" />
-                  <mat-datepicker-toggle matSuffix [for]="pickerFechaCreacion"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerFechaCreacion></mat-datepicker>
+                  <span>{{ form.get('fecha_creacion')?.value | date: 'dd/MM/yyyy' }}</span>
                 </div>
               </div>
+              
+              
+              
 
               <!-- Botones Cancelar y Enviar -->
               <div class="row">

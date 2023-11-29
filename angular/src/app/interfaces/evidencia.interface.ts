@@ -3,6 +3,7 @@ import { DetalleDAC } from "./D_dac.interface";
 import { DetalleComite } from "./D_comite.interface";
 import { User } from "./usuario.interface";
 import { Debilidad } from "./debilidades.interface";
+import { Criterio } from "./criterio.interface";
 import { Unidad } from "./unidad.interface";
 import { AmbitoGeografico } from "./ambito-geografico.interface";
 import { AmbitoAcademico } from "./ambito-academico.interface";
@@ -30,6 +31,7 @@ export interface Evidencia {
     detalle_dac?: DetalleDAC;
     detalle_comite?: DetalleComite;
     usuario: User;
+    criterio: Criterio;
     debilidades?: Debilidad;
     unidad?: Unidad;
     ambito_geografico?: AmbitoGeografico;
