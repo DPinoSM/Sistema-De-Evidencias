@@ -12,16 +12,17 @@ export class EvidenciasService {
 
   constructor(private http: HttpClient) {}
 
-  nuevaEvidencia(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, data)
+  
+  // Método para obtener todas las evidencias desde el backend
+  obtenerEvidencias(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/lista`)
     .pipe(
       catchError(err => this.handleError(err))
       );
   }
 
-  // Método para obtener todas las evidencias desde el backend
-  obtenerEvidencias(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/lista`)
+  nuevaEvidencia(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, data)
     .pipe(
       catchError(err => this.handleError(err))
       );

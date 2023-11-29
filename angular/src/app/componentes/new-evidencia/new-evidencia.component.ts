@@ -96,46 +96,46 @@ export class NewEvidenciaComponent implements OnInit {
     ) 
     {
       this.form = this.fb.group({
-        numero_folio: ['', Validators.required],//
-        fecha_evidencia: ['', Validators.required],//
-        rut_usuario: [null, Validators.required],//
-        correo_usuario: [null, Validators.required],//
+        numero_folio: ['', Validators.required],
+        fecha_evidencia: [null, Validators.required], // Usa null para fechas por defecto
+        rut_usuario: [null, Validators.required],
+        correo_usuario: [null, Validators.required],
         id_usuario: [null, Validators.required],
-        id_unidad: [null, Validators.required],//
-        id_procesos: [null, Validators.required],//
-        id_registro: [null, Validators.required],//
-        numero_de_mejoras: [null, Validators.required],//
-        id_ambito_academico: [null, Validators.required],//
-        id_ambito_geografico: [null, Validators.required],//
-        id_criterios: [null, Validators.required],//
-        id_debilidades: [null, Validators.required],//
-        id_carrera: [null, Validators.required],//
-        id_facultad: [null, Validators.required],//
-        id_impacto: [null, Validators.required],//
-        id_estado: [null, Validators.required],//
-        descripcion: ['', Validators.required],//
-        resultado: ['', Validators.required],//
-        almacenamiento: ['', Validators.required],//
-        unidades_personas_evidencias: [null, Validators.required],//
-        palabra_clave: ['', Validators.required],//
-        nombre_corto_evidencia: ['', Validators.required],//
-        asistentes_interno_autoridades: [null, Validators.required],//
-        asistentes_interno_administrativos: [null, Validators.required],//
-        asistentes_interno_docentes: [null, Validators.required],//
-        asistentes_interno_estudiantes: [null, Validators.required],//
-        asistentes_externo_autoridades: [null, Validators.required],//
-        asistentes_externo_administrativos: [null, Validators.required],//
-        asistentes_externo_docentes: [null, Validators.required],//
-        asistentes_externo_estudiantes: [null, Validators.required],//
-        adjuntar_imagenes: [null, Validators.required],//
-        fecha_creacion: [{ value: new Date(), disabled: true }, Validators.required],//
+        id_unidad: [null, Validators.required],
+        id_procesos: [null, Validators.required],
+        id_registro: [null, Validators.required],
+        numero_de_mejoras: [null, Validators.required],
+        id_ambito_academico: [null, Validators.required],
+        id_ambito_geografico: [null, Validators.required],
+        id_criterios: [null, Validators.required],
+        id_debilidades: [null, Validators.required],
+        id_carrera: [null, Validators.required],
+        id_facultad: [null, Validators.required],
+        id_impacto: [null, Validators.required],
+        id_estado: [null, Validators.required],
+        descripcion: ['', Validators.required],
+        resultado: ['', Validators.required],
+        almacenamiento: ['', Validators.required],
+        unidades_personas_evidencias: [null, Validators.required],
+        palabra_clave: ['', Validators.required],
+        nombre_corto_evidencia: ['', Validators.required],
+        asistentes_interno_autoridades: [null, Validators.required],
+        asistentes_interno_administrativos: [null, Validators.required],
+        asistentes_interno_docentes: [null, Validators.required],
+        asistentes_interno_estudiantes: [null, Validators.required],
+        asistentes_externo_autoridades: [null, Validators.required],
+        asistentes_externo_administrativos: [null, Validators.required],
+        asistentes_externo_docentes: [null, Validators.required],
+        asistentes_externo_estudiantes: [null, Validators.required],
+        adjuntar_imagenes: [null, Validators.required],
+        fecha_creacion: [{ value: new Date(), disabled: true }, Validators.required],
       });
+      
     }
     
     
 
   ngOnInit() {
-    this.getEvidencia();
     this.getUsers();
     this.getUnidades();
     this.getAmbitoA();
@@ -170,12 +170,6 @@ export class NewEvidenciaComponent implements OnInit {
   getUsers() {
     this.usuarioService.getUsers().subscribe((usuarios) => {
       this.usuarios = usuarios;
-    });
-  }
-
-  getEvidencia() {
-    this.evidenciasService.obtenerEvidencias().subscribe((evidencias) => {
-      this.evidencias = evidencias;
     });
   }
 
@@ -311,19 +305,36 @@ export class NewEvidenciaComponent implements OnInit {
   crearEvidencia() {
     if (this.form.valid) {
       const nuevaEvidencia: Evidencia = this.form.value;
-      this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
-        next: (response) => {
-          console.log('Evidencia creada con éxito', response);
-          this.form.reset();
-        },
-        error: (error) => {
-          console.error('Error al crear la evidencia', error);
-        }
-      });
+  
+      // Convertir FileList a Uint8Array
+      const files: FileList | null = this.form.get('adjuntar_imagenes')?.value;
+      if (files) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as ArrayBuffer;
+          const uintArray = new Uint8Array(result);
+          nuevaEvidencia.adjuntar_imagenes = uintArray;
+  
+          // Ahora puedes enviar la evidencia al servicio
+          this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
+            next: (response) => {
+              console.log('Evidencia creada con éxito', response);
+              this.form.reset();
+            },
+            error: (error) => {
+              console.error('Error al crear la evidencia', error);
+            }
+          });
+        };
+  
+        reader.readAsArrayBuffer(files[0]);
+      }
     } else {
       console.error('Formulario no válido. Verifica los campos.');
     }
   }
+  
+  
   
 
 }

@@ -47,7 +47,7 @@ export const Evidencias = sequelize.define(
         id_detalle_comite: {type: DataTypes.INTEGER},
         id_usuario: {type: DataTypes.INTEGER},
         id_debilidades: {type: DataTypes.INTEGER},
-        ID_criterios: {type: DataTypes.INTEGER},
+        id_criterios: {type: DataTypes.INTEGER},
         id_unidad: {type: DataTypes.INTEGER},
         id_ambito_geografico: {type: DataTypes.INTEGER},
         id_ambito_academico: {type: DataTypes.INTEGER},

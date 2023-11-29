@@ -50,7 +50,7 @@ exports.Evidencias = connection_1.default.define('evidencias', {
     id_detalle_comite: { type: sequelize_1.DataTypes.INTEGER },
     id_usuario: { type: sequelize_1.DataTypes.INTEGER },
     id_debilidades: { type: sequelize_1.DataTypes.INTEGER },
-    ID_criterios: { type: sequelize_1.DataTypes.INTEGER },
+    id_criterios: { type: sequelize_1.DataTypes.INTEGER },
     id_unidad: { type: sequelize_1.DataTypes.INTEGER },
     id_ambito_geografico: { type: sequelize_1.DataTypes.INTEGER },
     id_ambito_academico: { type: sequelize_1.DataTypes.INTEGER },

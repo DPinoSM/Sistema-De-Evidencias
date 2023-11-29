@@ -1,7 +1,7 @@
 <div class="container-fluid g-0">
   <app-header (SideNavToggled)="sideNavStatus = $event"></app-header>
   <main>
-    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus" [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
     <div class="display-area p-3" [ngClass]="{ 'display-area-shrink': sideNavStatus }">
       <div class="container evidencia-container">
         <div class="row mb-3 evidencia-header">
@@ -74,8 +74,8 @@
                     </select>
                   </div>
                   <div class="col">
-                    <label for="id_proceso">Proceso:</label>
-                    <select formControlName="id_proceso" class="form-control">
+                    <label for="id_procesos">Proceso:</label>
+                    <select formControlName="id_procesos" class="form-control">
                       <option *ngFor="let p of proceso" [value]="p.id_procesos">
                         {{ p.nombre_procesos }}
                       </option>
@@ -273,7 +273,7 @@
                     </div>
                   </div>
                 </div>
-              </form>
+              
               <!-- Opción para adjuntar imágenes -->
               <div class="row mb-3">
                 <div class="col">
@@ -318,8 +318,7 @@
                   <span>{{ form.get('fecha_creacion')?.value | date: 'dd/MM/yyyy' }}</span>
                 </div>
               </div>
-              
-              
+            
               
 
               <!-- Botones Cancelar y Enviar -->
@@ -331,6 +330,7 @@
                   <button (click)="crearEvidencia()" class="btn btn-secondary m-4">Enviar Evidencia</button>
                 </div>
               </div>
+            </form>
             </div>
           </div>
         </div>

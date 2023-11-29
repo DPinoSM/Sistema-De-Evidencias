@@ -60,6 +60,9 @@ module.exports = {
       id_debilidades: {
         type: Sequelize.INTEGER
       },
+      id_criterios: {
+        type: Sequelize.INTEGER
+      },
       id_unidad: {
         type: Sequelize.INTEGER
       },
@@ -95,7 +98,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-
       id_detalle_revisor_evidencias: {
         type: Sequelize.INTEGER,
         references: {
@@ -137,6 +139,15 @@ module.exports = {
         references: {
           model: 'debilidades',
           key: 'id_debilidades'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      id_criterios: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'criterios',
+          key: 'id_criterios'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -215,6 +226,8 @@ module.exports = {
       },
     });
   },
+
+  
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Evidencias');
   }

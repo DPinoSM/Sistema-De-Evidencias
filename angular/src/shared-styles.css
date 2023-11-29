@@ -1,3 +1,7 @@
+.sidenav-content{
+  position: fixed;
+}
+
 .black-border{
     border: 1px solid rgb(11, 0, 112);
   }

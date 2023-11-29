@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     id_detalle_comite_evidencias: DataTypes.INTEGER,
     id_usuario: DataTypes.INTEGER,
     id_debilidades: DataTypes.INTEGER,
+    id_criterios: DataTypes.INTEGER,
     id_unidad: DataTypes.INTEGER,
     id_ambito_geografico: DataTypes.INTEGER,
     id_ambito_academico: DataTypes.INTEGER,
