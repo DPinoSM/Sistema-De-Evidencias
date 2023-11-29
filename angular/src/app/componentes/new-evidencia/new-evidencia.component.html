@@ -1,222 +1,279 @@
 <div class="container-fluid g-0">
   <app-header (SideNavToggled)="sideNavStatus = $event"></app-header>
   <main>
-    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
-      [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
+    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
     <div class="display-area p-3" [ngClass]="{ 'display-area-shrink': sideNavStatus }">
       <div class="container evidencia-container">
         <div class="row mb-3 evidencia-header">
           <div class="col">
             <div class="container-fluid">
               <div class="row mb-3">
-                <div class="col-2">
+                <div class="col-4">
                   <img src="../../../assets/logo2.jpg" alt="Logo" class="custom-image" />
                 </div>
-                <div class="col-8 text-center">
-                  <h3>Universidad Católica del Maule</h3>
-                  <h6>Departamento de Aseguramiento y Calidad</h6>
+                <div class="col-4 text-center">
+                  <h1>Universidad Católica del Maule</h1>
+                  <h2>Departamento de Aseguramiento y Calidad</h2>
                 </div>
-                <div class="col-2 text-end">
+                <div class="col-4 text-end">
                   <img src="../../../assets/dac.png" alt="DAC Logo" class="custom-image" />
                 </div>
               </div>
               <div class="row mb-5">
                 <div class="col text-center">
-                  <h4>Documento del Sistema de Gestión de Calidad</h4>
-                  <h6>Registro del Sistema de Gestión de Calidad</h6>
-                  <h6>Identificación de Registros</h6>
+                  <h2>Documento del Sistema de Gestión de Calidad</h2>
+                  <h3>Registro del Sistema de Gestión de Calidad</h3>
+                  <h3>Identificación de Registros</h3>
                 </div>
               </div>
-              <!-- N° Folio y Fecha Actual -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="numero_folio">N° Folio:</label>
-                  <input type="text" formControlName="numero_folio" class="form-control" />
-                </div>
-                <div class="col">
-                  <label for="fecha_evidencia">Fecha Actual:</label>
-                  <input type="text" formControlName="fecha_evidencia" class="form-control" />
-                </div>
-              </div>
-
-              <!-- RUT y Correo del Usuario -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="rut_usuario">RUT del Usuario:</label>
-                  <input type="text" formControlName="rut_usuario" class="form-control" />
-                </div>
-                <div class="col">
-                  <label for="correo_usuario">Correo del Usuario:</label>
-                  <input type="text" formControlName="correo_usuario" class="form-control" />
-                </div>
-              </div>
-
-              <!-- Unidad y Proceso -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="id_unidad">Unidad:</label>
-                  <select formControlName="id_unidad" class="form-control">
-                    <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
-                      {{ unidad.nombre_unidad }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="id_proceso">Proceso:</label>
-                  <select formControlName="id_proceso" class="form-control">
-                    <option *ngFor="let p of proceso" [value]="p.id_procesos">
-                      {{ p.nombre_procesos }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Tipo Registro y N° Plan de Mejora -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="id_tipo_registro">Tipo Registro:</label>
-                  <select formControlName="id_tipo_registro" class="form-control">
-                    <!-- Agrega las opciones para Tipo Registro -->
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="numero_de_mejoras">N° Plan de Mejora:</label>
-                  <input type="text" formControlName="numero_de_mejoras" class="form-control" />
-                </div>
-              </div>
-
-              <!-- Ambito Academico y Ambito Geografico -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="id_ambito_academico">Ambito Academico:</label>
-                  <select formControlName="id_ambito_academico" class="form-control">
-                    <option *ngFor="let ambitoAcademico of academico" [value]="ambitoAcademico.id_ambito_academico">
-                      {{ ambitoAcademico.nombre_ambito_academico }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="id_ambito_geografico">Ambito Geografico:</label>
-                  <select formControlName="id_ambito_geografico" class="form-control">
-                    <option *ngFor="let ambitoGeografico of geografico" [value]="ambitoGeografico.id_ambito_geografico">
-                      {{ ambitoGeografico.nombre_ambito_geografico }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="id_criterio">Criterio:</label>
-                  <select formControlName="id_criterio" class="form-control">
-                    <option *ngFor="let criterio of criterio" [value]="criterio.id_criterios">
-                      {{ criterio.nombre_criterios }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label for="id_debilidades">Debilidades:</label>
-                  <select formControlName="id_debilidades" class="form-control">
-                    <option *ngFor="let debilidad of debilidad" [value]="debilidad.id_debilidades">
-                      {{ debilidad.descripcion_debilidades }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <!-- Descripcion -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="descripcion" class="form-label">Descripción:</label>
-                  <textarea class="form-control" id="descripcion" formControlName="descripcion" required></textarea>
-                </div>
-              </div>
-
-              <!-- Resultado -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="resultado" class="form-label">Resultado:</label>
-                  <textarea class="form-control" id="resultado" formControlName="resultado" required></textarea>
-                </div>
-              </div>
-
-              <!-- Almacenamiento -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="almacenamiento" class="form-label">Almacenamiento:</label>
-                  <textarea class="form-control" id="almacenamiento" formControlName="almacenamiento"
-                    required></textarea>
-                </div>
-              </div>
-
-              <!-- Unidades y/o Persona Relacionadas a la evidencia -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="unidades_personas_evidencias" class="form-label">Unidades y/o Persona Relacionadas a la
-                    Evidencia:</label>
-                  <textarea class="form-control" id="unidades_personas_evidencias"
-                    formControlName="unidades_personas_evidencias" required></textarea>
-                </div>
-              </div>
-
-              <!-- Palabras Clave -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="palabra_clave" class="form-label">Palabras Clave:</label>
-                  <input type="text" class="form-control" id="palabra_clave" formControlName="palabra_clave" required />
-                </div>
-              </div>
-
-              <!-- Nombre Corto Evidencia -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="nombre_corto_evidencia" class="form-label">Nombre Corto Evidencia:</label>
-                  <input type="text" class="form-control" id="nombre_corto_evidencia"
-                    formControlName="nombre_corto_evidencia" required />
-                </div>
-              </div>
-
-              <!-- Cantidad Asistentes Interno -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label>Cantidad Asistentes Interno:</label>
-                  <div class="form-group">
-                    <label for="asistentes_interno_autoridades">Autoridades:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_interno_autoridades" />
+              <form [formGroup]="form">
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="numero_folio">N° Folio:</label>
+                    <input type="text" formControlName="numero_folio" class="form-control" />
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_interno_administrativos">Administrativos:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_interno_administrativos" />
+                    <div class="col">
+                      <label for="fecha_evidencia">Fecha Evidencia:</label>
+                      <input matInput [matDatepicker]="picker" formControlName="fecha_evidencia" class="form-control" />
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_interno_docentes">Docentes:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_interno_docentes" />
+
+                <!-- RUT y Correo del Usuario -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label>RUT del Usuario:</label>
+                    <div>{{ form.get('rut_usuario')?.value }}</div>
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_interno_estudiantes">Estudiantes:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_interno_estudiantes" />
+                  <div class="col">
+                    <label>Correo del Usuario:</label>
+                    <div>{{ form.get('correo_usuario')?.value }}</div>
                   </div>
                 </div>
 
-                <!-- Cantidad Asistentes Externos -->
-                <div class="col">
-                  <label>Cantidad Asistentes Externos:</label>
-                  <div class="form-group">
-                    <label for="asistentes_externo_autoridades">Autoridades:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_externo_autoridades" />
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_usuario">Nombre:</label>
+                    <select formControlName="id_usuario" class="form-control">
+                      <option *ngFor="let Usuario of usuarios" [value]="Usuario.id_usuario">
+                        {{ Usuario.nombre_usuario }}
+                      </option>
+                    </select>
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_externo_administrativos">Administrativos:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_externo_administrativos" />
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_externo_docentes">Docentes:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_externo_docentes" />
+                
+                <!-- Unidad y Proceso -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_unidad">Unidad:</label>
+                    <select formControlName="id_unidad" class="form-control">
+                      <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                        {{ unidad.nombre_unidad }}
+                      </option>
+                    </select>
                   </div>
-                  <div class="form-group">
-                    <label for="asistentes_externo_estudiantes">Estudiantes:</label>
-                    <input type="number" class="form-control" formControlName="asistentes_externo_estudiantes" />
+                  <div class="col">
+                    <label for="id_proceso">Proceso:</label>
+                    <select formControlName="id_proceso" class="form-control">
+                      <option *ngFor="let p of proceso" [value]="p.id_procesos">
+                        {{ p.nombre_procesos }}
+                      </option>
+                    </select>
                   </div>
                 </div>
-              </div>
+
+                <!-- Tipo Registro y N° Plan de Mejora -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_registro">Tipo Registro:</label>
+                    <select formControlName="id_registro" class="form-control">
+                      <option *ngFor="let r of registro" [value]="r.id_registro">
+                        {{ r.datos_registro }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="numero_de_mejoras">N° Plan de Mejora:</label>
+                    <input type="text" formControlName="numero_de_mejoras" class="form-control" />
+                  </div>
+                </div>
+
+                <!-- Ambito Academico y Ambito Geografico -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_ambito_academico">Ambito Academico:</label>
+                    <select formControlName="id_ambito_academico" class="form-control">
+                      <option *ngFor="let ambitoAcademico of academico" [value]="ambitoAcademico.id_ambito_academico">
+                        {{ ambitoAcademico.nombre_ambito_academico }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="id_ambito_geografico">Ambito Geografico:</label>
+                    <select formControlName="id_ambito_geografico" class="form-control">
+                      <option *ngFor="let ambitoGeografico of geografico"
+                        [value]="ambitoGeografico.id_ambito_geografico">
+                        {{ ambitoGeografico.nombre_ambito_geografico }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_criterios">Criterio:</label>
+                    <select formControlName="id_criterios" class="form-control">
+                      <option *ngFor="let criterio of criterios" [value]="criterio.id_criterios">
+                        {{ criterio.nombre_criterios }}
+                      </option>
+                    </select>
+                  </div >
+                  <div class="col">
+                    <label for="id_debilidades">Debilidades:</label>
+                    <select formControlName="id_debilidades" class="form-control">
+                      <option *ngFor="let debilidad of debilidad" [value]="debilidad.id_debilidades">
+                        {{ debilidad.descripcion_debilidades }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_facultad">Facultad:</label>
+                    <select formControlName="id_facultad" class="form-control">
+                      <option *ngFor="let facultad of facultad" [value]="facultad.id_facultad">
+                        {{ facultad.nombre_facultad }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="id_carrera">Carrera:</label>
+                    <select formControlName="id_carrera" class="form-control">
+                      <option *ngFor="let carrera of carrera" [value]="carrera.id_carrera">
+                        {{ carrera.nombre_carrera }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="id_impacto">Impacto:</label>
+                    <select formControlName="id_impacto" class="form-control">
+                      <option *ngFor="let impacto of impacto" [value]="impacto.id_impacto">
+                        {{ impacto.interno_externo }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <label for="id_estado">Estado:</label>
+                    <select formControlName="id_estado" class="form-control">
+                      <option *ngFor="let estado of estado" [value]="estado.id_estado">
+                        {{ estado.online_presencial }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+
+                <!-- Descripcion -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="descripcion" class="form-label">Descripción:</label>
+                    <textarea class="form-control" id="descripcion" formControlName="descripcion" required></textarea>
+                  </div>
+                </div>
+
+                <!-- Resultado -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="resultado" class="form-label">Resultado:</label>
+                    <textarea class="form-control" id="resultado" formControlName="resultado" required></textarea>
+                  </div>
+                </div>
+
+                <!-- Almacenamiento -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="almacenamiento" class="form-label">Almacenamiento:</label>
+                    <textarea class="form-control" id="almacenamiento" formControlName="almacenamiento"
+                      required></textarea>
+                  </div>
+                </div>
+
+                <!-- Unidades y/o Persona Relacionadas a la evidencia -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="unidades_personas_evidencias" class="form-label">Unidades y/o Persona Relacionadas a la
+                      Evidencia:</label>
+                    <textarea class="form-control" id="unidades_personas_evidencias"
+                      formControlName="unidades_personas_evidencias" required></textarea>
+                  </div>
+                </div>
+
+                <!-- Palabras Clave -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="palabra_clave" class="form-label">Palabras Clave:</label>
+                    <input type="text" class="form-control" id="palabra_clave" formControlName="palabra_clave"
+                      required />
+                  </div>
+                </div>
+
+                <!-- Nombre Corto Evidencia -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="nombre_corto_evidencia" class="form-label">Nombre Corto Evidencia:</label>
+                    <input type="text" class="form-control" id="nombre_corto_evidencia"
+                      formControlName="nombre_corto_evidencia" required />
+                  </div>
+                </div>
+
+                <!-- Cantidad Asistentes Interno -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <label>Cantidad Asistentes Interno:</label>
+                    <div class="form-group">
+                      <label for="asistentes_interno_autoridades">Autoridades:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_interno_autoridades" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_interno_administrativos">Administrativos:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_interno_administrativos" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_interno_docentes">Docentes:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_interno_docentes" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_interno_estudiantes">Estudiantes:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_interno_estudiantes" />
+                    </div>
+                  </div>
+
+                  <!-- Cantidad Asistentes Externos -->
+                  <div class="col">
+                    <label>Cantidad Asistentes Externos:</label>
+                    <div class="form-group">
+                      <label for="asistentes_externo_autoridades">Autoridades:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_externo_autoridades" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_externo_administrativos">Administrativos:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_externo_administrativos" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_externo_docentes">Docentes:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_externo_docentes" />
+                    </div>
+                    <div class="form-group">
+                      <label for="asistentes_externo_estudiantes">Estudiantes:</label>
+                      <input type="number" class="form-control" formControlName="asistentes_externo_estudiantes" />
+                    </div>
+                  </div>
+                </div>
+              </form>
               <!-- Opción para adjuntar imágenes -->
               <div class="row mb-3">
                 <div class="col">
@@ -255,13 +312,23 @@
                 </div>
               </div>
 
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="fecha_creacion">Fecha Creación:</label>
+                  <span>{{ form.get('fecha_creacion')?.value | date: 'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+              
+              
+              
+
               <!-- Botones Cancelar y Enviar -->
               <div class="row">
                 <div class="col">
                   <button type="button" class="btn btn-secondary m-4">
                     Cancelar
                   </button>
-                  <button type="button" class="btn btn-primary">Enviar</button>
+                  <button (click)="crearEvidencia()" class="btn btn-secondary m-4">Enviar Evidencia</button>
                 </div>
               </div>
             </div>
