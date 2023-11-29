@@ -58,7 +58,7 @@ export class NewEvidenciaComponent implements OnInit {
   carrera: Carrera[] = [];
   facultad: Facultad[] = [];
   proceso: Proceso[] = [];
-  criterios: Criterio[] = [];
+  criterio: Criterio[] = [];
   impacto: Impacto[] = [];
   estado: Estado[] = [];
   errorMsg: string | undefined;
@@ -92,43 +92,35 @@ export class NewEvidenciaComponent implements OnInit {
     private impactoService: ImpactoService,
     private estadoService: EstadoService,
     private authService: AuthService,
-    private fb: FormBuilder
-    ) 
-    {
+    private fb: FormBuilder) {
       this.form = this.fb.group({
-        numero_folio: ['', Validators.required],//
-        fecha_evidencia: ['', Validators.required],//
-        rut_usuario: [null, Validators.required],//
-        correo_usuario: [null, Validators.required],//
-        id_usuario: [null, Validators.required],
-        id_unidad: [null, Validators.required],//
-        id_procesos: [null, Validators.required],//
-        id_registro: [null, Validators.required],//
-        numero_de_mejoras: [null, Validators.required],//
-        id_ambito_academico: [null, Validators.required],//
-        id_ambito_geografico: [null, Validators.required],//
-        id_criterios: [null, Validators.required],//
-        id_debilidades: [null, Validators.required],//
-        id_carrera: [null, Validators.required],//
-        id_facultad: [null, Validators.required],//
-        id_impacto: [null, Validators.required],//
-        id_estado: [null, Validators.required],//
-        descripcion: ['', Validators.required],//
-        resultado: ['', Validators.required],//
-        almacenamiento: ['', Validators.required],//
-        unidades_personas_evidencias: [null, Validators.required],//
-        palabra_clave: ['', Validators.required],//
-        nombre_corto_evidencia: ['', Validators.required],//
-        asistentes_interno_autoridades: [null, Validators.required],//
-        asistentes_interno_administrativos: [null, Validators.required],//
-        asistentes_interno_docentes: [null, Validators.required],//
-        asistentes_interno_estudiantes: [null, Validators.required],//
-        asistentes_externo_autoridades: [null, Validators.required],//
-        asistentes_externo_administrativos: [null, Validators.required],//
-        asistentes_externo_docentes: [null, Validators.required],//
-        asistentes_externo_estudiantes: [null, Validators.required],//
-        adjuntar_imagenes: [null, Validators.required],//
-        fecha_creacion: [{ value: new Date(), disabled: true }, Validators.required],//
+        numero_folio: ['', Validators.required],
+        fecha_evidencia: ['', Validators.required],
+        rut_usuario: ['', Validators.required],
+        correo_usuario: ['', Validators.required],
+        id_unidad: [null, Validators.required],
+        id_proceso: [null, Validators.required],
+        id_tipo_registro: [null, Validators.required],
+        numero_de_mejoras: [null, Validators.required],
+        id_ambito_academico: [null, Validators.required],
+        id_ambito_geografico: [null, Validators.required],
+        id_criterio: [null, Validators.required],
+        id_debilidades: [null, Validators.required],
+        descripcion: ['', Validators.required],
+        resultado: ['', Validators.required],
+        almacenamiento: ['', Validators.required],
+        unidades_personas_evidencias: [null, Validators.required],
+        palabra_clave: ['', Validators.required],
+        nombre_corto_evidencia: ['', Validators.required],
+        asistentes_interno_autoridades: [null],
+        asistentes_interno_administrativos: [null],
+        asistentes_interno_docentes: [null],
+        asistentes_interno_estudiantes: [null],
+        asistentes_externo_autoridades: [null],
+        asistentes_externo_administrativos: [null],
+        asistentes_externo_docentes: [null],
+        asistentes_externo_estudiantes: [null],
+        adjuntar_imagenes: [null],  
       });
     }
     
@@ -143,7 +135,6 @@ export class NewEvidenciaComponent implements OnInit {
     this.getCarrera();
     this.getDcomite();
     this.getDdac();
-    this.getCriterio();
     this.getDebilidades();
     this.getDrevisor();
     this.getEstado();
@@ -154,10 +145,9 @@ export class NewEvidenciaComponent implements OnInit {
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
 
     if (usuarioLogeadoInfo) {
-      this.form.patchValue({
-        rut_usuario: usuarioLogeadoInfo.rut,
-        correo_usuario: usuarioLogeadoInfo.correo,
-      });
+      this.rut_usuario = usuarioLogeadoInfo.rut;
+      this.correo_usuario = usuarioLogeadoInfo.correo;
+      console.log(this.rut_usuario, this.correo_usuario);
     }
   }
 
@@ -234,8 +224,8 @@ export class NewEvidenciaComponent implements OnInit {
   }
 
   getCriterio() {
-    this.criterioService.getCriterios().subscribe((criterio) => {
-      this.criterios = criterio;
+    this.criterioService.getCriterios().subscribe((criterios) => {
+      this.criterio = criterios;
     });
   }
 
@@ -306,26 +296,6 @@ export class NewEvidenciaComponent implements OnInit {
       this.images.splice(index, 1);
     }
   }
-
-  // Método para crear una nueva evidencia
-  crearEvidencia() {
-    if (this.form.valid) {
-      const nuevaEvidencia: Evidencia = this.form.value;
-      this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
-        next: (response) => {
-          console.log('Evidencia creada con éxito', response);
-          this.form.reset();
-        },
-        error: (error) => {
-          console.error('Error al crear la evidencia', error);
-        }
-      });
-    } else {
-      console.error('Formulario no válido. Verifica los campos.');
-    }
-  }
-  
-
 }
 
 

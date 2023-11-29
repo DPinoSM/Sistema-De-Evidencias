@@ -1,11 +1,10 @@
 
 .evidencia-container {
-  background-color: #ffffff; 
-  padding: 20px;
-  border-radius: 10px; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-  overflow: hidden; 
-}
+    background-color: #ffffff; 
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
   
 
 .evidencia-header {
@@ -19,9 +18,6 @@
     max-width: 100%; 
     height: auto; 
   }
-
-
-  
   
 
   .evidencia-title {
@@ -41,22 +37,17 @@
   
 
   /* Estilos para las imágenes adjuntas */
-  .adjunta-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    margin-bottom: 10px;
-}
-
+.adjunta-image {
+    max-width: 100%; /* Ajusta el tamaño máximo de la imagen al ancho del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina el espacio adicional debajo de la imagen */
+    margin-bottom: 10px; /* Espaciado entre imágenes */
+  }
   
   /* Estilos para el contenedor de imágenes */
   .image-container {
     position: relative; 
-    max-width: 100%;
-    overflow: hidden;
-    border: 1px solid #ccc;
-}
+  }
   
   /* Estilos para el botón de eliminar */
   .btn-danger {
