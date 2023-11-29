@@ -1,0 +1,106 @@
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+      [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h4>Listado de Procesos</h4>
+
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm"
+              (input)="realizarBusquedaProcesos()">
+            <button class="btn " (click)="realizarBusquedaProcesos()"></button>
+            <i class="fas fa-search"></i>
+          </div>
+
+          <button type="button" class="btn btn-dark" (click)="mostrarAgregarEditarProcesos(procesoEditId)">Agregar
+            Proceso</button>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarProcesos">
+          <div class="form-container">
+            <h3>{{ procesoEditId ? 'Editar Proceso' : 'Agregar Proceso' }}</h3>
+            <form [formGroup]="form" (ngSubmit)="crearEditarProceso()">
+              <div class="form-group">
+                <label for="nombre_procesos">Nombre del Proceso</label>
+                <input type="text" id="nombre_procesos" class="form-control" formControlName="nombre_procesos" required>
+                <div class="error-message error-text"
+                  *ngIf="form.get('nombre_procesos')?.invalid && (form.get('nombre_procesos')?.dirty || form.get('nombre_procesos')?.touched)">
+                  El Nombre del Proceso es obligatorio.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="codigo_procesos">Código del Proceso</label>
+                <input type="number" id="codigo_procesos" class="form-control" formControlName="codigo_procesos"
+                  required>
+                <div class="error-message error-text"
+                  *ngIf="form.get('codigo_procesos')?.invalid && (form.get('codigo_procesos')?.dirty || form.get('codigo_procesos')?.touched)">
+                  El Código del Proceso es obligatorio.
+                </div>
+              </div>
+
+              <div *ngIf="!procesoEditId" class="form-group">
+                <label for="estado_procesos">Estado del Proceso</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="estado_procesos"
+                    formControlName="estado_procesos">
+                  <label class="form-check-label" for="estado_procesos">Activo</label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ procesoEditId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Proceso</th>
+                <th scope="col">Nombre Proceso</th>
+                <th scope="col">Código Proceso</th>
+                <th scope="col">Estado Proceso</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proceso of procesos | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ proceso.id_procesos }}</td>
+                <td style="border: 1px solid black;">{{ proceso.nombre_procesos }}</td>
+                <td style="border: 1px solid black;">{{ proceso.codigo_procesos }}</td>
+                <td style="border: 1px solid black;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" [checked]="proceso.estado_procesos"
+                      (change)="cambiarEstadoProceso(proceso.id_procesos)">
+                    <label class="form-check-label"></label>
+                  </div>
+                </td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn" (click)="mostrarAgregarEditarProcesos(proceso.id_procesos)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+                  <button type="button" class="btn ms-2" (click)="eliminarProceso(proceso.id_procesos)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+            nextLabel="Siguiente"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

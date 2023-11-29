@@ -1,0 +1,89 @@
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+  <main>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+      [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+      <div class="container">
+        <div class="title">
+          <h4>Listado de Registros</h4>
+
+          <div class="search-container">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm"
+              (input)="realizarBusquedaRegistro()">
+            <button class="btn " (click)="realizarBusquedaRegistro()"></button>
+            <i class="fas fa-search"></i>
+          </div>
+
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRegistro(editRegistroId)">{{
+            editRegistroId ? 'Editar Registro' : 'Agregar Registro' }}</button>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRegistro">
+          <div class="form-container">
+            <h4>{{ editRegistroId ? 'Editar Registro' : 'Agregar Registro' }}</h4>
+            <form [formGroup]="form" (ngSubmit)="createNewRegistro()">
+              <div class="form-group">
+                <label for="datos_registro">Nombre del Registro</label>
+                <input type="text" id="datos_registro" class="form-control" formControlName="datos_registro" required>
+                <div class="error-message error-text"
+                  *ngIf="form.get('datos_registro')?.invalid && (form.get('datos_registro')?.dirty || form.get('datos_registro')?.touched)">
+                  El Nombre del Registro es obligatorio.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contenido_registro">Descripción del Registro</label>
+                <input type="text" id="contenido_registro" class="form-control" formControlName="contenido_registro"
+                  required>
+                <div class="error-message error-text"
+                  *ngIf="form.get('contenido_registro')?.invalid && (form.get('contenido_registro')?.dirty || form.get('contenido_registro')?.touched)">
+                  La descripción es obligatorio.
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary me-5"
+                  (click)="cancelarEdicionRegistro()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ editRegistroId ? 'Guardar' : 'Aceptar' }}</button>
+              </div>
+              <div class="error-message" *ngIf="errorMsg">
+                {{ errorMsg }}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-container mt-4">
+          <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+            <thead>
+              <tr>
+                <th scope="col">ID Registro</th>
+                <th scope="col">Nombre Registro</th>
+                <th scope="col">Descripción</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let registro of registros | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{ registro.id_registro }}</td>
+                <td style="border: 1px solid black;">{{ registro.datos_registro }}</td>
+                <td style="border: 1px solid black;">{{ registro.contenido_registro }}</td>
+                <td style="border: 1px solid black;">
+                  <button type="button" class="btn"
+                    (click)="mostrarFormularioAgregarEditarRegistro(registro.id_registro)">
+                    <i class="fas fa-edit icon-no-bg"></i>
+                  </button>
+                  <button type="button" class="btn ms-2" (click)="eliminarRegistro(registro.id_registro)">
+                    <i class="fa fa-trash icon-no-bg"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+            nextLabel="Siguiente"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

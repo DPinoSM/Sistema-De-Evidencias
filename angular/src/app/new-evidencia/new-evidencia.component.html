@@ -1,0 +1,273 @@
+<div class="container-fluid g-0">
+  <app-header (SideNavToggled)="sideNavStatus = $event"></app-header>
+  <main>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+      [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
+    <div class="display-area p-3" [ngClass]="{ 'display-area-shrink': sideNavStatus }">
+      <div class="container evidencia-container">
+        <div class="row mb-3 evidencia-header">
+          <div class="col">
+            <div class="container-fluid">
+              <div class="row mb-3">
+                <div class="col-2">
+                  <img src="../../../assets/logo2.jpg" alt="Logo" class="custom-image" />
+                </div>
+                <div class="col-8 text-center">
+                  <h3>Universidad Católica del Maule</h3>
+                  <h6>Departamento de Aseguramiento y Calidad</h6>
+                </div>
+                <div class="col-2 text-end">
+                  <img src="../../../assets/dac.png" alt="DAC Logo" class="custom-image" />
+                </div>
+              </div>
+              <div class="row mb-5">
+                <div class="col text-center">
+                  <h4>Documento del Sistema de Gestión de Calidad</h4>
+                  <h6>Registro del Sistema de Gestión de Calidad</h6>
+                  <h6>Identificación de Registros</h6>
+                </div>
+              </div>
+              <!-- N° Folio y Fecha Actual -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="numero_folio">N° Folio:</label>
+                  <input type="text" formControlName="numero_folio" class="form-control" />
+                </div>
+                <div class="col">
+                  <label for="fecha_evidencia">Fecha Actual:</label>
+                  <input type="text" formControlName="fecha_evidencia" class="form-control" />
+                </div>
+              </div>
+
+              <!-- RUT y Correo del Usuario -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="rut_usuario">RUT del Usuario:</label>
+                  <input type="text" formControlName="rut_usuario" class="form-control" />
+                </div>
+                <div class="col">
+                  <label for="correo_usuario">Correo del Usuario:</label>
+                  <input type="text" formControlName="correo_usuario" class="form-control" />
+                </div>
+              </div>
+
+              <!-- Unidad y Proceso -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="id_unidad">Unidad:</label>
+                  <select formControlName="id_unidad" class="form-control">
+                    <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                      {{ unidad.nombre_unidad }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="id_proceso">Proceso:</label>
+                  <select formControlName="id_proceso" class="form-control">
+                    <option *ngFor="let p of proceso" [value]="p.id_procesos">
+                      {{ p.nombre_procesos }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Tipo Registro y N° Plan de Mejora -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="id_tipo_registro">Tipo Registro:</label>
+                  <select formControlName="id_tipo_registro" class="form-control">
+                    <!-- Agrega las opciones para Tipo Registro -->
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="numero_de_mejoras">N° Plan de Mejora:</label>
+                  <input type="text" formControlName="numero_de_mejoras" class="form-control" />
+                </div>
+              </div>
+
+              <!-- Ambito Academico y Ambito Geografico -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="id_ambito_academico">Ambito Academico:</label>
+                  <select formControlName="id_ambito_academico" class="form-control">
+                    <option *ngFor="let ambitoAcademico of academico" [value]="ambitoAcademico.id_ambito_academico">
+                      {{ ambitoAcademico.nombre_ambito_academico }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="id_ambito_geografico">Ambito Geografico:</label>
+                  <select formControlName="id_ambito_geografico" class="form-control">
+                    <option *ngFor="let ambitoGeografico of geografico" [value]="ambitoGeografico.id_ambito_geografico">
+                      {{ ambitoGeografico.nombre_ambito_geografico }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="id_criterio">Criterio:</label>
+                  <select formControlName="id_criterio" class="form-control">
+                    <option *ngFor="let criterio of criterio" [value]="criterio.id_criterios">
+                      {{ criterio.nombre_criterios }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="id_debilidades">Debilidades:</label>
+                  <select formControlName="id_debilidades" class="form-control">
+                    <option *ngFor="let debilidad of debilidad" [value]="debilidad.id_debilidades">
+                      {{ debilidad.descripcion_debilidades }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <!-- Descripcion -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="descripcion" class="form-label">Descripción:</label>
+                  <textarea class="form-control" id="descripcion" formControlName="descripcion" required></textarea>
+                </div>
+              </div>
+
+              <!-- Resultado -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="resultado" class="form-label">Resultado:</label>
+                  <textarea class="form-control" id="resultado" formControlName="resultado" required></textarea>
+                </div>
+              </div>
+
+              <!-- Almacenamiento -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="almacenamiento" class="form-label">Almacenamiento:</label>
+                  <textarea class="form-control" id="almacenamiento" formControlName="almacenamiento"
+                    required></textarea>
+                </div>
+              </div>
+
+              <!-- Unidades y/o Persona Relacionadas a la evidencia -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="unidades_personas_evidencias" class="form-label">Unidades y/o Persona Relacionadas a la
+                    Evidencia:</label>
+                  <textarea class="form-control" id="unidades_personas_evidencias"
+                    formControlName="unidades_personas_evidencias" required></textarea>
+                </div>
+              </div>
+
+              <!-- Palabras Clave -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="palabra_clave" class="form-label">Palabras Clave:</label>
+                  <input type="text" class="form-control" id="palabra_clave" formControlName="palabra_clave" required />
+                </div>
+              </div>
+
+              <!-- Nombre Corto Evidencia -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="nombre_corto_evidencia" class="form-label">Nombre Corto Evidencia:</label>
+                  <input type="text" class="form-control" id="nombre_corto_evidencia"
+                    formControlName="nombre_corto_evidencia" required />
+                </div>
+              </div>
+
+              <!-- Cantidad Asistentes Interno -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label>Cantidad Asistentes Interno:</label>
+                  <div class="form-group">
+                    <label for="asistentes_interno_autoridades">Autoridades:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_interno_autoridades" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_interno_administrativos">Administrativos:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_interno_administrativos" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_interno_docentes">Docentes:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_interno_docentes" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_interno_estudiantes">Estudiantes:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_interno_estudiantes" />
+                  </div>
+                </div>
+
+                <!-- Cantidad Asistentes Externos -->
+                <div class="col">
+                  <label>Cantidad Asistentes Externos:</label>
+                  <div class="form-group">
+                    <label for="asistentes_externo_autoridades">Autoridades:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_externo_autoridades" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_externo_administrativos">Administrativos:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_externo_administrativos" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_externo_docentes">Docentes:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_externo_docentes" />
+                  </div>
+                  <div class="form-group">
+                    <label for="asistentes_externo_estudiantes">Estudiantes:</label>
+                    <input type="number" class="form-control" formControlName="asistentes_externo_estudiantes" />
+                  </div>
+                </div>
+              </div>
+              <!-- Opción para adjuntar imágenes -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="adjuntar_imagenes">Adjuntar Imágenes:</label>
+                  <input type="file" id="adjuntar_imagenes" (change)="onFileSelected($event)" multiple />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="imagenes" class="form-label"></label>
+                  <div id="dropZone" class="drop-zone" (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+                    Arrastra y suelta las imágenes aquí o haz clic para
+                    seleccionarlas.
+                  </div>
+                  <input type="file" id="imagenes" name="imagenes" (change)="onFileSelected($event)" multiple
+                    style="display: none" />
+                  <div *ngFor="let image of images" class="image-container">
+                    <img [src]="image.url" alt="Imagen adjunta" class="adjunta-image" />
+                    <button class="btn btn-danger" (click)="removeImage(image)">
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contenedor de imágenes -->
+              <div class="row mb-3">
+                <div class="col">
+                  <div *ngFor="let image of imagenesAdjuntas; let i = index" class="image-container">
+                    <img [src]="image" alt="Imagen adjunta" class="adjunta-image" />
+                    <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botones Cancelar y Enviar -->
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="btn btn-secondary m-4">
+                    Cancelar
+                  </button>
+                  <button type="button" class="btn btn-primary">Enviar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
