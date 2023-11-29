@@ -1,0 +1,56 @@
+.title{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+  .icon-no-bg {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  
+  .form-container {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 1; 
+    border-collapse: collapse;
+  }
+  
+  .form-container {
+    background-color: #fff; 
+    padding: 20px; 
+    border: 1px solid #000000; 
+    border-radius: 5px; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 10px; 
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+
+  /* styles.css */
+.image-container {
+  position: fixed;
+  top: 4rem;
+  right: -30.7rem;
+  align-self: flex-end;
+}
+
+.custom-image {
+  max-width: 55%; /* La imagen se ajusta al ancho del contenedor */
+  max-height: 100%; /* La imagen se ajusta a la altura del contenedor */
+}
+
+.error-text {
+  color: red;
+  font-size: 14px; 
+}
