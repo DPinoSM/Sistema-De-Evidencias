@@ -38,6 +38,10 @@ import { ResponsableComponent } from './Principal/responsable/responsable.compon
 import { AddTokenInterceptor } from './utils/add-token.interceptor';
 import { ListaEvidenciasComponent } from './componentes/lista-evidencias/lista-evidencias.component';
 import { NewEvidenciaComponent } from './componentes/new-evidencia/new-evidencia.component';
+import { ListaDebilidadComponent } from './componentes/lista-debilidad/lista-debilidad.component';
+import { ListaCarreraComponent } from './componentes/lista-carrera/lista-carrera.component';
+import { ListaImpactoComponent } from './componentes/lista-impacto/lista-impacto.component';
+import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.component';
 
 
 @NgModule({
@@ -61,7 +65,11 @@ import { NewEvidenciaComponent } from './componentes/new-evidencia/new-evidencia
     ComiteComponent,
     ResponsableComponent,
     ListaEvidenciasComponent,
-    NewEvidenciaComponent
+    NewEvidenciaComponent,
+    ListaDebilidadComponent,
+    ListaCarreraComponent,
+    ListaImpactoComponent,
+    ListaEstadoComponent
   ],
   imports: [
     BrowserModule,

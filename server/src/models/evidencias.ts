@@ -14,6 +14,7 @@ import { Facultad } from './facultad';
 import { Proceso } from './proceso';
 import { Impacto } from './impacto';
 import { Estado } from './estado';
+import { Criterio } from './criterio';
 
 export const Evidencias = sequelize.define(
     'evidencias',
@@ -46,6 +47,7 @@ export const Evidencias = sequelize.define(
         id_detalle_comite: {type: DataTypes.INTEGER},
         id_usuario: {type: DataTypes.INTEGER},
         id_debilidades: {type: DataTypes.INTEGER},
+        id_criterios: {type: DataTypes.INTEGER},
         id_unidad: {type: DataTypes.INTEGER},
         id_ambito_geografico: {type: DataTypes.INTEGER},
         id_ambito_academico: {type: DataTypes.INTEGER},
@@ -67,6 +69,7 @@ Evidencias.belongsTo(Detalle_DAC, {foreignKey: 'id_detalle_dac'});
 Evidencias.belongsTo(Detalle_Comite, {foreignKey: 'id_detalle_comite'});
 Evidencias.belongsTo(User, {foreignKey: 'id_usuario'});
 Evidencias.belongsTo(Debilidades, {foreignKey: 'id_debilidades'});
+Evidencias.belongsTo(Criterio, {foreignKey: 'id_criterios'});
 Evidencias.belongsTo(Unidad, { foreignKey: 'id_unidad' });
 Evidencias.belongsTo(AmbitoGeografico, {foreignKey: 'id_ambito_geografico'});
 Evidencias.belongsTo(AmbitoAcademico, {foreignKey: 'id_ambito_academico'});

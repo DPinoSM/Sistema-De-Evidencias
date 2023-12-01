@@ -1,19 +1,22 @@
 <div class="container-fluid g-0">
   <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
   <main>
-    <app-sidenav [sideNavStatus]="sideNavStatus" [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+    <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+      [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
     <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
       <div class="container">
         <div class="title">
           <h3 class="page-title">Listado de Roles</h3>
-          
+
           <div class="search-container">
-            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+            <input type="text" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm"
+              (input)="realizarBusqueda()">
             <button class="btn " (click)="realizarBusqueda()"></button>
             <i class="fas fa-search"></i>
           </div>
-          
-          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar Rol' }}</button>          
+
+          <button type="button" class="btn btn-dark" (click)="mostrarFormularioAgregarEditarRol(editRoleId)">{{ 'Agregar
+            Rol' }}</button>
         </div>
 
         <div class="d-flex justify-content-center align-items-center" *ngIf="mostrarFormularioAgregarRol">
@@ -23,11 +26,12 @@
               <div class="form-group">
                 <label for="nombre_rol">Nombre del Rol</label>
                 <input type="text" id="nombre_rol" class="form-control" formControlName="nombre_rol" required>
-                <div class="error-message error-text" *ngIf="form.get('nombre_rol')?.invalid && (form.get('nombre_rol')?.dirty || form.get('nombre_rol')?.touched)">
+                <div class="error-message error-text"
+                  *ngIf="form.get('nombre_rol')?.invalid && (form.get('nombre_rol')?.dirty || form.get('nombre_rol')?.touched)">
                   El Nombre del Rol es obligatorio.
                 </div>
               </div>
-              
+
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary me-5" (click)="cancelarEdicion()">Cancelar</button>
                 <button type="submit" class="btn btn-primary ">{{ editRoleId ? 'Guardar' : 'Aceptar' }}</button>
@@ -48,7 +52,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let rol of roles | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+              <tr *ngFor="let rol of roles | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                style="border: 1px solid black;">
 
                 <td style="border: 1px solid black;">{{ rol.id_rol }}</td>
                 <td style="border: 1px solid black;">{{ rol.nombre_rol }}</td>
@@ -63,7 +68,8 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+            nextLabel="Siguiente"></pagination-controls>
         </div>
       </div>
     </div>

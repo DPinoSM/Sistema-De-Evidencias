@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Evidencia } from '../../interfaces/evidencia.interface';
 import { DetalleRevisor } from "../../interfaces/D_revisor.interface";
 import { revisorService } from 'src/app/services/D-revisor.service';
@@ -58,7 +59,7 @@ export class NewEvidenciaComponent implements OnInit {
   carrera: Carrera[] = [];
   facultad: Facultad[] = [];
   proceso: Proceso[] = [];
-  criterio: Criterio[] = [];
+  criterios: Criterio[] = [];
   impacto: Impacto[] = [];
   estado: Estado[] = [];
   errorMsg: string | undefined;
@@ -78,6 +79,7 @@ export class NewEvidenciaComponent implements OnInit {
     private toastr: ToastrService,
     private revisorService: revisorService,
     private dacService: DacService,
+    private router: Router,
     private comiteService: ComiteService,
     private usuarioService: UsuarioService,
     private debilidadService: DebilidadService,
@@ -92,56 +94,49 @@ export class NewEvidenciaComponent implements OnInit {
     private impactoService: ImpactoService,
     private estadoService: EstadoService,
     private authService: AuthService,
-    private fb: FormBuilder
     ) 
     {
-      this.form = this.fb.group({
-        numero_folio: ['', Validators.required],
-        fecha_evidencia: ['', Validators.required],
-        rut_usuario: [null, Validators.required],
-        correo_usuario: [null, Validators.required],
-        id_unidad: [null, Validators.required],
-        id_proceso: [null, Validators.required],
-        id_tipo_registro: [null, Validators.required],
-        numero_de_mejoras: [null, Validators.required],
-        id_ambito_academico: [null, Validators.required],
-        id_ambito_geografico: [null, Validators.required],
-        id_criterio: [null, Validators.required],
-        id_debilidades: [null, Validators.required],
-        descripcion: ['', Validators.required],
-        resultado: ['', Validators.required],
-        almacenamiento: ['', Validators.required],
-        unidades_personas_evidencias: [null, Validators.required],
-        palabra_clave: ['', Validators.required],
-        nombre_corto_evidencia: ['', Validators.required],
-        asistentes_interno_autoridades: [null],
-        asistentes_interno_administrativos: [null],
-        asistentes_interno_docentes: [null],
-        asistentes_interno_estudiantes: [null],
-        asistentes_externo_autoridades: [null],
-        asistentes_externo_administrativos: [null],
-        asistentes_externo_docentes: [null],
-        asistentes_externo_estudiantes: [null],
-        adjuntar_imagenes: [null],
-        fecha_creacion: ['', Validators.required],
-        fecha_actualizacion: ['', Validators.required],
-        id_detalle_revisor: [null, Validators.required],
-        id_detalle_dac: [null, Validators.required],
-        id_detalle_comite: [null, Validators.required],
-        id_usuario: [null, Validators.required],
-        id_registro: [null, Validators.required],
-        id_carrera: [null, Validators.required],
-        id_facultad: [null, Validators.required],
-        id_procesos: [null, Validators.required],
-        id_impacto: [null, Validators.required],
-        id_estado: [null, Validators.required],
+      this.form = new FormGroup({
+        numero_folio: new FormControl('', Validators.required),
+        fecha_evidencia: new FormControl(null, Validators.required),
+        rut_usuario: new FormControl(null, Validators.required),
+        correo_usuario: new FormControl('' , Validators.required),
+        id_usuario: new FormControl(null, Validators.required),
+        id_unidad: new FormControl(null, Validators.required),
+        id_procesos: new FormControl(null, Validators.required),
+        id_registro: new FormControl(null, Validators.required),
+        numero_de_mejoras: new FormControl(null, Validators.required),
+        id_ambito_academico: new FormControl(null, Validators.required),
+        id_ambito_geografico: new FormControl(null, Validators.required),
+        id_criterios: new FormControl(null, Validators.required),
+        id_debilidades: new FormControl(null, Validators.required),
+        id_carrera: new FormControl(null, Validators.required),
+        id_facultad: new FormControl(null, Validators.required),
+        id_impacto: new FormControl(null, Validators.required),
+        id_estado: new FormControl(null, Validators.required),
+        descripcion: new FormControl('', Validators.required),
+        resultado: new FormControl('', Validators.required),
+        almacenamiento: new FormControl('', Validators.required),
+        unidades_personas_evidencias: new FormControl('', Validators.required),
+        palabra_clave: new FormControl('', Validators.required),
+        nombre_corto_evidencia: new FormControl('', Validators.required),
+        asistentes_interno_autoridades: new FormControl(null, Validators.required),
+        asistentes_interno_administrativos: new FormControl(null, Validators.required),
+        asistentes_interno_docentes: new FormControl(null, Validators.required),
+        asistentes_interno_estudiantes: new FormControl(null, Validators.required),
+        asistentes_externo_autoridades: new FormControl(null, Validators.required),
+        asistentes_externo_administrativos: new FormControl(null, Validators.required),
+        asistentes_externo_docentes: new FormControl(null, Validators.required),
+        asistentes_externo_estudiantes: new FormControl(null, Validators.required),
+        adjuntar_imagenes: new FormControl(null, Validators.required),
+        fecha_creacion: new FormControl({ value: new Date(), disabled: true }, Validators.required),
       });
+    
     }
     
     
 
   ngOnInit() {
-    this.getEvidencia();
     this.getUsers();
     this.getUnidades();
     this.getAmbitoA();
@@ -149,6 +144,7 @@ export class NewEvidenciaComponent implements OnInit {
     this.getCarrera();
     this.getDcomite();
     this.getDdac();
+    this.getCriterio();
     this.getDebilidades();
     this.getDrevisor();
     this.getEstado();
@@ -156,14 +152,12 @@ export class NewEvidenciaComponent implements OnInit {
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
-    // Obtén la información del usuario logueado
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
 
     if (usuarioLogeadoInfo) {
-      // Asigna los valores al formulario al inicio
       this.form.patchValue({
         rut_usuario: usuarioLogeadoInfo.rut,
-        correo_usuario: usuarioLogeadoInfo.correo
+        correo_usuario: usuarioLogeadoInfo.correo,
       });
     }
   }
@@ -177,12 +171,6 @@ export class NewEvidenciaComponent implements OnInit {
   getUsers() {
     this.usuarioService.getUsers().subscribe((usuarios) => {
       this.usuarios = usuarios;
-    });
-  }
-
-  getEvidencia() {
-    this.evidenciasService.obtenerEvidencias().subscribe((evidencias) => {
-      this.evidencias = evidencias;
     });
   }
 
@@ -241,8 +229,8 @@ export class NewEvidenciaComponent implements OnInit {
   }
 
   getCriterio() {
-    this.criterioService.getCriterios().subscribe((criterios) => {
-      this.criterio = criterios;
+    this.criterioService.getCriterios().subscribe((criterio) => {
+      this.criterios = criterio;
     });
   }
 
@@ -315,27 +303,46 @@ export class NewEvidenciaComponent implements OnInit {
   }
 
   // Método para crear una nueva evidencia
-crearEvidencia() {
-  if (this.form.valid) {
-    this.form.patchValue({
-      rut_usuario: this.rut_usuario,
-      correo_usuario: this.correo_usuario
-    });
-
-    const nuevaEvidencia: Evidencia = this.form.value;
-    this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
-      next: (response) => {
-        console.log('Evidencia creada con éxito', response);
-        this.form.reset();
-      },
-      error: (error) => {
-        console.error('Error al crear la evidencia', error);
+  crearEvidencia() {
+    if (this.form.valid) {
+      const nuevaEvidencia: Evidencia = this.form.value;
+  
+      // Convertir FileList a Uint8Array
+      const files: FileList | null = this.form.get('adjuntar_imagenes')?.value;
+      if (files) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as ArrayBuffer;
+          const uintArray = new Uint8Array(result);
+          nuevaEvidencia.adjuntar_imagenes = uintArray;
+  
+          this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
+            next: (response) => {
+              console.log('Evidencia creada con éxito', response);
+              this.toastr.success('Evidencia creada con éxito', 'Éxito');
+              this.form.reset();
+              this.router.navigate(['/evidencia']);
+            },
+            error: (error) => {
+              console.error('Error al crear la evidencia', error);
+              this.toastr.error('Error al crear la evidencia', 'Error');
+            }
+          });
+        };
+  
+        reader.readAsArrayBuffer(files[0]);
       }
-    });
-  } else {
-    console.error('Formulario no válido. Verifica los campos.');
+    } else {
+      console.error('Formulario no válido. Verifica los campos.');
+      this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
+    }
   }
-}
+  
+  cancelar() {
+    this.router.navigate(['/evidencias']);
+  }
+  
+  
 
 }
 

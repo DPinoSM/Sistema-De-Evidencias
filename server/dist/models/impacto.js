@@ -8,7 +8,7 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 exports.Impacto = connection_1.default.define('impacto', {
     "id_impacto": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    "interno_externo": { type: sequelize_1.DataTypes.BOOLEAN }
+    "interno_externo": { type: sequelize_1.DataTypes.STRING }
 }, {
     freezeTableName: true,
     timestamps: false,

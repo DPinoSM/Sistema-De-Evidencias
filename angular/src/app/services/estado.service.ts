@@ -12,16 +12,16 @@ export class EstadoService {
 
   constructor(private http: HttpClient) {}
 
-  nuevaEstado(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, data)
-    .pipe(
-      catchError(err => this.handleError(err))
-      );
-  }
-
   // Método para obtener todas las evidencias desde el backend
   obtenerEstado(): Observable<any> {
     return this.http.get(`${this.baseUrl}/lista`)
+        .pipe(
+            catchError(err => this.handleError(err))
+        );
+}
+  
+  nuevoEstado(online_presencial: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, {online_presencial: online_presencial})
     .pipe(
       catchError(err => this.handleError(err))
       );
@@ -35,17 +35,15 @@ export class EstadoService {
       );
   }
 
-  // Método para eliminar una evidencia por su ID desde el backend
-  eliminarEstado(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`)
+  actualizarEstado(id: number, online_presencial: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, { online_presencial: online_presencial})
     .pipe(
       catchError(err => this.handleError(err))
       );
   }
 
-  // Método para actualizar una evidencia por su ID en el backend
-  actualizarEstado(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, data)
+  eliminarEstado(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`)
     .pipe(
       catchError(err => this.handleError(err))
       );
@@ -56,12 +54,18 @@ export class EstadoService {
     console.error('Error en la solicitud:', error);
 
     let errorMessage = 'Error en la solicitud. Por favor, inténtalo de nuevo más tarde.';
+
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error del lado del cliente: ${error.error.message}`;
+        errorMessage = `Error del lado del cliente: ${error.error.message}`;
+    } else if (error.error && error.error.msg) {
+        errorMessage = error.error.msg;  
+    } else if (error.status === 400 && error.error.errors) {
+        
+        console.error('Detalles de errores de validación:', error.error.errors);
     } else if (error.status === 404) {
-      errorMessage = 'No se encontró el recurso solicitado.';
+        errorMessage = 'No se encontró el recurso solicitado.';
     } else if (error.status === 500) {
-      errorMessage = 'Error del servidor interno. Por favor, inténtalo más tarde.';
+        errorMessage = 'Error del servidor interno. Por favor, inténtalo más tarde.';
     }
 
     return throwError(() => errorMessage);

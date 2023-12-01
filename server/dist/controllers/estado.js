@@ -12,8 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEstado = exports.getOneEstado = exports.updateEstado = exports.newEstado = exports.getEstado = void 0;
 const estado_1 = require("../models/estado");
 const getEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listEstado = yield estado_1.Estado.findAll({ attributes: ['id_estado', 'online_presencial'] });
-    res.json(listEstado);
+    try {
+        const listEstado = yield estado_1.Estado.findAll({ attributes: ['id_estado', 'online_presencial'] });
+        res.json(listEstado);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Error al obtener estados',
+            error
+        });
+    }
 });
 exports.getEstado = getEstado;
 const newEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,7 +34,7 @@ const newEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     try {
         yield estado_1.Estado.create({
-            "online_presencial": online_presencial
+            online_presencial: online_presencial
         });
         return res.json({
             msg: 'Estado creado correctamente'
@@ -34,7 +42,7 @@ const newEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         res.status(400).json({
-            msg: 'Ocurrio un error',
+            msg: 'Ocurrió un error',
             error
         });
     }
@@ -50,16 +58,14 @@ const updateEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     try {
-        yield estado_1.Estado.update({
-            online_presencial: online_presencial
-        }, { where: { id_estado: id } });
+        yield estado_1.Estado.update({ online_presencial: online_presencial }, { where: { id_estado: id } });
         return res.json({
-            msg: 'Estado ' + id + ' actualizado correctamente'
+            msg: `Estado ${id} actualizado correctamente`
         });
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al actualizar el estado: ' + id,
+            msg: `Ha ocurrido un error al actualizar el estado: ${id}`,
             error
         });
     }
@@ -70,7 +76,7 @@ const getOneEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const idEstado = yield estado_1.Estado.findOne({ where: { id_estado: id } });
     if (!idEstado) {
         return res.status(400).json({
-            msg: "El id: " + id + " del estado no existes"
+            msg: `El id: ${id} del estado no existe`
         });
     }
     try {
@@ -79,7 +85,7 @@ const getOneEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al encontrar el estado: ' + id,
+            msg: `Ha ocurrido un error al encontrar el estado: ${id}`,
             error
         });
     }
@@ -90,18 +96,18 @@ const deleteEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const idEstado = yield estado_1.Estado.findOne({ where: { id_estado: id } });
     if (!idEstado) {
         return res.status(400).json({
-            msg: "El id: " + id + " del estado no existe"
+            msg: `El id: ${id} del estado no existe`
         });
     }
     try {
         yield estado_1.Estado.destroy({ where: { id_estado: id } });
         return res.json({
-            msg: 'Estado de ' + id + ' borrado correctamente'
+            msg: `Estado ${id} borrado correctamente`
         });
     }
     catch (error) {
         return res.status(400).json({
-            msg: 'Ha ocurrido un error al actualizar el estado: ' + id,
+            msg: `Ha ocurrido un error al borrar el estado: ${id}`,
             error
         });
     }

@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit {
     {
       name: 'Debilidades',
       icon: 'fa-solid fa-exclamation-circle',
-      link: '/debilidades',
+      link: '/debilidad',
     },
     {
       name: 'Impacto',
@@ -38,7 +38,7 @@ export class SidenavComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     const storedUserRole = localStorage.getItem('rol');
@@ -55,11 +55,4 @@ export class SidenavComponent implements OnInit {
     }
     return [1, 2, 3, 4, 5].includes(this.userRole);
   }
-  
-  
-  
-  
-  
-  
-  
 }
