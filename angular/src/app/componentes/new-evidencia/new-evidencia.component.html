@@ -41,7 +41,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="fecha_evidencia">Fecha Evidencia</label>
-                    <input matInput [matDatepicker]="picker" formControlName="fecha_evidencia" class="form-control" />
+                    <input matInput [matDatepicker]="picker" formControlName="fecha_evidencia" class="form-control" required/>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                     <div class="error-message error-text"
@@ -57,31 +57,24 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="rut_usuario">RUT del Usuario</label>
-                      <div>{{ form.get('rut_usuario')?.value }}</div>
-                      <div class="error-message error-text"
-                        *ngIf="form.get('rut_usuario')?.invalid && (form.get('rut_usuario')?.dirty || form.get('rut_usuario')?.touched)">
-                        El RUT del Usuario es obligatorio.
-                      </div>
-                    </div>
+                      <input type="text" id="rut_usuario" class="form-control" formControlName="rut_usuario" required>
+                    </div>                    
                   </div>
                   <div class="col">
                     <div class="form-group">
                       <label for="correo_usuario">Correo del Usuario</label>
-                      <div>{{ form.get('correo_usuario')?.value }}</div>
-                      <div class="error-message error-text"
-                        *ngIf="form.get('correo_usuario')?.invalid && (form.get('correo_usuario')?.dirty || form.get('correo_usuario')?.touched)">
-                        El Correo del Usuario es obligatorio.
-                      </div>
+                      <input type="text" id="correo_usuario" class="form-control" formControlName="correo_usuario" required>
                     </div>
                   </div>
                 </div>
+                
 
                 <!-- Nombre del Usuario -->
                   <div class="row mb-3">
                     <div class="col">
                       <div class="form-group">
                         <label for="id_usuario">Nombre del Usuario</label>
-                        <select formControlName="id_usuario" class="form-control">
+                        <select id="id_usuario" class="form-control" formControlName="id_usuario" required>
                           <option *ngFor="let usuario of usuarios" [value]="usuario.id_usuario">
                             {{ usuario.nombre_usuario }}
                           </option>
@@ -100,7 +93,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_unidad">Unidad</label>
-                      <select formControlName="id_unidad" class="form-control">
+                      <select id="id_unidad"  class="form-control" formControlName="id_unidad" required>
                         <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
                           {{ unidad.nombre_unidad }}
                         </option>
@@ -114,7 +107,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_procesos">Proceso</label>
-                      <select formControlName="id_procesos" class="form-control">
+                      <select id="id_procesos" class="form-control" formControlName="id_procesos" required>
                         <option *ngFor="let p of proceso" [value]="p.id_procesos">
                           {{ p.nombre_procesos }}
                         </option>
@@ -132,7 +125,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_registro">Tipo Registro</label>
-                      <select formControlName="id_registro" class="form-control">
+                      <select id="id_registro" class="form-control" formControlName="id_registro" required>
                         <option *ngFor="let r of registro" [value]="r.id_registro">
                           {{ r.datos_registro }}
                         </option>
@@ -146,7 +139,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="numero_de_mejoras">N° Plan de Mejora</label>
-                      <input type="text" formControlName="numero_de_mejoras" class="form-control" />
+                      <input type="number" id="numero_de_mejoras" class="form-control" formControlName="numero_de_mejoras" required />
                       <div class="error-message error-text"
                         *ngIf="form.get('numero_de_mejoras')?.invalid && (form.get('numero_de_mejoras')?.dirty || form.get('numero_de_mejoras')?.touched)">
                         El N° de Plan de Mejora es obligatorio.
@@ -160,7 +153,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_ambito_academico">Ambito Academico</label>
-                      <select formControlName="id_ambito_academico" class="form-control">
+                      <select id="id_ambito_academico" class="form-control" formControlName="id_ambito_academico" required>
                         <option *ngFor="let ambitoAcademico of academico" [value]="ambitoAcademico.id_ambito_academico">
                           {{ ambitoAcademico.nombre_ambito_academico }}
                         </option>
@@ -174,7 +167,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_ambito_geografico">Ambito Geografico</label>
-                      <select formControlName="id_ambito_geografico" class="form-control">
+                      <select id="id_ambito_geografico" class="form-control" formControlName="id_ambito_geografico" required>
                         <option *ngFor="let ambitoGeografico of geografico" [value]="ambitoGeografico.id_ambito_geografico">
                           {{ ambitoGeografico.nombre_ambito_geografico }}
                         </option>
@@ -193,7 +186,7 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="id_criterios">Criterio</label>
-                        <select formControlName="id_criterios" class="form-control">
+                        <select id="id_criterios" class="form-control" formControlName="id_criterios" required>
                           <option *ngFor="let criterio of criterios" [value]="criterio.id_criterios">
                             {{ criterio.nombre_criterios }}
                           </option>
@@ -207,7 +200,7 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="id_debilidades">Debilidades</label>
-                        <select formControlName="id_debilidades" class="form-control">
+                        <select id="id_debilidades" class="form-control" formControlName="id_debilidades" required>
                           <option *ngFor="let debilidad of debilidad" [value]="debilidad.id_debilidades">
                             {{ debilidad.descripcion_debilidades }}
                           </option>
@@ -226,7 +219,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_facultad">Facultad</label>
-                      <select formControlName="id_facultad" class="form-control">
+                      <select id="id_facultad" class="form-control" formControlName="id_facultad" required>
                         <option *ngFor="let facultad of facultad" [value]="facultad.id_facultad">
                           {{ facultad.nombre_facultad }}
                         </option>
@@ -240,7 +233,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_carrera">Carrera</label>
-                      <select formControlName="id_carrera" class="form-control">
+                      <select id="id_carrera" class="form-control" formControlName="id_carrera" required>
                         <option *ngFor="let carrera of carrera" [value]="carrera.id_carrera">
                           {{ carrera.nombre_carrera }}
                         </option>
@@ -259,7 +252,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_impacto">Impacto</label>
-                      <select formControlName="id_impacto" class="form-control">
+                      <select id="id_impacto" class="form-control" formControlName="id_impacto" required>
                         <option *ngFor="let impactoItem of impacto" [value]="impactoItem.id_impacto">
                           {{ impactoItem.interno_externo }}
                         </option>
@@ -273,7 +266,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="id_estado">Estado</label>
-                      <select formControlName="id_estado" class="form-control">
+                      <select id="id_estado" class="form-control" formControlName="id_estado" required>
                         <option *ngFor="let estadoItem of estado" [value]="estadoItem.id_estado">
                           {{ estadoItem.online_presencial }}
                         </option>
@@ -293,7 +286,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="descripcion" class="form-label">Descripción</label>
-                      <textarea class="form-control" id="descripcion" formControlName="descripcion" required></textarea>
+                      <textarea id="descripcion" class="form-control" formControlName="descripcion" required></textarea>
                       <div class="error-message error-text"
                         *ngIf="form.get('descripcion')?.invalid && (form.get('descripcion')?.dirty || form.get('descripcion')?.touched)">
                         La Descripción es obligatoria.
@@ -385,19 +378,19 @@
                     <label>Cantidad Asistentes Interno:</label>
                     <div class="form-group">
                       <label for="asistentes_interno_autoridades">Autoridades:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_interno_autoridades" />
+                      <input type="number" id="asistentes_interno_autoridades" class="form-control" formControlName="asistentes_interno_autoridades" required/>
                     </div>
                     <div class="form-group">
                       <label for="asistentes_interno_administrativos">Administrativos:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_interno_administrativos" />
+                      <input type="number" id="asistentes_interno_administrativos" class="form-control" formControlName="asistentes_interno_administrativos" required />
                     </div>
                     <div class="form-group">
                       <label for="asistentes_interno_docentes">Docentes:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_interno_docentes" />
+                      <input type="number" id="asistentes_interno_docentes" class="form-control" formControlName="asistentes_interno_docentes" required/>
                     </div>
                     <div class="form-group">
                       <label for="asistentes_interno_estudiantes">Estudiantes:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_interno_estudiantes" />
+                      <input type="number" id="asistentes_interno_estudiantes" class="form-control" formControlName="asistentes_interno_estudiantes" required/>
                     </div>
                   </div>
                 
@@ -406,19 +399,19 @@
                     <label>Cantidad Asistentes Externos:</label>
                     <div class="form-group">
                       <label for="asistentes_externo_autoridades">Autoridades:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_externo_autoridades" />
+                      <input type="number" id="asistentes_externo_autoridades" class="form-control" formControlName="asistentes_externo_autoridades" required/>
                     </div>
                     <div class="form-group">
                       <label for="asistentes_externo_administrativos">Administrativos:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_externo_administrativos" />
+                      <input type="number" id="asistentes_externo_administrativos" class="form-control" formControlName="asistentes_externo_administrativos" required />
                     </div>
                     <div class="form-group">
                       <label for="asistentes_externo_docentes">Docentes:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_externo_docentes" />
+                      <input type="number" id="asistentes_externo_docentes" class="form-control" formControlName="asistentes_externo_docentes" required/>
                     </div>
                     <div class="form-group">
                       <label for="asistentes_externo_estudiantes">Estudiantes:</label>
-                      <input type="number" class="form-control" formControlName="asistentes_externo_estudiantes" />
+                      <input type="number" id="asistentes_externo_estudiantes" class="form-control" formControlName="asistentes_externo_estudiantes" required/>
                     </div>
                   </div>
                 </div>
@@ -426,15 +419,25 @@
               <!-- Opción para adjuntar imágenes -->
               <div class="row mb-3">
                 <div class="col">
-                  <label for="adjuntar_imagenes">Adjuntar Imágenes:</label>
-                  <input type="file" id="adjuntar_imagenes" (change)="onFileSelected($event)" multiple />
+                  <div class="form-group">
+                    <label for="adjuntar_imagenes">Adjuntar Imágenes:</label>
+                    <input type="file" (change)="onFileSelected($event)" />
+              
+                    <div *ngFor="let image of imagenesAdjuntas; let i = index" class="image-container">
+                      <img [src]="image" alt="Imagen adjunta" class="adjunta-image" />
+                      <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+              
 
               <div class="row mb-3">
                 <div class="col">
+                  <div class="form-group">
                   <label for="fecha_creacion">Fecha Creación:</label>
-                  <span>{{ form.get('fecha_creacion')?.value | date: 'dd/MM/yyyy' }}</span>
+                  <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion"  readonly required>
+                  </div>
                 </div>
               </div>
 
@@ -445,17 +448,6 @@
                 <button type="submit" class="btn btn-primary">{{ 'Enviar Evidencia' }}</button>
               </div>
             </form>
-            <!-- Contenedor de imágenes -->
-            <div class="row mb-3">
-              <div class="col">
-                <div *ngFor="let image of imagenesAdjuntas; let i = index" class="image-container">
-                  <img [src]="image" alt="Imagen adjunta" class="adjunta-image" />
-                  <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">
-                    Eliminar
-                  </button>
-                </div>
-              </div>
-            </div>
             </div>
           </div>
         </div>

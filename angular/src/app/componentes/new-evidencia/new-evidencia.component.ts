@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
@@ -38,13 +38,11 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Criterio } from 'src/app/interfaces/criterio.interface';
 import { CriterioService } from 'src/app/services/criterio.service';
 
-
 @Component({
   selector: 'app-new-evidencia',
   templateUrl: './new-evidencia.component.html',
   styleUrls: ['./new-evidencia.component.css', '../../../shared-styles.css']
 })
-
 export class NewEvidenciaComponent implements OnInit {
   evidencias: Evidencia[] = [];
   ddac: DetalleDAC[] = [];
@@ -94,13 +92,13 @@ export class NewEvidenciaComponent implements OnInit {
     private impactoService: ImpactoService,
     private estadoService: EstadoService,
     private authService: AuthService,
-    ) 
-    {
+    @Inject('CHUNK_SIZE') private CHUNK_SIZE: number
+  ) {
       this.form = new FormGroup({
         numero_folio: new FormControl('', Validators.required),
         fecha_evidencia: new FormControl(null, Validators.required),
-        rut_usuario: new FormControl(null, Validators.required),
-        correo_usuario: new FormControl('' , Validators.required),
+        rut_usuario: new FormControl({value: '', disabled: true}),
+        correo_usuario: new FormControl({value: '', disabled: true}),
         id_usuario: new FormControl(null, Validators.required),
         id_unidad: new FormControl(null, Validators.required),
         id_procesos: new FormControl(null, Validators.required),
@@ -128,7 +126,7 @@ export class NewEvidenciaComponent implements OnInit {
         asistentes_externo_administrativos: new FormControl(null, Validators.required),
         asistentes_externo_docentes: new FormControl(null, Validators.required),
         asistentes_externo_estudiantes: new FormControl(null, Validators.required),
-        adjuntar_imagenes: new FormControl(null, Validators.required),
+        adjuntar_imagenes: new FormControl(null),
         fecha_creacion: new FormControl({ value: new Date(), disabled: true }, Validators.required),
       });
     
@@ -253,84 +251,117 @@ export class NewEvidenciaComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const files = event.target.files;
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.imagenesAdjuntas.push(e.target.result);
-        };
-        reader.readAsDataURL(files[i]);
-      }
+    const files: FileList | null = event.target.files;
+  
+    if (files && files.length > 0) {
+      this.form.get('adjuntar_imagenes')?.setValue(files);
+    } else {
+      console.error('No se ha seleccionado ningún archivo.');
     }
   }
+  
 
   eliminarImagen(index: number) {
     this.imagenesAdjuntas.splice(index, 1);
   }
 
-  // Método llamado cuando se suelta una imagen en la zona de arrastrar y soltar
-  onDrop(event: any) {
-    event.preventDefault();
-    const files = event.dataTransfer.files;
-    this.handleFiles(files);
-  }
 
-  // Método llamado cuando se arrastra una imagen sobre la zona de arrastrar y soltar
-  onDragOver(event: any) {
-    event.preventDefault();
-  }
-
-  // Método para manejar los archivos seleccionados o arrastrados
-  handleFiles(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader();
-
-      reader.onload = (e: any) => {
-        this.images.push({ url: e.target.result, file: files[i] });
-      };
-
-      reader.readAsDataURL(files[i]);
-    }
-  }
-
-  // Método para eliminar una imagen
-  removeImage(image: any) {
-    const index = this.images.indexOf(image);
-    if (index !== -1) {
-      this.images.splice(index, 1);
-    }
-  }
 
   // Método para crear una nueva evidencia
-  crearEvidencia() {
+  async crearEvidencia() {
+    console.log('Estado del formulario antes de la validación:', this.form.value);
+  
     if (this.form.valid) {
-      const nuevaEvidencia: Evidencia = this.form.value;
-  
-      // Convertir FileList a Uint8Array
+      const numero_folio = this.form.get('numero_folio')?.value;
+      const fecha_evidencia = this.form.get('fecha_evidencia')?.value;
+      const rut_usuario = this.form.get('rut_usuario')?.value;
+      const correo_usuario = this.form.get('correo_usuario')?.value;
+      const id_usuario = this.form.get('id_usuario')?.value;
+      const id_unidad = this.form.get('id_unidad')?.value;
+      const id_procesos = this.form.get('id_procesos')?.value;
+      const id_registro = this.form.get('id_registro')?.value;
+      const numero_de_mejoras = this.form.get('numero_de_mejoras')?.value;
+      const id_ambito_academico = this.form.get('id_ambito_academico')?.value;
+      const id_ambito_geografico = this.form.get('id_ambito_geografico')?.value;
+      const id_criterios = this.form.get('id_criterios')?.value;
+      const id_debilidades = this.form.get('id_debilidades')?.value;
+      const id_carrera = this.form.get('id_carrera')?.value;
+      const id_facultad = this.form.get('id_facultad')?.value;
+      const id_impacto = this.form.get('id_impacto')?.value;
+      const id_estado = this.form.get('id_estado')?.value;
+      const descripcion = this.form.get('descripcion')?.value;
+      const resultado = this.form.get('resultado')?.value;
+      const almacenamiento = this.form.get('almacenamiento')?.value;
+      const unidades_personas_evidencias = this.form.get('unidades_personas_evidencias')?.value;
+      const palabra_clave = this.form.get('palabra_clave')?.value;
+      const nombre_corto_evidencia = this.form.get('nombre_corto_evidencia')?.value;
+      const asistentes_interno_autoridades = this.form.get('asistentes_interno_autoridades')?.value;
+      const asistentes_interno_administrativos = this.form.get('asistentes_interno_administrativos')?.value;
+      const asistentes_interno_docentes = this.form.get('asistentes_interno_docentes')?.value;
+      const asistentes_interno_estudiantes = this.form.get('asistentes_interno_estudiantes')?.value;
+      const asistentes_externo_autoridades = this.form.get('asistentes_externo_autoridades')?.value;
+      const asistentes_externo_administrativos = this.form.get('asistentes_externo_administrativos')?.value;
+      const asistentes_externo_docentes = this.form.get('asistentes_externo_docentes')?.value;
+      const asistentes_externo_estudiantes = this.form.get('asistentes_externo_estudiantes')?.value;
       const files: FileList | null = this.form.get('adjuntar_imagenes')?.value;
-      if (files) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const result = event.target?.result as ArrayBuffer;
-          const uintArray = new Uint8Array(result);
-          nuevaEvidencia.adjuntar_imagenes = uintArray;
   
-          this.evidenciasService.nuevaEvidencia(nuevaEvidencia).subscribe({
-            next: (response) => {
-              console.log('Evidencia creada con éxito', response);
-              this.toastr.success('Evidencia creada con éxito', 'Éxito');
-              this.form.reset();
-              this.router.navigate(['/evidencia']);
-            },
-            error: (error) => {
-              console.error('Error al crear la evidencia', error);
-              this.toastr.error('Error al crear la evidencia', 'Error');
-            }
+      if (files && files.length > 0) {
+        const imagePromises = Array.from(files).map((file) => this.readFileAsArrayBuffer(file));
+      
+        Promise.all(imagePromises)
+          .then((imageChunks) => {
+            const concatenatedChunks = new Uint8Array(imageChunks.reduce((acc, chunk) => [...acc, ...new Uint8Array(chunk)], [] as number[]));
+            const adjuntar_imagenes = new Uint8Array(concatenatedChunks);
+
+            return this.evidenciasService.nuevaEvidencia({
+              numero_folio,
+              fecha_evidencia,
+              rut_usuario,
+              correo_usuario,
+              id_usuario,
+              id_unidad,
+              id_procesos,
+              id_registro,
+              numero_de_mejoras,
+              id_ambito_academico,
+              id_ambito_geografico,
+              id_criterios,
+              id_debilidades,
+              id_carrera,
+              id_facultad,
+              id_impacto,
+              id_estado,
+              descripcion,
+              resultado,
+              almacenamiento,
+              unidades_personas_evidencias,
+              palabra_clave,
+              nombre_corto_evidencia,
+              asistentes_interno_autoridades,
+              asistentes_interno_administrativos,
+              asistentes_interno_docentes,
+              asistentes_interno_estudiantes,
+              asistentes_externo_autoridades,
+              asistentes_externo_administrativos,
+              asistentes_externo_docentes,
+              asistentes_externo_estudiantes,
+              adjuntar_imagenes,
+              fecha_creacion: new Date(),
+            });
+          })
+          .then((response) => {
+            console.log('Evidencia creada con éxito', response);
+            this.toastr.success('Evidencia creada con éxito', 'Éxito');
+            this.form.reset();
+            this.router.navigate(['/evidencias']);
+          })
+          .catch((error) => {
+            console.error('Error al crear la evidencia', error);
+            this.toastr.error('Error al crear la evidencia', 'Error');
           });
-        };
-  
-        reader.readAsArrayBuffer(files[0]);
+      } else {
+        console.error('No se ha seleccionado ningún archivo.');
+        this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
       }
     } else {
       console.error('Formulario no válido. Verifica los campos.');
@@ -338,6 +369,22 @@ export class NewEvidenciaComponent implements OnInit {
     }
   }
   
+  private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as ArrayBuffer;
+        resolve(result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  }
+  
+  
+
   cancelar() {
     this.router.navigate(['/evidencias']);
   }

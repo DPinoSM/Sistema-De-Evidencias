@@ -96,7 +96,8 @@ import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.co
       useClass: AddTokenInterceptor,
       multi: true,
     },
-  ],
+    { provide: 'CHUNK_SIZE', useValue: 1024 * 1024 }
+  ],  
   bootstrap: [AppComponent],
 })
 export class AppModule {}
