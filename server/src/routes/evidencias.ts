@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getEvidencias, newEvidencia, getEvidencia, deleteEvidencia, updateEvidencia, buscarEvidencia } from '../controllers/evidencias';
 import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',validateToken,  getEvidencias);
+router.get('/lista',  getEvidencias);
 router.post('/', validateToken, newEvidencia);
 router.get('/:id',validateToken,  getEvidencia);
 router.delete('/:id',validateToken,  deleteEvidencia);

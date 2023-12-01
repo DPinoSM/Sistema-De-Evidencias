@@ -45,13 +45,12 @@
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                     <div class="error-message error-text"
-                      *ngIf="form.get('fecha_evidencia')?.invalid && (form.get('fecha_evidencia')?.dirty || form.get('fecha_evidencia')?.touched)">
+                         *ngIf="form.get('fecha_evidencia')?.invalid && (form.get('fecha_evidencia')?.dirty || form.get('fecha_evidencia')?.touched)">
                       La Fecha de Evidencia es obligatoria.
                     </div>
                   </div>
+                </div>                
                 </div>
-                </div>
-
                 <!-- RUT y Correo del Usuario -->
                 <div class="row mb-3">
                   <div class="col">
@@ -67,8 +66,6 @@
                     </div>
                   </div>
                 </div>
-                
-
                 <!-- Nombre del Usuario -->
                   <div class="row mb-3">
                     <div class="col">
@@ -86,8 +83,6 @@
                       </div>
                     </div>
                   </div>
-
-                
                 <!-- Unidad y Proceso -->
                 <div class="row mb-3">
                   <div class="col">
@@ -119,7 +114,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- Tipo Registro y N° Plan de Mejora -->
                 <div class="row mb-3">
                   <div class="col">
@@ -147,7 +141,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- Ambito Academico y Ambito Geografico -->
                 <div class="row mb-3">
                   <div class="col">
@@ -179,8 +172,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Criterio y Debilidades -->
                   <div class="row mb-3">
                     <div class="col">
@@ -212,8 +203,6 @@
                       </div>
                     </div>
                   </div>
-
-
                 <!-- Facultad y Carrera -->
                 <div class="row mb-3">
                   <div class="col">
@@ -245,8 +234,6 @@
                     </div>
                   </div>
                 </div>
-
-                
                 <!-- Impacto y Estado -->
                 <div class="row mb-3">
                   <div class="col">
@@ -278,9 +265,6 @@
                     </div>
                   </div>
                 </div>
-
-                
-
                 <!-- Descripcion -->
                 <div class="row mb-3">
                   <div class="col">
@@ -294,8 +278,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Resultado -->
                 <div class="row mb-3">
                   <div class="col">
@@ -309,8 +291,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Almacenamiento -->
                 <div class="row mb-3">
                   <div class="col">
@@ -324,8 +304,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Unidades y/o Persona Relacionadas a la Evidencia -->
                 <div class="row mb-3">
                   <div class="col">
@@ -339,8 +317,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Palabras Clave -->
                 <div class="row mb-3">
                   <div class="col">
@@ -354,8 +330,6 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Nombre Corto Evidencia -->
                 <div class="row mb-3">
                   <div class="col">
@@ -369,79 +343,72 @@
                     </div>
                   </div>
                 </div>
-
-
                 <!-- Cantidad Asistentes Interno -->
                 <div class="row mb-3">
                   <!-- Asistentes Internos -->
                   <div class="col justify-content-start">
                     <label>Cantidad Asistentes Interno:</label>
                     <div class="form-group">
-                      <label for="asistentes_interno_autoridades">Autoridades:</label>
-                      <input type="number" id="asistentes_interno_autoridades" class="form-control" formControlName="asistentes_interno_autoridades" required/>
+                      <label for="asistentes_internos_autoridades" class="form-label">Autoridades:</label>
+                      <input type="number" id="asistentes_internos_autoridades" class="form-control" formControlName="asistentes_internos_autoridades" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_interno_administrativos">Administrativos:</label>
-                      <input type="number" id="asistentes_interno_administrativos" class="form-control" formControlName="asistentes_interno_administrativos" required />
+                      <label for="asistentes_internos_administrativos" class="form-label">Administrativos:</label>
+                      <input type="number" id="asistentes_internos_administrativos" class="form-control" formControlName="asistentes_internos_administrativos" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_interno_docentes">Docentes:</label>
-                      <input type="number" id="asistentes_interno_docentes" class="form-control" formControlName="asistentes_interno_docentes" required/>
+                      <label for="asistentes_internos_docentes" class="form-label">Docentes:</label>
+                      <input type="number" id="asistentes_internos_docentes" class="form-control" formControlName="asistentes_internos_docentes" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_interno_estudiantes">Estudiantes:</label>
-                      <input type="number" id="asistentes_interno_estudiantes" class="form-control" formControlName="asistentes_interno_estudiantes" required/>
+                      <label for="asistentes_internos_estudiantes" class="form-label">Estudiantes:</label>
+                      <input type="number" id="asistentes_internos_estudiantes" class="form-control" formControlName="asistentes_internos_estudiantes" required />
                     </div>
                   </div>
-                
                   <!-- Asistentes Externos -->
                   <div class="col justify-content-end">
                     <label>Cantidad Asistentes Externos:</label>
                     <div class="form-group">
-                      <label for="asistentes_externo_autoridades">Autoridades:</label>
-                      <input type="number" id="asistentes_externo_autoridades" class="form-control" formControlName="asistentes_externo_autoridades" required/>
+                      <label for="asistentes_externos_autoridades" class="form-label">Autoridades:</label>
+                      <input type="number" id="asistentes_externos_autoridades" class="form-control" formControlName="asistentes_externos_autoridades" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_externo_administrativos">Administrativos:</label>
-                      <input type="number" id="asistentes_externo_administrativos" class="form-control" formControlName="asistentes_externo_administrativos" required />
+                      <label for="asistentes_externos_administrativos" class="form-label">Administrativos:</label>
+                      <input type="number" id="asistentes_externos_administrativos" class="form-control" formControlName="asistentes_externos_administrativos" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_externo_docentes">Docentes:</label>
-                      <input type="number" id="asistentes_externo_docentes" class="form-control" formControlName="asistentes_externo_docentes" required/>
+                      <label for="asistentes_externos_docentes" class="form-label">Docentes:</label>
+                      <input type="number" id="asistentes_externos_docentes" class="form-control" formControlName="asistentes_externos_docentes" required />
                     </div>
                     <div class="form-group">
-                      <label for="asistentes_externo_estudiantes">Estudiantes:</label>
-                      <input type="number" id="asistentes_externo_estudiantes" class="form-control" formControlName="asistentes_externo_estudiantes" required/>
+                      <label for="asistentes_externos_estudiantes" class="form-label">Estudiantes:</label>
+                      <input type="number" id="asistentes_externos_estudiantes" class="form-control" formControlName="asistentes_externos_estudiantes" required />
                     </div>
                   </div>
                 </div>
-              
+                
               <!-- Opción para adjuntar imágenes -->
               <div class="row mb-3">
                 <div class="col">
                   <div class="form-group">
-                    <label for="adjuntar_imagenes">Adjuntar Imágenes:</label>
-                    <input type="file" (change)="onFileSelected($event)" />
-              
+                    <label for="archivo_adjunto">Adjuntar Imágenes:</label>
+                    <input type="file" (change)="onFileSelected($event)" multiple />
                     <div *ngFor="let image of imagenesAdjuntas; let i = index" class="image-container">
-                      <img [src]="image" alt="Imagen adjunta" class="adjunta-image" />
+                      <img [src]="image" alt="archivo_adjunto" class="adjunta-image" />
                       <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
                     </div>
                   </div>
                 </div>
               </div>
-              
-
               <div class="row mb-3">
                 <div class="col">
                   <div class="form-group">
-                  <label for="fecha_creacion">Fecha Creación:</label>
-                  <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion"  readonly required>
+                    <label for="fecha_creacion">Fecha Creación:</label>
+                    <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion" readonly required>
                   </div>
                 </div>
               </div>
-
-
+              
               <!-- Botones Cancelar y Enviar -->
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary m-4" (click)="cancelar()">Cancelar</button>

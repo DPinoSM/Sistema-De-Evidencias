@@ -1,9 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
-import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Evidencia } from '../../interfaces/evidencia.interface';
 import { DetalleRevisor } from "../../interfaces/D_revisor.interface";
@@ -69,7 +67,6 @@ export class NewEvidenciaComponent implements OnInit {
   correo_usuario: string | null = null;
 
   form: FormGroup;
-  private evidenciaSubscription!: Subscription;
 
 
   constructor(
@@ -118,16 +115,16 @@ export class NewEvidenciaComponent implements OnInit {
         unidades_personas_evidencias: new FormControl('', Validators.required),
         palabra_clave: new FormControl('', Validators.required),
         nombre_corto_evidencia: new FormControl('', Validators.required),
-        asistentes_interno_autoridades: new FormControl(null, Validators.required),
-        asistentes_interno_administrativos: new FormControl(null, Validators.required),
-        asistentes_interno_docentes: new FormControl(null, Validators.required),
-        asistentes_interno_estudiantes: new FormControl(null, Validators.required),
-        asistentes_externo_autoridades: new FormControl(null, Validators.required),
-        asistentes_externo_administrativos: new FormControl(null, Validators.required),
-        asistentes_externo_docentes: new FormControl(null, Validators.required),
-        asistentes_externo_estudiantes: new FormControl(null, Validators.required),
-        adjuntar_imagenes: new FormControl(null),
-        fecha_creacion: new FormControl({ value: new Date(), disabled: true }, Validators.required),
+        asistentes_internos_autoridades: new FormControl(null, Validators.required),
+        asistentes_internos_administrativos: new FormControl(null, Validators.required),
+        asistentes_internos_docentes: new FormControl(null, Validators.required),
+        asistentes_internos_estudiantes: new FormControl(null, Validators.required),
+        asistentes_externos_autoridades: new FormControl(null, Validators.required),
+        asistentes_externos_administrativos: new FormControl(null, Validators.required),
+        asistentes_externos_docentes: new FormControl(null, Validators.required),
+        asistentes_externos_estudiantes: new FormControl(null, Validators.required),
+        archivo_adjunto: new FormControl(null),
+        fecha_creacion: new FormControl({ value: new Date(), disabled: true }),
       });
     
     }
@@ -254,21 +251,30 @@ export class NewEvidenciaComponent implements OnInit {
     const files: FileList | null = event.target.files;
   
     if (files && files.length > 0) {
-      this.form.get('adjuntar_imagenes')?.setValue(files);
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          this.imagenesAdjuntas.push(result);
+        };
+        reader.readAsDataURL(files[i]);
+      }
+      this.form.get('archivo_adjunto')?.setValue(files);
     } else {
       console.error('No se ha seleccionado ningún archivo.');
     }
   }
   
+  
 
   eliminarImagen(index: number) {
     this.imagenesAdjuntas.splice(index, 1);
   }
-
+  
 
 
   // Método para crear una nueva evidencia
-  async crearEvidencia() {
+  crearEvidencia() {
     console.log('Estado del formulario antes de la validación:', this.form.value);
   
     if (this.form.valid) {
@@ -295,93 +301,82 @@ export class NewEvidenciaComponent implements OnInit {
       const unidades_personas_evidencias = this.form.get('unidades_personas_evidencias')?.value;
       const palabra_clave = this.form.get('palabra_clave')?.value;
       const nombre_corto_evidencia = this.form.get('nombre_corto_evidencia')?.value;
-      const asistentes_interno_autoridades = this.form.get('asistentes_interno_autoridades')?.value;
-      const asistentes_interno_administrativos = this.form.get('asistentes_interno_administrativos')?.value;
-      const asistentes_interno_docentes = this.form.get('asistentes_interno_docentes')?.value;
-      const asistentes_interno_estudiantes = this.form.get('asistentes_interno_estudiantes')?.value;
-      const asistentes_externo_autoridades = this.form.get('asistentes_externo_autoridades')?.value;
-      const asistentes_externo_administrativos = this.form.get('asistentes_externo_administrativos')?.value;
-      const asistentes_externo_docentes = this.form.get('asistentes_externo_docentes')?.value;
-      const asistentes_externo_estudiantes = this.form.get('asistentes_externo_estudiantes')?.value;
-      const files: FileList | null = this.form.get('adjuntar_imagenes')?.value;
-  
-      if (files && files.length > 0) {
-        const imagePromises = Array.from(files).map((file) => this.readFileAsArrayBuffer(file));
-      
-        Promise.all(imagePromises)
-          .then((imageChunks) => {
-            const concatenatedChunks = new Uint8Array(imageChunks.reduce((acc, chunk) => [...acc, ...new Uint8Array(chunk)], [] as number[]));
-            const adjuntar_imagenes = new Uint8Array(concatenatedChunks);
+      const asistentes_internos_autoridades = this.form.get('asistentes_internos_autoridades')?.value;
+      const asistentes_internos_administrativos = this.form.get('asistentes_internos_administrativos')?.value;
+      const asistentes_internos_docentes = this.form.get('asistentes_internos_docentes')?.value;
+      const asistentes_internos_estudiantes = this.form.get('asistentes_internos_estudiantes')?.value;
+      const asistentes_externos_autoridades = this.form.get('asistentes_externos_autoridades')?.value;
+      const asistentes_externos_administrativos = this.form.get('asistentes_externos_administrativos')?.value;
+      const asistentes_externos_docentes = this.form.get('asistentes_externos_docentes')?.value;
+      const asistentes_externos_estudiantes = this.form.get('asistentes_externos_estudiantes')?.value;
+      const files: FileList | null = this.form.get('archivo_adjunto')?.value;
 
-            return this.evidenciasService.nuevaEvidencia({
-              numero_folio,
-              fecha_evidencia,
-              rut_usuario,
-              correo_usuario,
-              id_usuario,
-              id_unidad,
-              id_procesos,
-              id_registro,
-              numero_de_mejoras,
-              id_ambito_academico,
-              id_ambito_geografico,
-              id_criterios,
-              id_debilidades,
-              id_carrera,
-              id_facultad,
-              id_impacto,
-              id_estado,
-              descripcion,
-              resultado,
-              almacenamiento,
-              unidades_personas_evidencias,
-              palabra_clave,
-              nombre_corto_evidencia,
-              asistentes_interno_autoridades,
-              asistentes_interno_administrativos,
-              asistentes_interno_docentes,
-              asistentes_interno_estudiantes,
-              asistentes_externo_autoridades,
-              asistentes_externo_administrativos,
-              asistentes_externo_docentes,
-              asistentes_externo_estudiantes,
-              adjuntar_imagenes,
-              fecha_creacion: new Date(),
-            });
-          })
-          .then((response) => {
-            console.log('Evidencia creada con éxito', response);
-            this.toastr.success('Evidencia creada con éxito', 'Éxito');
-            this.form.reset();
-            this.router.navigate(['/evidencias']);
-          })
-          .catch((error) => {
-            console.error('Error al crear la evidencia', error);
-            this.toastr.error('Error al crear la evidencia', 'Error');
-          });
-      } else {
-        console.error('No se ha seleccionado ningún archivo.');
-        this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
-      }
-    } else {
-      console.error('Formulario no válido. Verifica los campos.');
-      this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
-    }
-  }
-  
-  private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
-    return new Promise((resolve, reject) => {
+    if (files && files.length > 0) {
       const reader = new FileReader();
       reader.onload = (event) => {
         const result = event.target?.result as ArrayBuffer;
-        resolve(result);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  }
+        const uintArray = new Uint8Array(result);
+        const archivo_adjunto = uintArray;
+
+        this.evidenciasService.nuevaEvidencia({
+              numero_folio: numero_folio,
+              fecha_evidencia: fecha_evidencia,
+              rut_usuario: rut_usuario,
+              correo_usuario: correo_usuario,
+              id_usuario: id_usuario,
+              id_unidad: id_unidad,
+              id_procesos: id_procesos,
+              id_registro: id_registro,
+              numero_de_mejoras: numero_de_mejoras,
+              id_ambito_academico: id_ambito_academico,
+              id_ambito_geografico: id_ambito_geografico,
+              id_criterios: id_criterios,
+              id_debilidades: id_debilidades,
+              id_carrera: id_carrera,
+              id_facultad: id_facultad,
+              id_impacto: id_impacto,
+              id_estado: id_estado,
+              descripcion: descripcion,
+              resultado: resultado,
+              almacenamiento: almacenamiento,
+              unidades_personas_evidencias: unidades_personas_evidencias,
+              palabra_clave: palabra_clave,
+              nombre_corto_evidencia: nombre_corto_evidencia,
+              asistentes_internos_autoridades: asistentes_internos_autoridades,
+              asistentes_internos_administrativos: asistentes_internos_administrativos,
+              asistentes_internos_docentes: asistentes_internos_docentes,
+              asistentes_internos_estudiantes: asistentes_internos_estudiantes,
+              asistentes_externos_autoridades: asistentes_externos_autoridades,
+              asistentes_externos_administrativos: asistentes_externos_administrativos,
+              asistentes_externos_docentes: asistentes_externos_docentes,
+              asistentes_externos_estudiantes: asistentes_externos_estudiantes,
+              archivo_adjunto: archivo_adjunto,
+              fecha_creacion: new Date(),
+            }).subscribe({
+              next: (response) => {
+                console.log('Evidencia creada con éxito', response);
+                this.toastr.success('Evidencia creada con éxito', 'Éxito');
+                this.form.reset();
+                this.imagenesAdjuntas = [];
+              },
+              error: (error) => {
+                console.error('Error al crear la evidencia', error);
+                this.toastr.error('Error al crear la evidencia', 'Error');
+              }
+            });
+          };
+    
+          reader.readAsArrayBuffer(files[0]);
+        } else {
+          console.error('No se ha seleccionado ningún archivo.');
+          this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
+        }
+      } else {
+        console.error('Formulario no válido. Verifica los campos.');
+        this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
+      }
+    }
+  
   
   
 
