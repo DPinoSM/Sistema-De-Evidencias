@@ -74,7 +74,8 @@ class Server {
     }
     midlewares() {
         //parseo body
-        this.app.use(express.json());
+        this.app.use(express.json({ limit: '10mb'}));
+        this.app.use(express.urlencoded({ extended: true, limit: '10mb'}));
         //cors
         this.app.use(cors());
     }
