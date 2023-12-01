@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit {
     {
       name: 'Debilidades',
       icon: 'fa-solid fa-exclamation-circle',
-      link: '/debilidades',
+      link: '/debilidad',
     },
     {
       name: 'Impacto',
