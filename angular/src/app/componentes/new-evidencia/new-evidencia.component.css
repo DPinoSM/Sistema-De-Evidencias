@@ -65,3 +65,28 @@
     right: 5px;
   }
   
+
+  /* Agrega estos estilos para controlar el tamaño de las imágenes adjuntas */
+.image-container {
+  margin-bottom: 10px; /* Ajusta según sea necesario */
+}
+
+.adjunta-image {
+  max-width: 100%; /* Ajusta según sea necesario */
+  max-height: 200px; /* Ajusta según sea necesario */
+  display: block;
+  margin-bottom: 5px; /* Ajusta según sea necesario */
+}
+
+/* Estilos adicionales para los botones de eliminación */
+.btn-danger {
+  margin-top: 5px; /* Ajusta según sea necesario */
+}
+
+.drop-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+}

@@ -393,21 +393,27 @@
                   <div class="form-group">
                     <label for="archivo_adjunto">Adjuntar Imágenes:</label>
                     <input type="file" (change)="onFileSelected($event)" multiple />
-                    <div *ngFor="let image of imagenesAdjuntas; let i = index" class="image-container">
+                    <div (dragover)="onDragOver($event)" (drop)="onDrop($event)" class="drop-area">
+                      Arrastra y suelta imágenes aquí
+                    </div>
+                    <div class="image-container" *ngFor="let image of imagenesAdjuntas; let i = index" draggable="true" (dragstart)="onDragStart($event, i)">
                       <img [src]="image" alt="archivo_adjunto" class="adjunta-image" />
                       <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
                     </div>
                   </div>
                 </div>
               </div>
+              
+              
               <div class="row mb-3">
                 <div class="col">
                   <div class="form-group">
                     <label for="fecha_creacion">Fecha Creación:</label>
-                    <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion" readonly required>
+                    <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion" [value]="currentDateTime" readonly required>
                   </div>
                 </div>
               </div>
+              
               
               <!-- Botones Cancelar y Enviar -->
               <div class="form-actions">

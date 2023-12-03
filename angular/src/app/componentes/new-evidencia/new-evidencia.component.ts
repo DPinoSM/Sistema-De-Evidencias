@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { Evidencia } from '../../interfaces/evidencia.interface';
 import { DetalleRevisor } from "../../interfaces/D_revisor.interface";
 import { revisorService } from 'src/app/services/D-revisor.service';
@@ -39,8 +40,10 @@ import { CriterioService } from 'src/app/services/criterio.service';
 @Component({
   selector: 'app-new-evidencia',
   templateUrl: './new-evidencia.component.html',
-  styleUrls: ['./new-evidencia.component.css', '../../../shared-styles.css']
+  styleUrls: ['./new-evidencia.component.css', '../../../shared-styles.css'],
+  providers: [DatePipe],
 })
+
 export class NewEvidenciaComponent implements OnInit {
   evidencias: Evidencia[] = [];
   ddac: DetalleDAC[] = [];
@@ -67,6 +70,8 @@ export class NewEvidenciaComponent implements OnInit {
   correo_usuario: string | null = null;
 
   form: FormGroup;
+  dateTimeInterval: any;
+  currentDateTime: string = '';
 
 
   constructor(
@@ -87,6 +92,7 @@ export class NewEvidenciaComponent implements OnInit {
     private facultadService: FacultadService,
     private procesoService: ProcesosService,
     private impactoService: ImpactoService,
+    private datePipe: DatePipe,
     private estadoService: EstadoService,
     private authService: AuthService,
     @Inject('CHUNK_SIZE') private CHUNK_SIZE: number
@@ -124,9 +130,9 @@ export class NewEvidenciaComponent implements OnInit {
         asistentes_externos_docentes: new FormControl(null, Validators.required),
         asistentes_externos_estudiantes: new FormControl(null, Validators.required),
         archivo_adjunto: new FormControl(null),
-        fecha_creacion: new FormControl({ value: new Date(), disabled: true }),
+        fecha_creacion: new FormControl({ value: this.getCurrentDateTime(), disabled: true }),
       });
-    
+      this.updateCurrentDateTime();
     }
     
     
@@ -155,6 +161,14 @@ export class NewEvidenciaComponent implements OnInit {
         correo_usuario: usuarioLogeadoInfo.correo,
       });
     }
+
+    this.dateTimeInterval = setInterval(() => {
+      this.updateCurrentDateTime();
+    }, 10);
+  }
+  
+  ngOnDestroy() {
+    clearInterval(this.dateTimeInterval);
   }
 
   getUnidades() {
@@ -247,24 +261,53 @@ export class NewEvidenciaComponent implements OnInit {
     });
   }
 
+  updateCurrentDateTime() {
+    this.currentDateTime = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss') || '';
+  }
+
+  getCurrentDateTime(): string {
+    const currentDate = new Date();
+    return this.datePipe.transform(currentDate, 'yyyy-MM-dd HH:mm:ss') || '';
+  }
+
   onFileSelected(event: any) {
     const files: FileList | null = event.target.files;
   
     if (files && files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result as string;
-          this.imagenesAdjuntas.push(result);
-        };
-        reader.readAsDataURL(files[i]);
-      }
-      this.form.get('archivo_adjunto')?.setValue(files);
+      this.handleFiles(files);
     } else {
       console.error('No se ha seleccionado ningún archivo.');
     }
   }
   
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+  
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleFiles(files);
+    }
+  }
+  
+  onDragStart(event: DragEvent, index: number) {
+    event.dataTransfer?.setData('text/plain', index.toString());
+  }
+  
+  private handleFiles(files: FileList) {
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        this.imagenesAdjuntas.push(result);
+      };
+      reader.readAsDataURL(files[i]);
+    }
+
+    this.form.get('archivo_adjunto')?.setValue(files);
+  }
   
 
   eliminarImagen(index: number) {
@@ -310,6 +353,8 @@ export class NewEvidenciaComponent implements OnInit {
       const asistentes_externos_docentes = this.form.get('asistentes_externos_docentes')?.value;
       const asistentes_externos_estudiantes = this.form.get('asistentes_externos_estudiantes')?.value;
       const files: FileList | null = this.form.get('archivo_adjunto')?.value;
+      const fecha_creacion = this.getCurrentDateTime();
+      this.form.get('fecha_creacion')?.setValue(fecha_creacion);
 
     if (files && files.length > 0) {
       const reader = new FileReader();
@@ -351,13 +396,14 @@ export class NewEvidenciaComponent implements OnInit {
               asistentes_externos_docentes: asistentes_externos_docentes,
               asistentes_externos_estudiantes: asistentes_externos_estudiantes,
               archivo_adjunto: archivo_adjunto,
-              fecha_creacion: new Date(),
+              fecha_creacion: this.getCurrentDateTime(),
             }).subscribe({
               next: (response) => {
                 console.log('Evidencia creada con éxito', response);
                 this.toastr.success('Evidencia creada con éxito', 'Éxito');
                 this.form.reset();
                 this.imagenesAdjuntas = [];
+                this.router.navigate(['/evidencias']);
               },
               error: (error) => {
                 console.error('Error al crear la evidencia', error);
@@ -383,6 +429,8 @@ export class NewEvidenciaComponent implements OnInit {
   cancelar() {
     this.router.navigate(['/evidencias']);
   }
+  
+  
   
   
 
