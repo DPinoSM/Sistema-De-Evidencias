@@ -14,14 +14,14 @@ export class EvidenciasService {
 
   
   // Método para obtener todas las evidencias desde el backend
-  obtenerEvidencias(): Observable<any> {
+  getEvidencias(): Observable<any> {
     return this.http.get(`${this.baseUrl}/lista`)
     .pipe(
       catchError(err => this.handleError(err))
       );
   }
 
-  nuevaEvidencia(data: any): Observable<any> {
+  newEvidencia(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}`, data)
     .pipe(
       catchError(err => this.handleError(err))
@@ -29,7 +29,7 @@ export class EvidenciasService {
   }
 
   // Método para obtener una evidencia específica por su ID desde el backend
-  obtenerEvidenciaPorId(id: number): Observable<any> {
+  getEvidencia(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`)
     .pipe(
       catchError(err => this.handleError(err))
@@ -37,7 +37,7 @@ export class EvidenciasService {
   }
 
   // Método para eliminar una evidencia por su ID desde el backend
-  eliminarEvidencia(id: number): Observable<any> {
+  deleteEvidencia(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`)
     .pipe(
       catchError(err => this.handleError(err))
@@ -45,7 +45,7 @@ export class EvidenciasService {
   }
 
   // Método para actualizar una evidencia por su ID en el backend
-  actualizarEvidencia(id: number, data: any): Observable<any> {
+  updateEvidencia(id: number, data: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}`, data)
     .pipe(
       catchError(err => this.handleError(err))

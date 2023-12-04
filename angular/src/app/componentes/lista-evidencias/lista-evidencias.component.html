@@ -10,8 +10,93 @@
                 <i class="fas fa-plus me-2"></i>
                 <span class="me-2">Crear</span>
             </a>
+            
+            <div class="table-container mt-4">
+              <div class="search-container">
+                <input type="text" placeholder="Numero de folio" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+                <button class="btn" (click)="realizarBusqueda()"><i class="fas fa-search"></i></button>
+              </div>
+
+              <div class="d-flex justify-content-end mt-4">
+                <div class="search-container">
+                  <input type="text" placeholder="estado" [(ngModel)]="searchTerm" (input)="realizarBusqueda()">
+                  <button class="btn" (click)="realizarBusqueda()"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+
+            <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+              <thead>
+                  <tr>
+                      <th scope="col">id evidencia</th>
+                      <th scope="col">Número de folio</th>
+                      <th scope="col">Fecha evidencia</th>
+                      <th scope="col">Unidad</th>
+                      <th scope="col">Proceso</th>
+                      <th scope="col">Registro</th>
+                      <th scope="col">Ambito</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Acción</th>
+                      <th scope="col">Descargar evidencia</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                      style="border: 1px solid black;">
+                      <td style="border: 1px solid black;">{{ evidencia.id_evidencias }}</td>
+                      <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
+                      <td style="border: 1px solid black;">{{ evidencia.fecha_evidencia }}</td>
+                      <td style="border: 1px solid black;">{{ evidencia.unidad?.nombre_unidad }}
+                      </td>
+                      <td style="border: 1px solid black;">{{ evidencia.proceso?.nombre_procesos
+                          }}</td>
+                      <td style="border: 1px solid black;">{{ evidencia.registro?.datos_registro
+                          }}</td>
+                      <td style="border: 1px solid black;">{{
+                          evidencia.ambito_academico?.nombre_ambito_academico }}</td>
+                      <td style="border: 1px solid black;">
+                          <i class="fas fa-question"></i>
+                          <i class="fas fa-question"></i>
+                          <i class="fas fa-question"></i>
+
+                          <i class="fas fa-user"></i>
+                          <i class="fas fa-times-circle text-danger"></i>
+
+                          <i class="fas fa-user"></i>
+                          <i class="fas fa-check-circle text-success"></i>
+
+                          <i class="fas fa-user"></i>
+                          <i class="fas fa-check-circle text-success"></i>
+                      </td>
+
+                      <td style="border: 1px solid black;">
+                          <i class="btn ms-2"></i>
+                          <i class="fas fa-eye"></i>
+
+  
+                            <!-- Botón de editar -->
+                            <button type="button" class="btn" (click)="mostrarAgregarEditarEvidencia(5)">
+                              <i class="fas fa-edit icon-no-bg"></i>
+                            </button>
+
+                          <!--eliminar-->
+                          <button type="button" class="btn ms-2" (click)="eliminarEvidencia(5)">
+                              <i class="fa fa-trash icon-no-bg"></i>
+                          </button>
+                      </td>
+                      <!--boton descarga-->
+                      <td style="border: 1px solid black;">
+                        <button type="button" class="btn ms-2">
+                          <i class="fas fa-download"></i> Descargar
+                        </button>
+                    </td>
+                  </tr>
+              </tbody>
+          </table>
+          <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+              nextLabel="Siguiente"></pagination-controls>
           </div>
         </div>
+      </div>
       </div>
     </main>
   </div>

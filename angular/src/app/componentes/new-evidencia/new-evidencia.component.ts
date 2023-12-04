@@ -37,6 +37,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Criterio } from 'src/app/interfaces/criterio.interface';
 import { CriterioService } from 'src/app/services/criterio.service';
 
+
 @Component({
   selector: 'app-new-evidencia',
   templateUrl: './new-evidencia.component.html',
@@ -154,6 +155,7 @@ export class NewEvidenciaComponent implements OnInit {
     this.getProceso();
     this.getRegistro();
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
+
 
     if (usuarioLogeadoInfo) {
       this.form.patchValue({
@@ -363,7 +365,7 @@ export class NewEvidenciaComponent implements OnInit {
         const uintArray = new Uint8Array(result);
         const archivo_adjunto = uintArray;
 
-        this.evidenciasService.nuevaEvidencia({
+        this.evidenciasService.newEvidencia({
               numero_folio: numero_folio,
               fecha_evidencia: fecha_evidencia,
               rut_usuario: rut_usuario,
