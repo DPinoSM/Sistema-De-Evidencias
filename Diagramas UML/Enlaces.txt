@@ -1,0 +1,10 @@
+Correos:jonathan.molina@alu.ucm.cl; matias.morales.02@alu.ucm.cl; diego.pino@alu.ucm.cl; jose.sepulveda.03@alu.ucm.cl; sofia.silva.02@alu.ucm.cl
+
+Nombres:-Jonathan Molina 
+	-Matías Morales
+	-Diego Pino
+	-Jose Sepulveda
+	-Sofia Silva
+
+Video Diagrama de clase: https://www.youtube.com/watch?v=LXJoTqMmbTg
+Video Diagrama de caso de uso: https://www.youtube.com/watch?v=VfcsZlmrY2U
