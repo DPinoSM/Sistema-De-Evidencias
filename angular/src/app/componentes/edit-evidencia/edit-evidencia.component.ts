@@ -62,7 +62,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
   estado: Estado[] = [];
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
-  
+  selectedImages: File[] = [];
   imagenesAdjuntas: string[] = [];
   images: any[] = [];
   rut_usuario: number | null = null;
@@ -71,6 +71,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
   form: FormGroup;
   dateTimeInterval: any;
   currentDateTime: string = '';
+  imagenBase64: string | null = null;
 
 
   constructor(
@@ -149,11 +150,8 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
     this.getAmbitoA();
     this.getAmbitoG();
     this.getCarrera();
-    this.getDcomite();
-    this.getDdac();
     this.getCriterio();
     this.getDebilidades();
-    this.getDrevisor();
     this.getEstado();
     this.getFacultad();
     this.getImpacto();
@@ -180,7 +178,6 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
   }
 
   obtenerEvidencia(id: number | null) {
-    // Check if id is not null before making the service call
     if (id !== null) {
       this.evidenciasService.getEvidencia(id).subscribe((evidencias) => {
         if (evidencias) {
@@ -217,20 +214,14 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
           asistentes_externos_administrativos: evidencias.asistentes_externos_administrativos,
           asistentes_externos_docentes: evidencias.asistentes_externos_docentes,
           asistentes_externos_estudiantes: evidencias.asistentes_externos_estudiantes,
-          archivo_adjunto: null,
+          archivo_adjunto: evidencias.archivo_adjunto,
           fecha_creacion: evidencias.fecha_creacion,
           fecha_actualizacion: evidencias.fecha_actualizacion,
+          
         });
-  
-        if (evidencias.archivo_adjunto) {
-          const blob = new Blob([evidencias.archivo_adjunto]);
-          const file = new File([blob], 'archivo_adjunto');
-          this.form.get('archivo_adjunto')?.setValue([file]);
-        }
-        console.log('Formulario actualizado con datos de la evidencia:', this.form.value);
+        this.imagenBase64 = evidencias.archivo_adjunto;
       }
-      
-    });
+    })
   } else {
 
     console.error('ID is null');
@@ -269,18 +260,6 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDcomite() {
-    this.comiteService.obtenerComite().subscribe((comite) => {
-      this.dcomite = comite;
-    });
-  }
-
-  getDdac() {
-    this.dacService.obtenerDac().subscribe((dac) => {
-      this.ddac = dac;
-    });
-  }
-
   getDebilidades() {
     this.debilidadService.obtenerDebilidad().subscribe((debilidades) => {
       this.debilidad = debilidades;
@@ -308,12 +287,6 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
   getCriterio() {
     this.criterioService.getCriterios().subscribe((criterio) => {
       this.criterios = criterio;
-    });
-  }
-
-  getDrevisor() {
-    this.revisorService.obtenerRevisor().subscribe((revisor) => {
-      this.drevisor = revisor;
     });
   }
 
@@ -372,15 +345,21 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
         this.imagenesAdjuntas.push(result);
       };
       reader.readAsDataURL(files[i]);
+  
+      this.selectedImages.push(files[i]);
     }
-
-    this.form.get('archivo_adjunto')?.setValue(files);
+    this.form.get('archivo_adjunto')?.setValue(this.selectedImages);
   }
   
+  getSafeImageURL(image: File): string {
+    return URL.createObjectURL(image);
+  }
 
   eliminarImagen(index: number) {
     this.imagenesAdjuntas.splice(index, 1);
+    this.selectedImages.splice(index, 1);
   }
+  
 
   cancelar() {
     this.router.navigate(['/evidencias']);
@@ -392,8 +371,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
     console.log('Estado del formulario antes de la validación:', this.form.value);
   
     if (this.form.valid) {
-      const files: FileList | null = this.form.get('archivo_adjunto')?.value;
-  
+      const files: File[] = this.selectedImages;  
       if (files && files.length > 0) {
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -469,7 +447,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
                 asistentes_externos_docentes: asistentes_externos_docentes,
                 asistentes_externos_estudiantes: asistentes_externos_estudiantes,
                 fecha_creacion: fecha_creacion,
-                archivo_adjunto: archivo_adjunto,
+                archivo_adjunto: files,
                 fecha_actualizacion: fecha_actualizacion,
           }).subscribe({
             next: (response) => {

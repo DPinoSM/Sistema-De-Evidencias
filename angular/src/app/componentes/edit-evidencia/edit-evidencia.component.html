@@ -396,10 +396,11 @@
                       <div (dragover)="onDragOver($event)" (drop)="onDrop($event)" class="drop-area">
                         Arrastra y suelta imágenes aquí
                       </div>
-                      <div class="image-container" *ngFor="let image of imagenesAdjuntas; let i = index" draggable="true" (dragstart)="onDragStart($event, i)">
-                        <img [src]="image" alt="archivo_adjunto" class="adjunta-image" />
+                      <div class="image-container" *ngFor="let image of selectedImages; let i = index" draggable="true" (dragstart)="onDragStart($event, i)">
+                        <img *ngIf="imagenBase64" [src]="imagenBase64" alt="Imagen Adjunta" class="adjunta-image" />
                         <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
                       </div>
+                      
                     </div>
                   </div>
                 </div>

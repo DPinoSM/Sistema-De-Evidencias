@@ -5,6 +5,7 @@ import { User } from '../interfaces/login.interface';
 import { tap } from 'rxjs/operators';
 
 export interface LoginResponse {
+  id_usuario: number;
   token: string;
   rol: number;
   rut_usuario: number;
@@ -23,6 +24,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.ApiUrl}/login`, user)
       .pipe(
         tap(response => {
+          localStorage.setItem('id_usuario', response.id_usuario.toString());
           localStorage.setItem('token', response.token);
           localStorage.setItem('rol', response.rol.toString());
           localStorage.setItem('rut_usuario', response.rut_usuario.toString());

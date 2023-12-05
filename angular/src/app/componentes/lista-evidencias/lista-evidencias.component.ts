@@ -35,6 +35,8 @@ import { Impacto } from "../../interfaces/impacto.interface";
 import { ImpactoService } from 'src/app/services/impacto.service';
 import { Estado } from "../../interfaces/estado.interface";
 import { EstadoService } from 'src/app/services/estado.service';
+import { saveAs } from 'file-saver';
+
 
 
 @Component({
@@ -68,6 +70,7 @@ export class ListaEvidenciasComponent implements OnInit {
   private evidenciasSubscription!: Subscription;    
   imagenesAdjuntas: string[] = [];
   images: any[] = [];
+  selectedEstado: string | null = null;
 
 
 
@@ -125,6 +128,9 @@ export class ListaEvidenciasComponent implements OnInit {
   ngOnInit() {
     this.getEvidencias();
     this.getUsers();
+    this.getComite();
+    this.getDac();
+    this.getRevisor();
     this.getUnidades();
     this.getAmbitoA();
     this.getAmbitoG();
@@ -138,6 +144,24 @@ export class ListaEvidenciasComponent implements OnInit {
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
+  }
+
+  getDac() {
+    this.dacService.obtenerDac().subscribe((dac) => {
+      this.ddac = dac;
+    });
+  }
+
+  getComite() {
+    this.comiteService.obtenerComite().subscribe((comite) => {
+      this.dcomite = comite;
+    });
+  }
+
+  getRevisor() {
+    this.revisorService.obtenerRevisor().subscribe((revisor) => {
+      this.drevisor = revisor;
+    });
   }
 
   getUnidades() {
@@ -296,16 +320,29 @@ export class ListaEvidenciasComponent implements OnInit {
   }
 
   realizarBusqueda() {
-    if (this.searchTerm) {
-      this.currentPage = 1;
-      this.getEvidencias(); 
-    } else {
-
-      if (this.evidenciasOriginal) {
-        this.evidencias = this.evidenciasOriginal;
-      }
+    if (this.selectedEstado === null || this.selectedEstado === undefined) {
+      this.evidencias = [...this.evidenciasOriginal!];
+      return;
     }
+  
+    const searchTerm = this.selectedEstado.toString().toLowerCase();
+  
+    this.evidencias = this.evidenciasOriginal?.filter(evidencia => {
+      const revisadoComite = evidencia.comite?.revisado_comite;
+      const revisadoDac = evidencia.dac?.revisado_dac;
+      const revisadoRevisor = evidencia.revisor?.revisado_revisor;
+  
+      const aprobadoRevisor = revisadoRevisor === true ? 'Aprobado' : (revisadoRevisor === false ? 'Rechazado' : 'En espera');
+      const aprobadoDac = revisadoDac === true ? 'Aprobado' : (revisadoDac === false ? 'Rechazado' : 'En espera');
+      const aprobadoComite = revisadoComite === true ? 'Aprobado' : (revisadoComite === false ? 'Rechazado' : 'En espera');
+  
+      // Agregamos la propiedad estadoRevision a cada evidencia
+      evidencia.estadoRevision = `${aprobadoRevisor} - ${aprobadoDac} - ${aprobadoComite}`;
+  
+      return aprobadoRevisor.includes(searchTerm) || aprobadoDac.includes(searchTerm) || aprobadoComite.includes(searchTerm);
+    }) || [];
   }
+
 
   pageChanged(page: number) {
     this.currentPage = page;
@@ -364,10 +401,26 @@ private realizarOperacionDeEvidencia(operacion: () => any, mensajeExitoso: strin
       }
   });
 }
-
-
+  descargarPDF(idEvidencia: number | undefined): void {
+    if (idEvidencia !== undefined) {
+      // Llama a tu servicio para obtener el contenido del PDF
+      this.evidenciasService.descargarPDF(idEvidencia).subscribe({
+        next: (data: any) => {
+          // Convierte el contenido a Blob
+          const blob = new Blob([data], { type: 'application/pdf' });
+  
+          // Guarda el Blob como archivo PDF usando file-saver
+          saveAs(blob, `evidencia_${idEvidencia}.pdf`);
+        },
+        error: (error: any) => {
+          console.error('Error al descargar el PDF', error);
+        },
+      });
+    } else {
+      console.error('ID de evidencia no definida. No se puede descargar el PDF.');
+    }
+  }
 
 }
-
 
   

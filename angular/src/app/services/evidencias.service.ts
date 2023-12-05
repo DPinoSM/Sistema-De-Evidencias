@@ -60,6 +60,14 @@ export class EvidenciasService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
+
+  descargarPDF(idEvidencia: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${idEvidencia}`, { responseType: 'arraybuffer' })
+    .pipe(
+      catchError(err => this.handleError(err))
+      );
+  }
+  
   // Manejo de errores
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);

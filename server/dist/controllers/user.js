@@ -103,13 +103,14 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Obtener el correo del usuario
         const correo_usuario = usuario.correo_usuario;
+        const id_usuario = usuario.id_usuario;
         // Generar token JWT con el rol del usuario
         const token = jsonwebtoken_1.default.sign({
             rut_usuario,
             role: usuario.id_rol,
         }, process.env.SECRET_KEY || 'HS384', { expiresIn: '120m' });
         // Enviar el token, el rol y el correo como parte de la respuesta JSON
-        res.json({ token, rol: usuario.id_rol, rut_usuario, correo_usuario: correo_usuario || '' });
+        res.json({ token, rol: usuario.id_rol, rut_usuario, id_usuario: id_usuario, correo_usuario: correo_usuario || '' });
     }
     catch (error) {
         console.error('Error en el controlador loginUser:', error);
