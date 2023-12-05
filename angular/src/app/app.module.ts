@@ -44,6 +44,7 @@ import { ListaDebilidadComponent } from './componentes/lista-debilidad/lista-deb
 import { ListaCarreraComponent } from './componentes/lista-carrera/lista-carrera.component';
 import { ListaImpactoComponent } from './componentes/lista-impacto/lista-impacto.component';
 import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.component';
+import { EditEvidenciaComponent } from './componentes/edit-evidencia/edit-evidencia.component';
 
 
 
@@ -73,7 +74,8 @@ import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.co
     ListaDebilidadComponent,
     ListaCarreraComponent,
     ListaImpactoComponent,
-    ListaEstadoComponent
+    ListaEstadoComponent,
+    EditEvidenciaComponent
   ],
   imports: [
     BrowserModule,

@@ -24,6 +24,7 @@ import { ListaDebilidadComponent } from '../componentes/lista-debilidad/lista-de
 import { ListaImpactoComponent } from '../componentes/lista-impacto/lista-impacto.component';
 import { ListaCarreraComponent } from '../componentes/lista-carrera/lista-carrera.component';
 import { ListaEstadoComponent } from '../componentes/lista-estado/lista-estado.component';
+import { EditEvidenciaComponent } from '../componentes/edit-evidencia/edit-evidencia.component';
 
 
 const routes: Routes = [
@@ -47,7 +48,8 @@ const routes: Routes = [
   { path: 'facultad', component: ListaFacultadComponent, canActivate: [AuthGuard], data: { rol: 1 }},
   { path: 'debilidad', component: ListaDebilidadComponent, canActivate: [AuthGuard], data: { rol: 1}},
   { path: 'evidencias', component: ListaEvidenciasComponent},
-  { path: 'Cevidencias', component: NewEvidenciaComponent},
+  { path: 'Cevidencias', component: NewEvidenciaComponent },
+  { path: 'evidencia', component: EditEvidenciaComponent },
   { path: 'impacto', component: ListaImpactoComponent},
   { path: 'carrera', component: ListaCarreraComponent},
   { path: 'estado', component: ListaEstadoComponent}

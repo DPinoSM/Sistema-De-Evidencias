@@ -31,10 +31,11 @@ export class EvidenciasService {
   // Método para obtener una evidencia específica por su ID desde el backend
   getEvidencia(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`)
-    .pipe(
-      catchError(err => this.handleError(err))
+      .pipe(
+        catchError(err => this.handleError(err))
       );
   }
+  
 
   // Método para eliminar una evidencia por su ID desde el backend
   deleteEvidencia(id: number): Observable<any> {
