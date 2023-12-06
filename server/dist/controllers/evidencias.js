@@ -374,7 +374,7 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     const { id_usuario } = req.params;
     try {
         const evidenciasUsuario = yield evidencias_1.Evidencias.findAll({
-            where: { id_usuario },
+            where: { id_usuario: id_usuario },
         });
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
             return res.status(404).json({

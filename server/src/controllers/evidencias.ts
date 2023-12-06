@@ -470,7 +470,7 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
 
     try {
         const evidenciasUsuario = await Evidencias.findAll({
-            where: { id_usuario },
+            where: { id_usuario: id_usuario },
         });
 
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {

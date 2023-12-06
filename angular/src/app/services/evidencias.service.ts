@@ -60,7 +60,13 @@ export class EvidenciasService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-
+  getEvidenciasByUsuario(idUsuario: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/usuario/${idUsuario}`)
+      .pipe(
+        catchError(err => this.handleError(err))
+      );
+  }
+  
   descargarPDF(idEvidencia: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${idEvidencia}`, { responseType: 'arraybuffer' })
     .pipe(

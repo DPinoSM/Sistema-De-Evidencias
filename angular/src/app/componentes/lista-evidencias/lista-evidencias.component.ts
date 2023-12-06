@@ -110,6 +110,13 @@ export class ListaEvidenciasComponent implements OnInit {
     }
 
   ngOnInit() {
+    const idUsuario = localStorage.getItem('id_usuario');
+
+    if (idUsuario) {
+      this.obtenerEvidenciasPorUsuario(+idUsuario);
+    } else {
+      console.error('ID de usuario no encontrado en el Local Storage.');
+    }
     this.getEvidencias();
     this.getUsers();
     this.getComite();
@@ -252,15 +259,16 @@ export class ListaEvidenciasComponent implements OnInit {
   
   
 
-  obtenerEvidencia(id: number ) {
-    this.evidenciasService.getEvidencia(id).subscribe((evidencias) => {
-      if (evidencias) {
-        this.form.get('id_evidencias')?.setValue( evidencias.id_evidencias);
-        this.form.get('numero_folio')?.setValue( evidencias.numero_folio);
+  obtenerEvidenciasPorUsuario(idUsuario: number) {
+    this.evidenciasService.getEvidenciasByUsuario(idUsuario).subscribe((evidencias) => {
+      if (evidencias && evidencias.length > 0) {
+        this.evidencias = evidencias;
+        this.form.get('id_evidencias')?.setValue(evidencias.id_evidencias);
+        this.form.get('numero_folio')?.setValue(evidencias.numero_folio);
         this.form.get('fecha_evidencia')?.setValue(evidencias.fecha_evidencia);
-        this.form.get('id_detalle_revisor')?.setValue( evidencias.id_detalle_revisor);
-        this.form.get('id_detalle_dac')?.setValue( evidencias.id_detalle_dac);
-        this.form.get('id_detalle_comite')?.setValue( evidencias.id_detalle_comite);
+        this.form.get('id_detalle_revisor')?.setValue(evidencias.id_detalle_revisor);
+        this.form.get('id_detalle_dac')?.setValue(evidencias.id_detalle_dac);
+        this.form.get('id_detalle_comite')?.setValue(evidencias.id_detalle_comite);
         this.form.get('id_unidad')?.setValue(evidencias.id_unidad);
         this.form.get('id_ambito_academico')?.setValue(evidencias.id_ambito_academico);
         this.form.get('id_registro')?.setValue(evidencias.id_registro);
@@ -268,6 +276,7 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     });
   }
+  
 
   comienzaConCadena(cadena: string, input: string): boolean {
     if (!cadena || !input) {
