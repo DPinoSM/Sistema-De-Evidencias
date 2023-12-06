@@ -69,7 +69,7 @@ export class EvidenciasService {
   }
 
   descargarPDF(idEvidencia: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${idEvidencia}`, { responseType: 'arraybuffer' })
+    return this.http.get(`${this.baseUrl}/pdf/${idEvidencia}`, { responseType: 'arraybuffer' })
     .pipe(
       catchError(err => this.handleError(err))
       );

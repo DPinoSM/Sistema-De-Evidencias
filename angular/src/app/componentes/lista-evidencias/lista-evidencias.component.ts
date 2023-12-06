@@ -24,6 +24,7 @@ import { DetalleRevisor } from 'src/app/interfaces/D_revisor.interface';
 import { revisorService } from 'src/app/services/D-revisor.service';
 
 
+
 @Component({
   selector: 'app-lista-evidencias',
   templateUrl: './lista-evidencias.component.html',
@@ -267,25 +268,27 @@ private realizarOperacionDeEvidencia(operacion: () => any, mensajeExitoso: strin
       }
   });
 }
-  descargarPDF(idEvidencia: number | undefined): void {
-    if (idEvidencia !== undefined) {
-      // Llama a tu servicio para obtener el contenido del PDF
-      this.evidenciasService.descargarPDF(idEvidencia).subscribe({
-        next: (data: any) => {
-          // Convierte el contenido a Blob
-          const blob = new Blob([data], { type: 'application/pdf' });
-  
-          // Guarda el Blob como archivo PDF usando file-saver
-          saveAs(blob, `evidencia_${idEvidencia}.pdf`);
-        },
-        error: (error: any) => {
-          console.error('Error al descargar el PDF', error);
-        },
-      });
-    } else {
-      console.error('ID de evidencia no definida. No se puede descargar el PDF.');
-    }
+
+
+descargarPDF(id_evidencias: number | undefined): void {
+  if (id_evidencias !== undefined) {
+    this.evidenciasService.descargarPDF(id_evidencias).subscribe({
+      next: (data: ArrayBuffer) => {
+        const blob = new Blob([data], { type: 'application/pdf' });
+
+        // Usa file-saver para descargar el PDF
+        saveAs(blob, `evidencia_${id_evidencias}.pdf`);
+      },
+      error: (error: any) => {
+        console.error('Error al descargar el PDF', error);
+      },
+    });
+  } else {
+    console.error('ID de evidencias no definido. No se puede descargar el PDF.');
   }
+}
+
+
 
 }
 
