@@ -11,6 +11,7 @@ import { Evidencia } from 'src/app/interfaces/evidencia.interface';
 })
 
 export class ResponsableComponent implements OnInit {
+  sideNavStatus: boolean = false;
   evidencias: Evidencia[] = [];
   errorMsg: string | undefined;
   private evidenciasSubscription!: Subscription;
