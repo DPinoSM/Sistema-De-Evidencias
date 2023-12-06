@@ -8,4 +8,6 @@ router.get('/:id',validateToken,  getEvidencia);
 router.delete('/:id',validateToken,  deleteEvidencia);
 router.put('/:id', validateToken, updateEvidencia);
 router.get('/buscar', validateToken, buscarEvidencia); 
+router.get('/pdf/:id', validateToken, generarPDF);
+router.get('/usuario/:id_usuario', validateToken, getEvidenciasByUsuario);
 export default router;
