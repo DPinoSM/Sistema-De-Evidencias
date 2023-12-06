@@ -98,30 +98,14 @@ export class ListaEvidenciasComponent implements OnInit {
       this.form = new FormGroup({
         id_evidencias: new FormControl(null, [Validators.required]),
         numero_folio: new FormControl(null, [Validators.required]),
-        id_usuario: new FormControl(null, [Validators.required]),
         fecha_evidencia: new FormControl('', [Validators.required]),
-        numero_de_mejoras: new FormControl(null, [Validators.required]),
-        descripcion: new FormControl('', [Validators.required]),
-        resultado: new FormControl('', [Validators.required]),
-        almacenamiento: new FormControl('', [Validators.required]),
-        unidades_personas_evidencias: new FormControl(null, [Validators.required]), 
-        palabra_clave: new FormControl('', [Validators.required]),
-        nombre_corto_evidencia: new FormControl('', [Validators.required]),
-        fecha_creacion: new FormControl('', [Validators.required]),
-        fecha_actualizacion: new FormControl('', [Validators.required]),
         id_detalle_revisor: new FormControl(null, [Validators.required]),
         id_detalle_dac: new FormControl(null, [Validators.required]),
         id_detalle_comite: new FormControl(null, [Validators.required]),
-        id_debilidades: new FormControl(null, [Validators.required]),
         id_unidad: new FormControl(null, [Validators.required]),
-        id_ambito_geografico: new FormControl(null, [Validators.required]),
         id_ambito_academico: new FormControl(null, [Validators.required]),
         id_registro: new FormControl(null, [Validators.required]),
-        id_carrera: new FormControl(null, [Validators.required]),
-        id_facultad: new FormControl(null, [Validators.required]),
         id_procesos: new FormControl(null, [Validators.required]),
-        id_impacto: new FormControl(null, [Validators.required]),
-        id_estado: new FormControl(null, [Validators.required])
       });
     }
 
@@ -273,33 +257,14 @@ export class ListaEvidenciasComponent implements OnInit {
       if (evidencias) {
         this.form.get('id_evidencias')?.setValue( evidencias.id_evidencias);
         this.form.get('numero_folio')?.setValue( evidencias.numero_folio);
-        this.form.get('id_usuario')?.setValue( evidencias.id_usuario);
         this.form.get('fecha_evidencia')?.setValue(evidencias.fecha_evidencia);
-        this.form.get('numero_de_mejoras')?.setValue( evidencias.numero_de_mejoras);
-        this.form.get('descripcion')?.setValue( evidencias.descripcion);
-        this.form.get('resultado')?.setValue( evidencias.resultado);
-        this.form.get('almecenamiento')?.setValue( evidencias.almecenamiento);
-        this.form.get('unidades_personas_evidencias')?.setValue( evidencias.unidades_personas_evidencias);
-        this.form.get('palabra_clave')?.setValue( evidencias.palabra_clave);
-        this.form.get('nombre_corto_evidencia')?.setValue( evidencias.nombre_corto_evidencia);
-        this.form.get('fecha_creacion')?.setValue( evidencias.fecha_creacion);
-        this.form.get('fecha_actualizacion')?.setValue( evidencias.fecha_actualizacion);
         this.form.get('id_detalle_revisor')?.setValue( evidencias.id_detalle_revisor);
         this.form.get('id_detalle_dac')?.setValue( evidencias.id_detalle_dac);
         this.form.get('id_detalle_comite')?.setValue( evidencias.id_detalle_comite);
-        this.form.get('id_debilidades')?.setValue( evidencias.id_debilidades);
         this.form.get('id_unidad')?.setValue(evidencias.id_unidad);
-        this.form.get('id_ambito_geografico')?.setValue(evidencias.id_ambito_geografico);
         this.form.get('id_ambito_academico')?.setValue(evidencias.id_ambito_academico);
         this.form.get('id_registro')?.setValue(evidencias.id_registro);
-        this.form.get('id_carrera')?.setValue(evidencias.id_carrera);
-        this.form.get('id_facultad')?.setValue(evidencias.id_facultad);
         this.form.get('id_procesos')?.setValue(evidencias.id_procesos);
-        this.form.get('id_procesos')?.setValue(evidencias.id_procesos);
-        this.form.get('id_impacto')?.setValue(evidencias.id_impacto);
-        this.form.get('id_estado')?.setValue(evidencias.id_estado);
- 
-   
       }
     });
   }

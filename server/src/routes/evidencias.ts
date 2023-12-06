@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { getEvidencias, newEvidencia, getEvidencia, deleteEvidencia, updateEvidencia, buscarEvidencia } from '../controllers/evidencias';
+import { getEvidencias, newEvidencia, getEvidencia, deleteEvidencia, updateEvidencia, buscarEvidencia, generarPDF, getEvidenciasByUsuario } from '../controllers/evidencias';
 import validateToken from './validate-token';
 const router = Router();
-router.get('/lista',  getEvidencias);
+router.get('/lista',validateToken,  getEvidencias);
 router.post('/', validateToken, newEvidencia);
 router.get('/:id',validateToken,  getEvidencia);
 router.delete('/:id',validateToken,  deleteEvidencia);
 router.put('/:id', validateToken, updateEvidencia);
 router.get('/buscar', validateToken, buscarEvidencia); 
+router.get('/pdf/:id', validateToken, generarPDF);
+router.get('/usuario/:id_usuario', validateToken, getEvidenciasByUsuario);
 export default router;

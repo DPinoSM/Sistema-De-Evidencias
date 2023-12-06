@@ -68,7 +68,7 @@ export const getOneDetalle_Revisor = async(req: Request, res: Response) =>{
         })
     }
     try{
-        const Detalle_RevisorOne = await Detalle_Revisor.findOne({where: {id_detalle_Revisor: id}})
+        const Detalle_RevisorOne = await Detalle_Revisor.findOne({where: {id_detalle_revisor: id}})
         res.json(Detalle_RevisorOne)
         }catch (error){
             return res.status(400).json({
