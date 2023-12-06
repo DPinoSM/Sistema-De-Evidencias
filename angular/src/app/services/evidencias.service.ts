@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Evidencia } from '../interfaces/id_evidencia.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -60,13 +61,13 @@ export class EvidenciasService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  getEvidenciasByUsuario(idUsuario: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/usuario/${idUsuario}`)
+  getEvidenciasByUsuario(idUsuario: number): Observable<Evidencia[]> {
+    return this.http.get<Evidencia[]>(`${this.baseUrl}/usuario/${idUsuario}`)
       .pipe(
         catchError(err => this.handleError(err))
       );
   }
-  
+
   descargarPDF(idEvidencia: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${idEvidencia}`, { responseType: 'arraybuffer' })
     .pipe(

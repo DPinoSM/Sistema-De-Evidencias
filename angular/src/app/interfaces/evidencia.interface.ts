@@ -10,9 +10,7 @@ import { Facultad } from "./facultad.interface";
 import { Proceso } from "./proceso.interface";
 import { Impacto } from "./impacto.interface";
 import { Estado } from "./estado.interface";
-import { DetalleDAC } from "./D_dac.interface";
-import { DetalleComite } from "./D_comite.interface";
-import { DetalleRevisor } from "./D_revisor.interface";
+
 
 export interface Evidencia {
   id_evidencias?: number;
@@ -36,10 +34,6 @@ export interface Evidencia {
   descripcion?: string;
   resultado?: string;
   almacenamiento?: string;
-  dac?: { revisado_dac: boolean };
-  comite?: { revisado_comite: boolean };
-  revisor?: { revisado_revisor: boolean };
-  estadoRevision?: string;
   unidades_personas_evidencias?: number;
   palabra_clave?: string;
   nombre_corto_evidencia?: string;

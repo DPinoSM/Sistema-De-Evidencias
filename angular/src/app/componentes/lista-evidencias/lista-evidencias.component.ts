@@ -6,37 +6,22 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/services/shared.service';
-import { Evidencia } from '../../interfaces/evidencia.interface';
-import { DetalleRevisor } from "../../interfaces/D_revisor.interface";
-import { revisorService } from 'src/app/services/D-revisor.service';
-import { DetalleDAC } from "../../interfaces/D_dac.interface";
-import { DacService } from 'src/app/services/D-dac.service';
-import { DetalleComite } from "../../interfaces/D_comite.interface";
-import { ComiteService } from 'src/app/services/D-comite.service';
-import { User } from "../../interfaces/usuario.interface";
-import { UsuarioService } from 'src/app/services/usuario.service';
-import { Debilidad } from "../../interfaces/debilidades.interface";
-import { DebilidadService } from 'src/app/services/debilidad.service';
+import { Evidencia } from 'src/app/interfaces/id_evidencia.interface';
+import { saveAs } from 'file-saver';
 import { Unidad } from "../../interfaces/unidad.interface";
 import { UnidadService } from 'src/app/services/unidad.service';
-import { AmbitoGeografico } from "../../interfaces/ambito-geografico.interface";
-import { AmbitoGeograficoService } from 'src/app/services/ambito-geografico.service';
 import { AmbitoAcademico } from "../../interfaces/ambito-academico.interface";
 import { AmbitoAService } from 'src/app/services/ambito-a.service';
 import { Registro } from "../../interfaces/registro.interface";
 import { RegistroService } from 'src/app/services/registro.service';
-import { Carrera } from "../../interfaces/carrera.interface";
-import { CarreraService } from 'src/app/services/carrera.service';
-import { Facultad } from "../../interfaces/facultad.interface";
-import { FacultadService } from 'src/app/services/facultad.service';
 import { Proceso } from "../../interfaces/proceso.interface";
 import { ProcesosService } from 'src/app/services/proceso.service';
-import { Impacto } from "../../interfaces/impacto.interface";
-import { ImpactoService } from 'src/app/services/impacto.service';
-import { Estado } from "../../interfaces/estado.interface";
-import { EstadoService } from 'src/app/services/estado.service';
-import { saveAs } from 'file-saver';
-
+import { DetalleComite } from 'src/app/interfaces/D_comite.interface';
+import { ComiteService } from 'src/app/services/D-comite.service';
+import { DetalleDAC } from 'src/app/interfaces/D_dac.interface';
+import { DacService } from 'src/app/services/D-dac.service';
+import { DetalleRevisor } from 'src/app/interfaces/D_revisor.interface';
+import { revisorService } from 'src/app/services/D-revisor.service';
 
 
 @Component({
@@ -47,29 +32,20 @@ import { saveAs } from 'file-saver';
 
 export class ListaEvidenciasComponent implements OnInit {
   evidencias: Evidencia[] = [];
-  evidenciasOriginal: Evidencia[] | null = null;
-  ddac: DetalleDAC[] = [];
-  dcomite: DetalleComite[] = [];
-  drevisor: DetalleRevisor[] = [];
-  usuarios: User[] = [];
   unidades: Unidad[] = [];
-  debilidad: Debilidad[] = [];
   academico: AmbitoAcademico[] = [];
-  geografico: AmbitoGeografico[] = [];
   registro: Registro[] = [];
-  carrera: Carrera[] = [];
-  facultad: Facultad[] = [];
   proceso: Proceso[] = [];
-  impacto: Impacto[] = [];
-  estado: Estado[] = [];
+  Ddac: DetalleComite[] = [];
+  Dcomite: DetalleComite[] = [];
+  Drevisor: DetalleRevisor[] = [];
+  evidenciasOriginal: Evidencia[] | null = null;
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
   form: FormGroup;
   currentPage: number = 1;
   searchTerm: string = '';
   private evidenciasSubscription!: Subscription;    
-  imagenesAdjuntas: string[] = [];
-  images: any[] = [];
   selectedEstado: string | null = null;
 
 
@@ -77,22 +53,15 @@ export class ListaEvidenciasComponent implements OnInit {
   constructor(
     private evidenciasService: EvidenciasService, 
     private toastr: ToastrService,
-    private revisorService: revisorService,
-    private dacService: DacService,
-    private comiteService: ComiteService,
     private router: Router,
-    private usuarioService: UsuarioService,
-    private debilidadService: DebilidadService,
-    private unidadService: UnidadService,
-    private ambitoGeograficoService: AmbitoGeograficoService,
-    private ambitoAcademicoService: AmbitoAService,
-    private registroService: RegistroService,
-    private carreraService: CarreraService,
     private sharedService: SharedService,
-    private facultadService: FacultadService,
+    private unidadService: UnidadService,
+    private ambitoAService: AmbitoAService,
+    private registroService: RegistroService,
     private procesoService: ProcesosService,
-    private impactoService: ImpactoService,
-    private estadoService: EstadoService
+    private comiteService: ComiteService,
+    private dacService: DacService,
+    private revisorService: revisorService
     ) 
     {
       this.form = new FormGroup({
@@ -109,142 +78,95 @@ export class ListaEvidenciasComponent implements OnInit {
       });
     }
 
-  ngOnInit() {
-    const idUsuario = localStorage.getItem('id_usuario');
+    ngOnInit() {
+      this.selectedEstado = 'En espera';
+      const idUsuario = localStorage.getItem('id_usuario');
+      
+      if (idUsuario) {
+        this.evidenciasService.getEvidenciasByUsuario(+idUsuario).subscribe((evidencias) => {
+          if (evidencias && evidencias.length > 0) {
+            // Obtener detalles adicionales para cada evidencia
+            evidencias.forEach((evidencia) => {
+              // Obtener detalles de unidad
+              if (evidencia.id_unidad !== undefined) {
+                this.unidadService.getUnidad(evidencia.id_unidad).subscribe((unidad) => {
+                  evidencia.unidad = unidad?.nombre_unidad || '';
+                });
+              }
+              
+              // Obtener detalles de proceso
+              if (evidencia.id_procesos !== undefined) {
+                this.procesoService.getProcesoById(evidencia.id_procesos).subscribe((proceso) => {
+                  evidencia.proceso = proceso?.nombre_procesos || '';
+                });
+              }
+    
+              // Obtener detalles de registro
+              if (evidencia.id_registro !== undefined) {
+                this.registroService.getRegistroById(evidencia.id_registro).subscribe((registro) => {
+                  evidencia.registro = registro?.datos_registro || '';
+                });
+              }
+    
+              // Obtener detalles de ámbito académico
+              if (evidencia.id_ambito_academico !== undefined) {
+                this.ambitoAService.getAmbitoAcademico(evidencia.id_ambito_academico).subscribe((ambitoAcademico) => {
+                  evidencia.ambitoAcademico = ambitoAcademico?.nombre_ambito_academico || '';
+                });
+              }
 
-    if (idUsuario) {
-      this.obtenerEvidenciasPorUsuario(+idUsuario);
-    } else {
-      console.error('ID de usuario no encontrado en el Local Storage.');
+               // Obtener detalles de DAC
+              if (evidencia.id_detalle_dac !== undefined) {
+                this.dacService.obtenerDacPorId(evidencia.id_detalle_dac).subscribe((detalleDac) => {
+                  evidencia.Ddac = detalleDac?.revisado_dac ?? null; 
+                });
+              }
+              
+              // Obtener detalles de comité
+              if (evidencia.id_detalle_comite !== undefined) {
+                this.comiteService.obtenerComitePorId(evidencia.id_detalle_comite).subscribe((detalleComite) => {
+                  evidencia.Dcomite = detalleComite?.revisado_comite ?? null;
+                });
+              }
+              
+              // Obtener detalles de revisor
+              if (evidencia.id_detalle_revisor !== undefined) {
+                this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor).subscribe((detalleRevisor) => {
+                  evidencia.Drevisor = detalleRevisor?.revisado_revisor ?? null;
+                });
+              
+              
+              }
+            });
+            this.evidencias = evidencias;
+          }
+        });
+      } else {
+        console.error('ID de usuario no encontrado en el Local Storage.');
+      }
     }
-    this.getEvidencias();
-    this.getUsers();
-    this.getComite();
-    this.getDac();
-    this.getRevisor();
-    this.getUnidades();
-    this.getAmbitoA();
-    this.getAmbitoG();
-    this.getCarrera();
-    this.getDcomite();
-    this.getDdac();
-    this.getDebilidades();
-    this.getDrevisor();
-    this.getEstado();
-    this.getFacultad();
-    this.getImpacto();
-    this.getProceso();
-    this.getRegistro();
-  }
-
-  getDac() {
-    this.dacService.obtenerDac().subscribe((dac) => {
-      this.ddac = dac;
-    });
-  }
-
-  getComite() {
-    this.comiteService.obtenerComite().subscribe((comite) => {
-      this.dcomite = comite;
-    });
-  }
-
-  getRevisor() {
-    this.revisorService.obtenerRevisor().subscribe((revisor) => {
-      this.drevisor = revisor;
-    });
-  }
-
-  getUnidades() {
-    this.unidadService.getUnidades().subscribe((unidades) => {
-      this.unidades = unidades;
-    });
-  }
-
-  getUsers() {
-    this.usuarioService.getUsers().subscribe((usuarios) => {
-      this.usuarios = usuarios;
-    });
-  }
-
-  getEvidencia() {
-    this.evidenciasService.getEvidencias().subscribe((evidencias) => {
-      this.evidencias = evidencias;
-    });
-  }
-
-  getAmbitoA() {
-    this.ambitoAcademicoService.getAmbitosAcademicos().subscribe((ambito_academico) => {
-      this.academico = ambito_academico;
-    });
-  }
-
-  getAmbitoG() {
-    this.ambitoGeograficoService.getAmbitosGeograficos().subscribe((ambito_geografico) => {
-      this.geografico = ambito_geografico;
-    });
-  }
-
-  getCarrera() {
-    this.carreraService.obtenerCarreras().subscribe((carrera) => {
-      this.carrera = carrera;
-    });
-  }
-
-  getDcomite() {
-    this.comiteService.obtenerComite().subscribe((comite) => {
-      this.dcomite = comite;
-    });
-  }
-
-  getDdac() {
-    this.dacService.obtenerDac().subscribe((dac) => {
-      this.ddac = dac;
-    });
-  }
-
-  getDebilidades() {
-    this.debilidadService.obtenerDebilidad().subscribe((debilidades) => {
-      this.debilidad = debilidades;
-    });
-  }
-
-  getRegistro() {
-    this.registroService.getRegistros().subscribe((registro) => {
-      this.registro = registro;
-    });
-  }
-
-  getFacultad() {
-    this.facultadService.getFacultades().subscribe((facultad) => {
-      this.facultad = facultad;
-    });
-  }
-
-  getProceso() {
-    this.procesoService.getProcesos().subscribe((procesos) => {
-      this.proceso = procesos;
-    });
-  }
-
-  getDrevisor() {
-    this.revisorService.obtenerRevisor().subscribe((revisor) => {
-      this.drevisor = revisor;
-    });
-  }
-
-  getImpacto() {
-    this.impactoService.obtenerImpacto().subscribe((impacto) => {
-      this.impacto = impacto;
-    });
-  }
-
-  getEstado() {
-    this.estadoService.obtenerEstado().subscribe((estado) => {
-      this.estado = estado;
-    });
-  }
-
+    
+    getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null | undefined): string {
+      if (state === null) {
+        return 'fas fa-question';
+      } else if (state === undefined) {
+        return 'fas fa-question';
+      } else if (Array.isArray(state) && state.length === 0) {
+        return 'fas fa-question';
+      } else if (state === true) {
+        return 'fas fa-user fas fa-check-circle text-success';
+      } else if (state === false) {
+        return 'fas fa-user fas fa-times-circle text-danger';
+      } else {
+        return 'fas fa-question'; 
+      }
+    }
+    
+    
+    
+    
+    
+  
   actualizarEvidencia(id: number | undefined): void {
     if (id !== undefined) {
       console.log('ID a actualizar:', id);
@@ -253,28 +175,6 @@ export class ListaEvidenciasComponent implements OnInit {
     } else {
       console.error('ID de evidencia no definida. No se puede actualizar.');
     }
-  }
-  
-  
-  
-  
-
-  obtenerEvidenciasPorUsuario(idUsuario: number) {
-    this.evidenciasService.getEvidenciasByUsuario(idUsuario).subscribe((evidencias) => {
-      if (evidencias && evidencias.length > 0) {
-        this.evidencias = evidencias;
-        this.form.get('id_evidencias')?.setValue(evidencias.id_evidencias);
-        this.form.get('numero_folio')?.setValue(evidencias.numero_folio);
-        this.form.get('fecha_evidencia')?.setValue(evidencias.fecha_evidencia);
-        this.form.get('id_detalle_revisor')?.setValue(evidencias.id_detalle_revisor);
-        this.form.get('id_detalle_dac')?.setValue(evidencias.id_detalle_dac);
-        this.form.get('id_detalle_comite')?.setValue(evidencias.id_detalle_comite);
-        this.form.get('id_unidad')?.setValue(evidencias.id_unidad);
-        this.form.get('id_ambito_academico')?.setValue(evidencias.id_ambito_academico);
-        this.form.get('id_registro')?.setValue(evidencias.id_registro);
-        this.form.get('id_procesos')?.setValue(evidencias.id_procesos);
-      }
-    });
   }
   
 
@@ -302,21 +202,13 @@ export class ListaEvidenciasComponent implements OnInit {
     const searchTerm = this.selectedEstado.toString().toLowerCase();
   
     this.evidencias = this.evidenciasOriginal?.filter(evidencia => {
-      const revisadoComite = evidencia.comite?.revisado_comite;
-      const revisadoDac = evidencia.dac?.revisado_dac;
-      const revisadoRevisor = evidencia.revisor?.revisado_revisor;
+
+      const estadoRevision = `${evidencia.Drevisor?.revisado_revisor === true ? 'Aprobado' : (evidencia.Drevisor?.revisado_revisor === false ? 'Rechazado' : 'En espera')} - ${evidencia.Ddac?.revisado_dac === true ? 'Aprobado' : (evidencia.Ddac?.revisado_dac === false ? 'Rechazado' : 'En espera')} - ${evidencia.Dcomite?.revisado_comite === true ? 'Aprobado' : (evidencia.Dcomite?.revisado_comite === false ? 'Rechazado' : 'En espera')}`;
   
-      const aprobadoRevisor = revisadoRevisor === true ? 'Aprobado' : (revisadoRevisor === false ? 'Rechazado' : 'En espera');
-      const aprobadoDac = revisadoDac === true ? 'Aprobado' : (revisadoDac === false ? 'Rechazado' : 'En espera');
-      const aprobadoComite = revisadoComite === true ? 'Aprobado' : (revisadoComite === false ? 'Rechazado' : 'En espera');
-  
-      // Agregamos la propiedad estadoRevision a cada evidencia
-      evidencia.estadoRevision = `${aprobadoRevisor} - ${aprobadoDac} - ${aprobadoComite}`;
-  
-      return aprobadoRevisor.includes(searchTerm) || aprobadoDac.includes(searchTerm) || aprobadoComite.includes(searchTerm);
+      return estadoRevision.includes(searchTerm);
     }) || [];
   }
-
+  
 
   pageChanged(page: number) {
     this.currentPage = page;
