@@ -4,16 +4,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Detalle_Revisor = void 0;
-//JONATHAN MOLINA 
-//MODELS DETALLE REVISOR
+// Importa las dependencias necesarias
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-exports.Detalle_Revisor = connection_1.default.define('detalle_revisor', {
+// Define la clase Detalle_Revisor extendiendo el modelo y las interfaces
+class Detalle_Revisor extends sequelize_1.Model {
+}
+exports.Detalle_Revisor = Detalle_Revisor;
+// Inicializa el modelo Detalle_Revisor
+Detalle_Revisor.init({
     id_detalle_revisor: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     revisado_revisor: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_revisor: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-    comentario_revisor: { type: sequelize_1.DataTypes.STRING }
+    comentario_revisor: { type: sequelize_1.DataTypes.STRING },
 }, {
-    freezeTableName: true,
+    sequelize: connection_1.default,
+    modelName: 'Detalle_Revisor',
     timestamps: false,
+    freezeTableName: true,
 });
+// Define la relación con Evidencias
+// Exporta el modelo Detalle_Revisor
+exports.default = Detalle_Revisor;
