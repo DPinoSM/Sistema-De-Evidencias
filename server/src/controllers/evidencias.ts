@@ -16,6 +16,8 @@ import { Facultad } from '../models/facultad';
 import { Proceso } from '../models/proceso';
 import { Impacto } from '../models/impacto';
 import { Estado } from '../models/estado';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts'
 
 export const newEvidencia = async (req: Request, res: Response) => {
     try {
@@ -151,7 +153,7 @@ export const getEvidencias = async (req: Request, res: Response) => {
                 'archivo_adjunto'
             ],
             include: [
-                { model: Detalle_Revisor, attributes: ['revisado_revisor','comentario_revisor'] },
+                { model: Detalle_Revisor, as: 'detalle_revisor', attributes: ['revisado_revisor','comentario_revisor'] },
                 { model: Detalle_DAC, attributes: ['revisado_dac','comentario_dac'] },
                 { model: Detalle_Comite, attributes: ['revisado_comite','comentario_comite'] },
                 { model: User, attributes: ['nombre_usuario'] },
@@ -332,7 +334,7 @@ export const updateEvidencia = async (req: Request, res: Response) => {
             error,
         });
     }
-}
+};
 
 export const buscarEvidencia = async (req: Request, res: Response) =>{
     const { searchTerm } = req.query;
@@ -348,10 +350,10 @@ export const buscarEvidencia = async (req: Request, res: Response) =>{
             attributes: ['id_evidencias', 'nombre_corto_evidencia'],
             where: {
                 [Op.or]: [
-                    { id_evidencias: { [Op.like]: `%{searchTerm}%` } },
-                    { nombre_corto_evidencia: { [Op.like]: `%{searchTerm}%` } },
+                    { 'id_evidencias': { [Op.like]: `%${searchTerm}%` } },
+                    { 'nombre_corto_evidencia': { [Op.like]: `%${searchTerm}%` } },
                 ],
-            },
+            }as unknown as Record<string,any>,
         });
         return res.json(evidencias);
     }   catch (error){
@@ -361,4 +363,129 @@ export const buscarEvidencia = async (req: Request, res: Response) =>{
     }
 };
 
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  
+  interface TDocumentDefinitions {
+    content: any[]
+    styles: Record<string,any>;
+  }
+
+export const generarPDF = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    // Obtener los detalles de la evidencia por ID
+    const evidencia = await Evidencias.findByPk(id, {
+        include: [{model: Detalle_Revisor, as: 'detalle_revisor'}],
+    });
+
+    
+
+    if (!evidencia) {
+      return res.status(404).send('Evidencia no encontrada');
+    }
+
+    const detalleRevisor = await Detalle_Revisor.findOne({
+        where: {id_detalle_revisor: evidencia.id_detalle_revisor},
+    });
+
+    // Crear la definición del documento PDF
+    const documentDefinition: TDocumentDefinitions = {
+      content: [
+        { text: `Evidencia ID: ${evidencia.id_evidencias}`, style: 'header' },
+        { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
+        // Crear una tabla con los datos de la evidencia
+        {
+          table: {
+            headerRows: 1,
+            widths: ['auto', '*'],
+            body: [
+              ['Campo', 'Valor'],
+              ['Número de Folio', evidencia.numero_folio],
+              ['Correo Usuario', evidencia.correo_usuario],
+              ['Rut Usuario', evidencia.rut_usuario],
+              ['Fecha de evidencia', evidencia.fecha_evidencia.toString()],
+              ['Número de mejoras', evidencia.numero_de_mejoras],
+              ['Descripción', evidencia.descripcion],
+              ['Resultado', evidencia.resultado],
+              ['Almacenamiento', evidencia.almacenamiento],
+              ['Unidades de Personas de Evidencia', evidencia.unidades_personas_evidencias],
+              ['Palabras Claves', evidencia.palabra_clave],
+              ['Nombre Abreviado', evidencia.nombre_corto_evidencia],
+              ['Fecha de Creación', evidencia.fecha_creacion.toString()],
+              ['Fecha de Actualizacion', evidencia.fecha_actualizacion.toString()],
+              ['Asistentes Internos Autoridades', evidencia.asistentes_internos_autoridades],
+              ['Asistentes Internos Administrativos', evidencia.asistentes_internos_administrativos],
+              ['Asistentes Internos Docentes', evidencia.asistentes_internos_docentes],
+              ['Asistentes Internos Estudiantes', evidencia.asistentes_internos_estudiantes],
+              ['Asistentes Externos Autoridades', evidencia.asistentes_externos_autoridades],
+              ['Asistentes Externos Administrativos', evidencia.asistentes_externos_administrativos],
+              ['Asistentes Externos Docentes', evidencia.asistentes_externos_docentes],
+              ['Asistentes Externos Estudiantes', evidencia.asistentes_externos_estudiantes],
+              ['Detalle Revisor', detalleRevisor?.comentario_revisor || 'No disponible'],
+              
+            ],
+          },
+        } as any,
+      ],
+      styles: {
+        header: {
+          fontSize: 16,
+          bold: true,
+          alignment: 'center',
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+        },
+      },
+    };
+
+    // Crear el PDF
+    const pdfDoc = pdfMake.createPdf(documentDefinition);
+    console.log('Detalle Revisor:', detalleRevisor);
+    console.log('Comentario Revisor:', detalleRevisor?.comentario_revisor);
+
+    
+
+    // Enviar el PDF como respuesta
+    pdfDoc.getBuffer((buffer: any) => {
+      try{
+        res.attachment(`evidencia_${id}.pdf`);  
+        res.type('application/pdf');
+        res.end(buffer, 'binary');
+      } catch (error: any) {
+        console.error('Error',error);
+        res.status(500).send('Error interno del servidor')
+      }
+    });
+  } catch (error) {
+    console.error('Error al generar el PDF',error);
+    res.status(500).send('Error interno del servidor');
+  }
+};
+
+export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
+    const { id_usuario } = req.params;
+
+    try {
+        const evidenciasUsuario = await Evidencias.findAll({
+            where: { id_usuario },
+        });
+
+        if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
+            return res.status(404).json({
+                msg: 'No se encontraron evidencias para el usuario indicado',
+            });
+        }
+
+        res.json(evidenciasUsuario);
+    } catch (error) {
+        console.error('Error en el controlador getEvidenciasByUsuario:', error);
+        res.status(500).json({
+            msg: 'Error interno del servidor',
+            error,
+        });
+    }
+};
 

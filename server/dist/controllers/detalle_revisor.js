@@ -78,7 +78,7 @@ const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
         });
     }
     try {
-        const Detalle_RevisorOne = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_Revisor: id } });
+        const Detalle_RevisorOne = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
         res.json(Detalle_RevisorOne);
     }
     catch (error) {
