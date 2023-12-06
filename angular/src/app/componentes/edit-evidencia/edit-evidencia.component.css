@@ -1,0 +1,92 @@
+
+.evidencia-container {
+    background-color: #ffffff; 
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
+  }
+    
+  
+  .evidencia-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .custom-image {
+      max-width: 100%; 
+      height: auto; 
+    }
+  
+  
+    
+    
+  
+    .evidencia-title {
+      color: #007bff;
+    }
+   
+    .evidencia-subtitle {
+      font-weight: normal;
+      color: #6c757d;
+      margin-bottom: 10px; 
+    }
+    
+   
+    .evidencia-form {
+      margin-bottom: 20px; 
+    }
+    
+  
+    /* Estilos para las imágenes adjuntas */
+    .adjunta-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 10px;
+  }
+  
+    
+    /* Estilos para el contenedor de imágenes */
+    .image-container {
+      position: relative; 
+      max-width: 100%;
+      overflow: hidden;
+      border: 1px solid #ccc;
+  }
+    
+    /* Estilos para el botón de eliminar */
+    .btn-danger {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    
+  
+    /* Agrega estos estilos para controlar el tamaño de las imágenes adjuntas */
+  .image-container {
+    margin-bottom: 10px; /* Ajusta según sea necesario */
+  }
+  
+  .adjunta-image {
+    max-width: 100%; /* Ajusta según sea necesario */
+    max-height: 200px; /* Ajusta según sea necesario */
+    display: block;
+    margin-bottom: 5px; /* Ajusta según sea necesario */
+  }
+  
+  /* Estilos adicionales para los botones de eliminación */
+  .btn-danger {
+    margin-top: 5px; /* Ajusta según sea necesario */
+  }
+  
+  .drop-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+  }

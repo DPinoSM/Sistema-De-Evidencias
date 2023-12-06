@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './Rutas/app-routing.module';
+import { DatePipe } from '@angular/common';
+
 
 //componentes
 import { AppComponent } from './app.component';
@@ -42,6 +44,9 @@ import { ListaDebilidadComponent } from './componentes/lista-debilidad/lista-deb
 import { ListaCarreraComponent } from './componentes/lista-carrera/lista-carrera.component';
 import { ListaImpactoComponent } from './componentes/lista-impacto/lista-impacto.component';
 import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.component';
+import { EditEvidenciaComponent } from './componentes/edit-evidencia/edit-evidencia.component';
+
+
 
 
 @NgModule({
@@ -69,7 +74,8 @@ import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.co
     ListaDebilidadComponent,
     ListaCarreraComponent,
     ListaImpactoComponent,
-    ListaEstadoComponent
+    ListaEstadoComponent,
+    EditEvidenciaComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +102,9 @@ import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.co
       useClass: AddTokenInterceptor,
       multi: true,
     },
-  ],
+    { provide: 'CHUNK_SIZE', useValue: 1024 * 1024,  },
+    DatePipe,
+  ],  
   bootstrap: [AppComponent],
 })
 export class AppModule {}

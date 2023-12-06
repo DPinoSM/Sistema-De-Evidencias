@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SharedService } from 'src/app/services/shared.service';
 import { DatePipe } from '@angular/common';
 import { Evidencia } from '../../interfaces/evidencia.interface';
 import { DetalleRevisor } from "../../interfaces/D_revisor.interface";
@@ -37,15 +38,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Criterio } from 'src/app/interfaces/criterio.interface';
 import { CriterioService } from 'src/app/services/criterio.service';
 
-
 @Component({
-  selector: 'app-new-evidencia',
-  templateUrl: './new-evidencia.component.html',
-  styleUrls: ['./new-evidencia.component.css', '../../../shared-styles.css'],
-  providers: [DatePipe],
+  selector: 'app-edit-evidencia',
+  templateUrl: './edit-evidencia.component.html',
+  styleUrls: ['./edit-evidencia.component.css', '../../../shared-styles.css']
 })
-
-export class NewEvidenciaComponent implements OnInit {
+export class EditEvidenciaComponent implements OnInit, OnDestroy {
   evidencias: Evidencia[] = [];
   ddac: DetalleDAC[] = [];
   dcomite: DetalleComite[] = [];
@@ -64,15 +62,16 @@ export class NewEvidenciaComponent implements OnInit {
   estado: Estado[] = [];
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
-  
+  selectedImages: File[] = [];
   imagenesAdjuntas: string[] = [];
   images: any[] = [];
   rut_usuario: number | null = null;
   correo_usuario: string | null = null;
-
+  idEvidencia: number | null = null;
   form: FormGroup;
   dateTimeInterval: any;
   currentDateTime: string = '';
+  imagenBase64: string | null = null;
 
 
   constructor(
@@ -94,11 +93,12 @@ export class NewEvidenciaComponent implements OnInit {
     private procesoService: ProcesosService,
     private impactoService: ImpactoService,
     private datePipe: DatePipe,
+    private sharedService: SharedService,
     private estadoService: EstadoService,
-    private authService: AuthService,
-    @Inject('CHUNK_SIZE') private CHUNK_SIZE: number
+    private authService: AuthService
   ) {
       this.form = new FormGroup({
+        idEvidencia: new FormControl(null),
         numero_folio: new FormControl('', Validators.required),
         fecha_evidencia: new FormControl(null, Validators.required),
         rut_usuario: new FormControl({value: '', disabled: true}),
@@ -131,29 +131,33 @@ export class NewEvidenciaComponent implements OnInit {
         asistentes_externos_docentes: new FormControl(null, Validators.required),
         asistentes_externos_estudiantes: new FormControl(null, Validators.required),
         archivo_adjunto: new FormControl(null),
-        fecha_creacion: new FormControl({ value: this.getCurrentDateTime(), disabled: true }),
+        fecha_creacion: new FormControl({value: '', disabled: true}),
+        fecha_actualizar: new FormControl({ value: this.getCurrentDateTime(), disabled: true})
       });
       this.updateCurrentDateTime();
     }
     
     
 
-  ngOnInit() {
+    ngOnInit() {
+      this.sharedService.evidenciaId$.subscribe((id) => {
+        this.form.get('idEvidencia')?.setValue(id);
+        // Call obtenerEvidencia method when the component starts
+        this.obtenerEvidencia(id);
+      });
     this.getUsers();
     this.getUnidades();
     this.getAmbitoA();
     this.getAmbitoG();
     this.getCarrera();
-    this.getDcomite();
-    this.getDdac();
     this.getCriterio();
     this.getDebilidades();
-    this.getDrevisor();
     this.getEstado();
     this.getFacultad();
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
+    
     const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
 
 
@@ -172,6 +176,59 @@ export class NewEvidenciaComponent implements OnInit {
   ngOnDestroy() {
     clearInterval(this.dateTimeInterval);
   }
+
+  obtenerEvidencia(id: number | null) {
+    if (id !== null) {
+      this.evidenciasService.getEvidencia(id).subscribe((evidencias) => {
+        if (evidencias) {
+        this.form.patchValue({
+          id_evidencias: evidencias.id_evidencias,
+          numero_folio: evidencias.numero_folio,
+          id_usuario: evidencias.id_usuario,
+          fecha_evidencia: evidencias.fecha_evidencia,
+          rut_usuario: evidencias.rut_usuario,
+          correo_usuario: evidencias.correo_usuario,
+          id_unidad: evidencias.id_unidad,
+          id_procesos: evidencias.id_procesos,
+          id_registro: evidencias.id_registro,
+          numero_de_mejoras: evidencias.numero_de_mejoras,
+          id_ambito_academico: evidencias.id_ambito_academico,
+          id_ambito_geografico: evidencias.id_ambito_geografico,
+          id_criterios: evidencias.id_criterios,
+          id_debilidades: evidencias.id_debilidades,
+          id_carrera: evidencias.id_carrera,
+          id_facultad: evidencias.id_facultad,
+          id_impacto: evidencias.id_impacto,
+          id_estado: evidencias.id_estado,
+          descripcion: evidencias.descripcion,
+          resultado: evidencias.resultado,
+          almacenamiento: evidencias.almacenamiento,
+          unidades_personas_evidencias: evidencias.unidades_personas_evidencias,
+          palabra_clave: evidencias.palabra_clave,
+          nombre_corto_evidencia: evidencias.nombre_corto_evidencia,
+          asistentes_internos_autoridades: evidencias.asistentes_internos_autoridades,
+          asistentes_internos_administrativos: evidencias.asistentes_internos_administrativos,
+          asistentes_internos_docentes: evidencias.asistentes_internos_docentes,
+          asistentes_internos_estudiantes: evidencias.asistentes_internos_estudiantes,
+          asistentes_externos_autoridades: evidencias.asistentes_externos_autoridades,
+          asistentes_externos_administrativos: evidencias.asistentes_externos_administrativos,
+          asistentes_externos_docentes: evidencias.asistentes_externos_docentes,
+          asistentes_externos_estudiantes: evidencias.asistentes_externos_estudiantes,
+          archivo_adjunto: evidencias.archivo_adjunto,
+          fecha_creacion: evidencias.fecha_creacion,
+          fecha_actualizacion: evidencias.fecha_actualizacion,
+          
+        });
+        this.imagenBase64 = evidencias.archivo_adjunto;
+      }
+    })
+  } else {
+
+    console.error('ID is null');
+  }
+  }
+  
+
 
   getUnidades() {
     this.unidadService.getUnidades().subscribe((unidades) => {
@@ -203,18 +260,6 @@ export class NewEvidenciaComponent implements OnInit {
     });
   }
 
-  getDcomite() {
-    this.comiteService.obtenerComite().subscribe((comite) => {
-      this.dcomite = comite;
-    });
-  }
-
-  getDdac() {
-    this.dacService.obtenerDac().subscribe((dac) => {
-      this.ddac = dac;
-    });
-  }
-
   getDebilidades() {
     this.debilidadService.obtenerDebilidad().subscribe((debilidades) => {
       this.debilidad = debilidades;
@@ -242,12 +287,6 @@ export class NewEvidenciaComponent implements OnInit {
   getCriterio() {
     this.criterioService.getCriterios().subscribe((criterio) => {
       this.criterios = criterio;
-    });
-  }
-
-  getDrevisor() {
-    this.revisorService.obtenerRevisor().subscribe((revisor) => {
-      this.drevisor = revisor;
     });
   }
 
@@ -306,137 +345,138 @@ export class NewEvidenciaComponent implements OnInit {
         this.imagenesAdjuntas.push(result);
       };
       reader.readAsDataURL(files[i]);
+  
+      this.selectedImages.push(files[i]);
     }
-
-    this.form.get('archivo_adjunto')?.setValue(files);
+    this.form.get('archivo_adjunto')?.setValue(this.selectedImages);
   }
   
+  getSafeImageURL(image: File): string {
+    return URL.createObjectURL(image);
+  }
 
   eliminarImagen(index: number) {
     this.imagenesAdjuntas.splice(index, 1);
+    this.selectedImages.splice(index, 1);
   }
-  
-
-
-  // Método para crear una nueva evidencia
-  crearEvidencia() {
-    console.log('Estado del formulario antes de la validación:', this.form.value);
-  
-    if (this.form.valid) {
-      const numero_folio = this.form.get('numero_folio')?.value;
-      const fecha_evidencia = this.form.get('fecha_evidencia')?.value;
-      const rut_usuario = this.form.get('rut_usuario')?.value;
-      const correo_usuario = this.form.get('correo_usuario')?.value;
-      const id_usuario = this.form.get('id_usuario')?.value;
-      const id_unidad = this.form.get('id_unidad')?.value;
-      const id_procesos = this.form.get('id_procesos')?.value;
-      const id_registro = this.form.get('id_registro')?.value;
-      const numero_de_mejoras = this.form.get('numero_de_mejoras')?.value;
-      const id_ambito_academico = this.form.get('id_ambito_academico')?.value;
-      const id_ambito_geografico = this.form.get('id_ambito_geografico')?.value;
-      const id_criterios = this.form.get('id_criterios')?.value;
-      const id_debilidades = this.form.get('id_debilidades')?.value;
-      const id_carrera = this.form.get('id_carrera')?.value;
-      const id_facultad = this.form.get('id_facultad')?.value;
-      const id_impacto = this.form.get('id_impacto')?.value;
-      const id_estado = this.form.get('id_estado')?.value;
-      const descripcion = this.form.get('descripcion')?.value;
-      const resultado = this.form.get('resultado')?.value;
-      const almacenamiento = this.form.get('almacenamiento')?.value;
-      const unidades_personas_evidencias = this.form.get('unidades_personas_evidencias')?.value;
-      const palabra_clave = this.form.get('palabra_clave')?.value;
-      const nombre_corto_evidencia = this.form.get('nombre_corto_evidencia')?.value;
-      const asistentes_internos_autoridades = this.form.get('asistentes_internos_autoridades')?.value;
-      const asistentes_internos_administrativos = this.form.get('asistentes_internos_administrativos')?.value;
-      const asistentes_internos_docentes = this.form.get('asistentes_internos_docentes')?.value;
-      const asistentes_internos_estudiantes = this.form.get('asistentes_internos_estudiantes')?.value;
-      const asistentes_externos_autoridades = this.form.get('asistentes_externos_autoridades')?.value;
-      const asistentes_externos_administrativos = this.form.get('asistentes_externos_administrativos')?.value;
-      const asistentes_externos_docentes = this.form.get('asistentes_externos_docentes')?.value;
-      const asistentes_externos_estudiantes = this.form.get('asistentes_externos_estudiantes')?.value;
-      const files: FileList | null = this.form.get('archivo_adjunto')?.value;
-      const fecha_creacion = this.getCurrentDateTime();
-      this.form.get('fecha_creacion')?.setValue(fecha_creacion);
-
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as ArrayBuffer;
-        const uintArray = new Uint8Array(result);
-        const archivo_adjunto = uintArray;
-
-        this.evidenciasService.newEvidencia({
-              numero_folio: numero_folio,
-              fecha_evidencia: fecha_evidencia,
-              rut_usuario: rut_usuario,
-              correo_usuario: correo_usuario,
-              id_usuario: id_usuario,
-              id_unidad: id_unidad,
-              id_procesos: id_procesos,
-              id_registro: id_registro,
-              numero_de_mejoras: numero_de_mejoras,
-              id_ambito_academico: id_ambito_academico,
-              id_ambito_geografico: id_ambito_geografico,
-              id_criterios: id_criterios,
-              id_debilidades: id_debilidades,
-              id_carrera: id_carrera,
-              id_facultad: id_facultad,
-              id_impacto: id_impacto,
-              id_estado: id_estado,
-              descripcion: descripcion,
-              resultado: resultado,
-              almacenamiento: almacenamiento,
-              unidades_personas_evidencias: unidades_personas_evidencias,
-              palabra_clave: palabra_clave,
-              nombre_corto_evidencia: nombre_corto_evidencia,
-              asistentes_internos_autoridades: asistentes_internos_autoridades,
-              asistentes_internos_administrativos: asistentes_internos_administrativos,
-              asistentes_internos_docentes: asistentes_internos_docentes,
-              asistentes_internos_estudiantes: asistentes_internos_estudiantes,
-              asistentes_externos_autoridades: asistentes_externos_autoridades,
-              asistentes_externos_administrativos: asistentes_externos_administrativos,
-              asistentes_externos_docentes: asistentes_externos_docentes,
-              asistentes_externos_estudiantes: asistentes_externos_estudiantes,
-              archivo_adjunto: archivo_adjunto,
-              fecha_creacion: this.getCurrentDateTime(),
-            }).subscribe({
-              next: (response) => {
-                console.log('Evidencia creada con éxito', response);
-                this.toastr.success('Evidencia creada con éxito', 'Éxito');
-                this.form.reset();
-                this.imagenesAdjuntas = [];
-                this.router.navigate(['/evidencias']);
-              },
-              error: (error) => {
-                console.error('Error al crear la evidencia', error);
-                this.toastr.error('Error al crear la evidencia', 'Error');
-              }
-            });
-          };
-    
-          reader.readAsArrayBuffer(files[0]);
-        } else {
-          console.error('No se ha seleccionado ningún archivo.');
-          this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
-        }
-      } else {
-        console.error('Formulario no válido. Verifica los campos.');
-        this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
-      }
-    }
-  
-  
   
 
   cancelar() {
     this.router.navigate(['/evidencias']);
   }
   
+    // Método para actualizar una evidencia existente
+    actualizarEvidencia(idEvidencia: number | null) {
+      if (idEvidencia !== null) {
+    console.log('Estado del formulario antes de la validación:', this.form.value);
   
+    if (this.form.valid) {
+      const files: File[] = this.selectedImages;  
+      if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as ArrayBuffer;
+          const uintArray = new Uint8Array(result);
+          const archivo_adjunto = uintArray;
+  
+          const fecha_actualizacion = this.getCurrentDateTime();
+          const numero_folio = this.form.get('numero_folio')?.value;
+          const fecha_evidencia = this.form.get('fecha_evidencia')?.value;
+          const rut_usuario = this.form.get('rut_usuario')?.value;
+          const correo_usuario = this.form.get('correo_usuario')?.value;
+          const id_usuario = this.form.get('id_usuario')?.value;
+          const id_unidad = this.form.get('id_unidad')?.value;
+          const id_procesos = this.form.get('id_procesos')?.value;
+          const id_registro = this.form.get('id_registro')?.value;
+          const numero_de_mejoras = this.form.get('numero_de_mejoras')?.value;
+          const id_ambito_academico = this.form.get('id_ambito_academico')?.value;
+          const id_ambito_geografico = this.form.get('id_ambito_geografico')?.value;
+          const id_criterios = this.form.get('id_criterios')?.value;
+          const id_debilidades = this.form.get('id_debilidades')?.value;
+          const id_carrera = this.form.get('id_carrera')?.value;
+          const id_facultad = this.form.get('id_facultad')?.value;
+          const id_impacto = this.form.get('id_impacto')?.value;
+          const id_estado = this.form.get('id_estado')?.value;
+          const descripcion = this.form.get('descripcion')?.value;
+          const resultado = this.form.get('resultado')?.value;
+          const almacenamiento = this.form.get('almacenamiento')?.value;
+          const unidades_personas_evidencias = this.form.get('unidades_personas_evidencias')?.value;
+          const palabra_clave = this.form.get('palabra_clave')?.value;
+          const nombre_corto_evidencia = this.form.get('nombre_corto_evidencia')?.value;
+          const asistentes_internos_autoridades = this.form.get('asistentes_internos_autoridades')?.value;
+          const asistentes_internos_administrativos = this.form.get('asistentes_internos_administrativos')?.value;
+          const asistentes_internos_docentes = this.form.get('asistentes_internos_docentes')?.value;
+          const asistentes_internos_estudiantes = this.form.get('asistentes_internos_estudiantes')?.value;
+          const asistentes_externos_autoridades = this.form.get('asistentes_externos_autoridades')?.value;
+          const asistentes_externos_administrativos = this.form.get('asistentes_externos_administrativos')?.value;
+          const asistentes_externos_docentes = this.form.get('asistentes_externos_docentes')?.value;
+          const asistentes_externos_estudiantes = this.form.get('asistentes_externos_estudiantes')?.value;
+          const fecha_creacion = this.form.get('fecha_creacion')?.value;
+          
+  
+          this.evidenciasService.updateEvidencia(idEvidencia, {
+                numero_folio: numero_folio,
+                fecha_evidencia: fecha_evidencia,
+                rut_usuario: rut_usuario,
+                correo_usuario: correo_usuario,
+                id_usuario: id_usuario,
+                id_unidad: id_unidad,
+                id_procesos: id_procesos,
+                id_registro: id_registro,
+                numero_de_mejoras: numero_de_mejoras,
+                id_ambito_academico: id_ambito_academico,
+                id_ambito_geografico: id_ambito_geografico,
+                id_criterios: id_criterios,
+                id_debilidades: id_debilidades,
+                id_carrera: id_carrera,
+                id_facultad: id_facultad,
+                id_impacto: id_impacto,
+                id_estado: id_estado,
+                descripcion: descripcion,
+                resultado: resultado,
+                almacenamiento: almacenamiento,
+                unidades_personas_evidencias: unidades_personas_evidencias,
+                palabra_clave: palabra_clave,
+                nombre_corto_evidencia: nombre_corto_evidencia,
+                asistentes_internos_autoridades: asistentes_internos_autoridades,
+                asistentes_internos_administrativos: asistentes_internos_administrativos,
+                asistentes_internos_docentes: asistentes_internos_docentes,
+                asistentes_internos_estudiantes: asistentes_internos_estudiantes,
+                asistentes_externos_autoridades: asistentes_externos_autoridades,
+                asistentes_externos_administrativos: asistentes_externos_administrativos,
+                asistentes_externos_docentes: asistentes_externos_docentes,
+                asistentes_externos_estudiantes: asistentes_externos_estudiantes,
+                fecha_creacion: fecha_creacion,
+                archivo_adjunto: files,
+                fecha_actualizacion: fecha_actualizacion,
+          }).subscribe({
+            next: (response) => {
+              console.log('Evidencia actualizada con éxito', response);
+              this.toastr.success('Evidencia actualizada con éxito', 'Éxito');
+              this.form.reset();
+              this.imagenesAdjuntas = [];
+              this.router.navigate(['/evidencias']);
+            },
+            error: (error) => {
+              console.error('Error al actualizar la evidencia', error);
+              this.toastr.error('Error al actualizar la evidencia', 'Error');
+            }
+          });
+        };
+  
+        reader.readAsArrayBuffer(files[0]);
+      } else {
+        console.error('No se ha seleccionado ningún archivo.');
+        this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
+      }
+    } else {
+      console.error('Formulario no válido. Verifica los campos.');
+      this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
+    }
+  }
+}
   
   
 
 }
 
-
-  

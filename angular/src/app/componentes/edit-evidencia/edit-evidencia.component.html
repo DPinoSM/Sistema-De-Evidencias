@@ -1,0 +1,440 @@
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event"></app-header>
+    <main>
+      <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus" [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{ 'display-area-shrink': sideNavStatus }">
+        <div class="container evidencia-container">
+          <div class="row mb-3 evidencia-header">
+            <div class="col">
+              <div class="container-fluid">
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <img src="../../../assets/logo2.jpg" alt="Logo" class="custom-image" />
+                  </div>
+                  <div class="col-4 text-center">
+                    <h1>Universidad Católica del Maule</h1>
+                    <h2>Departamento de Aseguramiento y Calidad</h2>
+                  </div>
+                  <div class="col-4 text-end">
+                    <img src="../../../assets/dac.png" alt="DAC Logo" class="custom-image" />
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col text-center">
+                    <h2>Documento del Sistema de Gestión de Calidad</h2>
+                    <h3>Registro del Sistema de Gestión de Calidad</h3>
+                    <h3>Identificación de Registros</h3>
+                  </div>
+                </div>
+                <form [formGroup]="form" (ngSubmit)="actualizarEvidencia(form.get('idEvidencia')?.value)">
+                  <div class="row mb-3">
+                    <div class="col">
+                    <div class="form-group">
+                      <label for="numero_folio">N° Folio</label>
+                      <input type="text" id="numero_folio" class="form-control" formControlName="numero_folio" required>
+                      <div class="error-message error-text"
+                        *ngIf="form.get('numero_folio')?.invalid && (form.get('numero_folio')?.dirty || form.get('numero_folio')?.touched)">
+                        El Numero de Folio es obligatorio.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="fecha_evidencia">Fecha Evidencia</label>
+                      <input matInput [matDatepicker]="picker" formControlName="fecha_evidencia" class="form-control" required/>
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                      <div class="error-message error-text"
+                           *ngIf="form.get('fecha_evidencia')?.invalid && (form.get('fecha_evidencia')?.dirty || form.get('fecha_evidencia')?.touched)">
+                        La Fecha de Evidencia es obligatoria.
+                      </div>
+                    </div>
+                  </div>                
+                  </div>
+                  <!-- RUT y Correo del Usuario -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="rut_usuario">RUT del Usuario</label>
+                        <input type="text" id="rut_usuario" class="form-control" formControlName="rut_usuario" required>
+                      </div>                    
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="correo_usuario">Correo del Usuario</label>
+                        <input type="text" id="correo_usuario" class="form-control" formControlName="correo_usuario" required>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Nombre del Usuario -->
+                    <div class="row mb-3">
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="id_usuario">Nombre del Usuario</label>
+                          <select id="id_usuario" class="form-control" formControlName="id_usuario" required>
+                            <option *ngFor="let usuario of usuarios" [value]="usuario.id_usuario">
+                              {{ usuario.nombre_usuario }}
+                            </option>
+                          </select>
+                          <div class="error-message error-text"
+                            *ngIf="form.get('id_usuario')?.invalid && (form.get('id_usuario')?.dirty || form.get('id_usuario')?.touched)">
+                            El Nombre del Usuario es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <!-- Unidad y Proceso -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_unidad">Unidad</label>
+                        <select id="id_unidad"  class="form-control" formControlName="id_unidad" required>
+                          <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                            {{ unidad.nombre_unidad }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_unidad')?.invalid && (form.get('id_unidad')?.dirty || form.get('id_unidad')?.touched)">
+                          La Unidad es obligatoria.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_procesos">Proceso</label>
+                        <select id="id_procesos" class="form-control" formControlName="id_procesos" required>
+                          <option *ngFor="let p of proceso" [value]="p.id_procesos">
+                            {{ p.nombre_procesos }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_procesos')?.invalid && (form.get('id_procesos')?.dirty || form.get('id_procesos')?.touched)">
+                          El Proceso es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Tipo Registro y N° Plan de Mejora -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_registro">Tipo Registro</label>
+                        <select id="id_registro" class="form-control" formControlName="id_registro" required>
+                          <option *ngFor="let r of registro" [value]="r.id_registro">
+                            {{ r.datos_registro }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_registro')?.invalid && (form.get('id_registro')?.dirty || form.get('id_registro')?.touched)">
+                          El Tipo de Registro es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="numero_de_mejoras">N° Plan de Mejora</label>
+                        <input type="number" id="numero_de_mejoras" class="form-control" formControlName="numero_de_mejoras" required />
+                        <div class="error-message error-text"
+                          *ngIf="form.get('numero_de_mejoras')?.invalid && (form.get('numero_de_mejoras')?.dirty || form.get('numero_de_mejoras')?.touched)">
+                          El N° de Plan de Mejora es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Ambito Academico y Ambito Geografico -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_ambito_academico">Ambito Academico</label>
+                        <select id="id_ambito_academico" class="form-control" formControlName="id_ambito_academico" required>
+                          <option *ngFor="let ambitoAcademico of academico" [value]="ambitoAcademico.id_ambito_academico">
+                            {{ ambitoAcademico.nombre_ambito_academico }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_ambito_academico')?.invalid && (form.get('id_ambito_academico')?.dirty || form.get('id_ambito_academico')?.touched)">
+                          El Ambito Académico es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_ambito_geografico">Ambito Geografico</label>
+                        <select id="id_ambito_geografico" class="form-control" formControlName="id_ambito_geografico" required>
+                          <option *ngFor="let ambitoGeografico of geografico" [value]="ambitoGeografico.id_ambito_geografico">
+                            {{ ambitoGeografico.nombre_ambito_geografico }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_ambito_geografico')?.invalid && (form.get('id_ambito_geografico')?.dirty || form.get('id_ambito_geografico')?.touched)">
+                          El Ambito Geográfico es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Criterio y Debilidades -->
+                    <div class="row mb-3">
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="id_criterios">Criterio</label>
+                          <select id="id_criterios" class="form-control" formControlName="id_criterios" required>
+                            <option *ngFor="let criterio of criterios" [value]="criterio.id_criterios">
+                              {{ criterio.nombre_criterios }}
+                            </option>
+                          </select>
+                          <div class="error-message error-text"
+                            *ngIf="form.get('id_criterios')?.invalid && (form.get('id_criterios')?.dirty || form.get('id_criterios')?.touched)">
+                            El Criterio es obligatorio.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <label for="id_debilidades">Debilidades</label>
+                          <select id="id_debilidades" class="form-control" formControlName="id_debilidades" required>
+                            <option *ngFor="let debilidad of debilidad" [value]="debilidad.id_debilidades">
+                              {{ debilidad.descripcion_debilidades }}
+                            </option>
+                          </select>
+                          <div class="error-message error-text"
+                            *ngIf="form.get('id_debilidades')?.invalid && (form.get('id_debilidades')?.dirty || form.get('id_debilidades')?.touched)">
+                            Las Debilidades son obligatorias.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <!-- Facultad y Carrera -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_facultad">Facultad</label>
+                        <select id="id_facultad" class="form-control" formControlName="id_facultad" required>
+                          <option *ngFor="let facultad of facultad" [value]="facultad.id_facultad">
+                            {{ facultad.nombre_facultad }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_facultad')?.invalid && (form.get('id_facultad')?.dirty || form.get('id_facultad')?.touched)">
+                          La Facultad es obligatoria.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_carrera">Carrera</label>
+                        <select id="id_carrera" class="form-control" formControlName="id_carrera" required>
+                          <option *ngFor="let carrera of carrera" [value]="carrera.id_carrera">
+                            {{ carrera.nombre_carrera }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_carrera')?.invalid && (form.get('id_carrera')?.dirty || form.get('id_carrera')?.touched)">
+                          La Carrera es obligatoria.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Impacto y Estado -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_impacto">Impacto</label>
+                        <select id="id_impacto" class="form-control" formControlName="id_impacto" required>
+                          <option *ngFor="let impactoItem of impacto" [value]="impactoItem.id_impacto">
+                            {{ impactoItem.interno_externo }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_impacto')?.invalid && (form.get('id_impacto')?.dirty || form.get('id_impacto')?.touched)">
+                          El Impacto es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="id_estado">Estado</label>
+                        <select id="id_estado" class="form-control" formControlName="id_estado" required>
+                          <option *ngFor="let estadoItem of estado" [value]="estadoItem.id_estado">
+                            {{ estadoItem.online_presencial }}
+                          </option>
+                        </select>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('id_estado')?.invalid && (form.get('id_estado')?.dirty || form.get('id_estado')?.touched)">
+                          El Estado es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Descripcion -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea id="descripcion" class="form-control" formControlName="descripcion" required></textarea>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('descripcion')?.invalid && (form.get('descripcion')?.dirty || form.get('descripcion')?.touched)">
+                          La Descripción es obligatoria.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Resultado -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="resultado" class="form-label">Resultado</label>
+                        <textarea class="form-control" id="resultado" formControlName="resultado" required></textarea>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('resultado')?.invalid && (form.get('resultado')?.dirty || form.get('resultado')?.touched)">
+                          El Resultado es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Almacenamiento -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="almacenamiento" class="form-label">Almacenamiento</label>
+                        <textarea class="form-control" id="almacenamiento" formControlName="almacenamiento" required></textarea>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('almacenamiento')?.invalid && (form.get('almacenamiento')?.dirty || form.get('almacenamiento')?.touched)">
+                          El Almacenamiento es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Unidades y/o Persona Relacionadas a la Evidencia -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="unidades_personas_evidencias" class="form-label">Unidades y/o Persona Relacionadas a la Evidencia</label>
+                        <textarea class="form-control" id="unidades_personas_evidencias" formControlName="unidades_personas_evidencias" required></textarea>
+                        <div class="error-message error-text"
+                          *ngIf="form.get('unidades_personas_evidencias')?.invalid && (form.get('unidades_personas_evidencias')?.dirty || form.get('unidades_personas_evidencias')?.touched)">
+                          Las Unidades y/o Persona Relacionadas a la Evidencia son obligatorias.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Palabras Clave -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="palabra_clave" class="form-label">Palabras Clave</label>
+                        <input type="text" class="form-control" id="palabra_clave" formControlName="palabra_clave" required />
+                        <div class="error-message error-text"
+                          *ngIf="form.get('palabra_clave')?.invalid && (form.get('palabra_clave')?.dirty || form.get('palabra_clave')?.touched)">
+                          Las Palabras Clave son obligatorias.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Nombre Corto Evidencia -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="nombre_corto_evidencia" class="form-label">Nombre Corto Evidencia</label>
+                        <input type="text" class="form-control" id="nombre_corto_evidencia" formControlName="nombre_corto_evidencia" required />
+                        <div class="error-message error-text"
+                          *ngIf="form.get('nombre_corto_evidencia')?.invalid && (form.get('nombre_corto_evidencia')?.dirty || form.get('nombre_corto_evidencia')?.touched)">
+                          El Nombre Corto Evidencia es obligatorio.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Cantidad Asistentes Interno -->
+                  <div class="row mb-3">
+                    <!-- Asistentes Internos -->
+                    <div class="col justify-content-start">
+                      <label>Cantidad Asistentes Interno:</label>
+                      <div class="form-group">
+                        <label for="asistentes_internos_autoridades" class="form-label">Autoridades:</label>
+                        <input type="number" id="asistentes_internos_autoridades" class="form-control" formControlName="asistentes_internos_autoridades" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_internos_administrativos" class="form-label">Administrativos:</label>
+                        <input type="number" id="asistentes_internos_administrativos" class="form-control" formControlName="asistentes_internos_administrativos" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_internos_docentes" class="form-label">Docentes:</label>
+                        <input type="number" id="asistentes_internos_docentes" class="form-control" formControlName="asistentes_internos_docentes" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_internos_estudiantes" class="form-label">Estudiantes:</label>
+                        <input type="number" id="asistentes_internos_estudiantes" class="form-control" formControlName="asistentes_internos_estudiantes" required />
+                      </div>
+                    </div>
+                    <!-- Asistentes Externos -->
+                    <div class="col justify-content-end">
+                      <label>Cantidad Asistentes Externos:</label>
+                      <div class="form-group">
+                        <label for="asistentes_externos_autoridades" class="form-label">Autoridades:</label>
+                        <input type="number" id="asistentes_externos_autoridades" class="form-control" formControlName="asistentes_externos_autoridades" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_externos_administrativos" class="form-label">Administrativos:</label>
+                        <input type="number" id="asistentes_externos_administrativos" class="form-control" formControlName="asistentes_externos_administrativos" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_externos_docentes" class="form-label">Docentes:</label>
+                        <input type="number" id="asistentes_externos_docentes" class="form-control" formControlName="asistentes_externos_docentes" required />
+                      </div>
+                      <div class="form-group">
+                        <label for="asistentes_externos_estudiantes" class="form-label">Estudiantes:</label>
+                        <input type="number" id="asistentes_externos_estudiantes" class="form-control" formControlName="asistentes_externos_estudiantes" required />
+                      </div>
+                    </div>
+                  </div>
+                  
+                <!-- Opción para adjuntar imágenes -->
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="archivo_adjunto">Adjuntar Imágenes:</label>
+                      <input type="file" (change)="onFileSelected($event)" multiple />
+                      <div (dragover)="onDragOver($event)" (drop)="onDrop($event)" class="drop-area">
+                        Arrastra y suelta imágenes aquí
+                      </div>
+                      <div class="image-container" *ngFor="let image of selectedImages; let i = index" draggable="true" (dragstart)="onDragStart($event, i)">
+                        <img *ngIf="imagenBase64" [src]="imagenBase64" alt="Imagen Adjunta" class="adjunta-image" />
+                        <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="fecha_creacion">Fecha Creación:</label>
+                      <input type="text" id="fecha_creacion" class="form-control" formControlName="fecha_creacion" readonly required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="fecha_actualizacion">Fecha Actualizacion:</label>
+                        <input type="text" id="fecha_actualizacion" class="form-control" formControlName="fecha_actualizacion" [value]="currentDateTime" readonly required>
+                      </div>
+                    </div>
+                  </div>
+                
+                
+                <!-- Botones Cancelar y Enviar -->
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary m-4" (click)="cancelar()">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Actualizar Evidencia</button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>

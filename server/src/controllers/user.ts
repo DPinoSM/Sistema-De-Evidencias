@@ -110,6 +110,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
         // Obtener el correo del usuario
         const correo_usuario = usuario.correo_usuario;
+        const id_usuario = usuario.id_usuario;
 
         // Generar token JWT con el rol del usuario
         const token = jwt.sign(
@@ -122,7 +123,7 @@ export const loginUser = async (req: Request, res: Response) => {
         );
 
         // Enviar el token, el rol y el correo como parte de la respuesta JSON
-        res.json({ token, rol: usuario.id_rol, rut_usuario, correo_usuario: correo_usuario || '' });
+        res.json({ token, rol: usuario.id_rol, rut_usuario, id_usuario:id_usuario, correo_usuario: correo_usuario || '' });
     } catch (error) {
         console.error('Error en el controlador loginUser:', error);
         res.status(500).json({
