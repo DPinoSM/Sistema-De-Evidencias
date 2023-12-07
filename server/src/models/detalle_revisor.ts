@@ -38,7 +38,7 @@ Detalle_Revisor.init(
   },
   {
     sequelize,
-    modelName: 'Detalle_Revisor',
+    modelName: 'detalle_revisor',
     timestamps: false,
     freezeTableName: true,
   }

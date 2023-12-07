@@ -116,7 +116,7 @@ export const buscarRegistro = async (req: Request, res: Response) => {
             { id_registro: { [Op.like]: `%${searchTerm}%` } },
             { datos_registro: { [Op.like]: `%${searchTerm}%` } },
           ],
-        },
+        } as unknown as Record<string,any>,
       });
   
       return res.json(registros);

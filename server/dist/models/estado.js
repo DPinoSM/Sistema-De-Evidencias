@@ -6,10 +6,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Estado = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-exports.Estado = connection_1.default.define('estado', {
-    "id_estado": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    "online_presencial": { type: sequelize_1.DataTypes.STRING }
+// Define la clase Estado extendiendo el modelo y las interfaces
+class Estado extends sequelize_1.Model {
+}
+exports.Estado = Estado;
+// Inicializa el modelo Estado
+Estado.init({
+    id_estado: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    online_presencial: { type: sequelize_1.DataTypes.STRING },
 }, {
-    freezeTableName: true,
+    sequelize: connection_1.default,
+    modelName: 'estado',
     timestamps: false,
+    freezeTableName: true,
 });
+// Exporta el modelo Estado
+exports.default = Estado;

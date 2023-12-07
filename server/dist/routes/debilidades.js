@@ -3,8 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//JONATHAN MOLINA 
-//ROUTES DEBILIDADES
 const express_1 = require("express");
 const debilidades_1 = require("../controllers/debilidades");
 const validate_token_1 = __importDefault(require("./validate-token"));
@@ -15,4 +13,3 @@ router.get('/:id', validate_token_1.default, debilidades_1.getOneDebilidades);
 router.delete('/:id', validate_token_1.default, debilidades_1.deleteDebilidades);
 router.put('/:id', validate_token_1.default, debilidades_1.updateDebilidades);
 exports.default = router;
-//FIN

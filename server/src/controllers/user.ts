@@ -250,10 +250,10 @@ export const buscarUsuario = async (req: Request, res: Response) =>{
             attributes: ['id_usuario', 'nombre_usuario'],
             where: {
                 [Op.or]: [
-                    { id_usuario: { [Op.like]: `%{searchTerm}%` } },
-                    { nombre_usuario: { [Op.like]: `%{searchTerm}%` } },
+                    { 'id_usuario': { [Op.like]: `%${searchTerm}%` } },
+                    { 'nombre_usuario': { [Op.like]: `%${searchTerm}%` } },
                 ],
-            },
+            } as unknown as Record<string,any>,
         });
         return res.json(users);
     }   catch (error){

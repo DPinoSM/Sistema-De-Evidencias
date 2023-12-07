@@ -375,9 +375,7 @@ export const generarPDF = async (req: Request, res: Response) => {
 
   try {
     // Obtener los detalles de la evidencia por ID
-    const evidencia = await Evidencias.findByPk(id, {
-        include: [{model: Detalle_Revisor, as: 'detalle_revisor'}],
-    });
+    const evidencia = await Evidencias.findByPk(id);
 
     
 
@@ -388,11 +386,52 @@ export const generarPDF = async (req: Request, res: Response) => {
     const detalleRevisor = await Detalle_Revisor.findOne({
         where: {id_detalle_revisor: evidencia.id_detalle_revisor},
     });
-
+    const detalleDac = await Detalle_DAC.findOne({
+        where: {id_detalle_dac: evidencia.id_detalle_dac},
+    });
+    const detalleComite = await Detalle_Comite.findOne({
+        where: {id_detalle_comite: evidencia.id_detalle_comite},
+    });
+    const nameUser = await User.findOne({
+        where: {id_usuario: evidencia.id_usuario},
+    });
+    const descripcionDebilidades = await Debilidades.findOne({
+        where: {id_debilidades: evidencia.id_debilidades},
+    });
+    const detalleCriterios = await Criterio.findOne({
+        where: {id_criterios: evidencia.id_criterios},
+    });
+    const nameUnidad = await Unidad.findOne({
+        where: {id_unidad: evidencia.id_unidad},
+    });
+    const nameAmbitoGeografico = await AmbitoGeografico.findOne({
+        where: {id_ambito_geografico: evidencia.id_ambito_geografico},
+    });
+    const nameAmbitoAcademico = await AmbitoAcademico.findOne({
+        where: {id_ambito_academico: evidencia.id_ambito_academico},
+    });
+    const detalleRegistro = await Registro.findOne({
+        where: {id_registro: evidencia.id_registro},
+    });
+    const nameCarrera = await Carrera.findOne({
+        where: {id_carrera: evidencia.id_carrera},
+    });
+    const nameFacultad = await Facultad.findOne({
+        where: {id_facultad: evidencia.id_facultad},
+    });
+    const nameProceso = await Proceso.findOne({
+        where: {id_procesos: evidencia.id_procesos},
+    });
+    const typeImpacto = await Impacto.findOne({
+        where: {id_impacto: evidencia.id_impacto},
+    });
+    const typeEstado = await Estado.findOne({
+        where: {id_estado: evidencia.id_estado},
+    });
     // Crear la definición del documento PDF
     const documentDefinition: TDocumentDefinitions = {
       content: [
-        { text: `Evidencia ID: ${evidencia.id_evidencias}`, style: 'header' },
+        { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
         { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
         // Crear una tabla con los datos de la evidencia
         {
@@ -423,7 +462,33 @@ export const generarPDF = async (req: Request, res: Response) => {
               ['Asistentes Externos Docentes', evidencia.asistentes_externos_docentes],
               ['Asistentes Externos Estudiantes', evidencia.asistentes_externos_estudiantes],
               ['Detalle Revisor', detalleRevisor?.comentario_revisor || 'No disponible'],
-              
+              ['Detalle Dac', detalleDac?.comentario_dac || 'No disponible'],
+              ['Detalle Comite', detalleComite?.comentario_comite || 'No disponible'],
+              ['Usuario',
+                (nameUser?.nombre_usuario || '') +
+                (nameUser?.apellido1_usuario ? ` ${nameUser.apellido1_usuario}` : '') +
+                (nameUser?.apellido2_usuario ? ` ${nameUser.apellido2_usuario}` : '')
+              ],
+              ['Debilidades', descripcionDebilidades?.descripcion_debilidades || 'No disponibles'],
+              ['Criterios', 
+                [
+                    detalleCriterios?.nombre_criterios || 'No disponible',
+                    detalleCriterios?.descripcion_criterios || 'No disponible'
+                ].join('\n'),
+              ],
+              ['Unidad', nameUnidad?.nombre_unidad || 'No disponible'],
+              ['Ambito Geografico', nameAmbitoGeografico?.nombre_ambito_geografico || 'No disponible'],
+              ['Ambito Academico', nameAmbitoAcademico?.nombre_ambito_academico || 'No disponible'],
+              ['Registro', [
+                detalleRegistro?.datos_registro || 'No disponible',
+                detalleRegistro?.contenido_registro || 'No disponible'
+              ].join('\n'),
+              ],
+              ['Carrera', nameCarrera?.nombre_carrera || 'No disponible'],
+              ['Facultad', nameFacultad?.nombre_facultad || 'No disponible'],
+              ['Proceso', nameProceso?.nombre_procesos || 'No disponible'],
+              ['Impacto', typeImpacto?.interno_externo || 'No disponible'],
+              ['Estado', typeEstado?.online_presencial || 'No disponible'],
             ],
           },
         } as any,
@@ -443,8 +508,6 @@ export const generarPDF = async (req: Request, res: Response) => {
 
     // Crear el PDF
     const pdfDoc = pdfMake.createPdf(documentDefinition);
-    console.log('Detalle Revisor:', detalleRevisor);
-    console.log('Comentario Revisor:', detalleRevisor?.comentario_revisor);
 
     
 
