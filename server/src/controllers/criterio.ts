@@ -122,7 +122,7 @@ export const buscarCriterio = async (req: Request, res: Response) => {
           [Op.or]: [
             { id_criterios: { [Op.like]: `%${searchTerm}%` } },
             { nombre_criterios: { [Op.like]: `%${searchTerm}%` } },
-          ],
+          ] as unknown as Record<string,any>,
         },
       });
   

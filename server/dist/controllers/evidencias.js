@@ -288,19 +288,59 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { id } = req.params;
     try {
         // Obtener los detalles de la evidencia por ID
-        const evidencia = yield evidencias_1.Evidencias.findByPk(id, {
-            include: [{ model: detalle_revisor_1.Detalle_Revisor, as: 'detalle_revisor' }],
-        });
+        const evidencia = yield evidencias_1.Evidencias.findByPk(id);
         if (!evidencia) {
             return res.status(404).send('Evidencia no encontrada');
         }
         const detalleRevisor = yield detalle_revisor_1.Detalle_Revisor.findOne({
             where: { id_detalle_revisor: evidencia.id_detalle_revisor },
         });
+        const detalleDac = yield detalle_dac_1.Detalle_DAC.findOne({
+            where: { id_detalle_dac: evidencia.id_detalle_dac },
+        });
+        const detalleComite = yield detalle_comite_1.Detalle_Comite.findOne({
+            where: { id_detalle_comite: evidencia.id_detalle_comite },
+        });
+        const nameUser = yield user_1.User.findOne({
+            where: { id_usuario: evidencia.id_usuario },
+        });
+        const descripcionDebilidades = yield debilidades_1.Debilidades.findOne({
+            where: { id_debilidades: evidencia.id_debilidades },
+        });
+        const detalleCriterios = yield criterio_1.Criterio.findOne({
+            where: { id_criterios: evidencia.id_criterios },
+        });
+        const nameUnidad = yield unidad_1.Unidad.findOne({
+            where: { id_unidad: evidencia.id_unidad },
+        });
+        const nameAmbitoGeografico = yield ambito_geografico_1.AmbitoGeografico.findOne({
+            where: { id_ambito_geografico: evidencia.id_ambito_geografico },
+        });
+        const nameAmbitoAcademico = yield ambito_academico_1.AmbitoAcademico.findOne({
+            where: { id_ambito_academico: evidencia.id_ambito_academico },
+        });
+        const detalleRegistro = yield registro_1.Registro.findOne({
+            where: { id_registro: evidencia.id_registro },
+        });
+        const nameCarrera = yield carrera_1.Carrera.findOne({
+            where: { id_carrera: evidencia.id_carrera },
+        });
+        const nameFacultad = yield facultad_1.Facultad.findOne({
+            where: { id_facultad: evidencia.id_facultad },
+        });
+        const nameProceso = yield proceso_1.Proceso.findOne({
+            where: { id_procesos: evidencia.id_procesos },
+        });
+        const typeImpacto = yield impacto_1.Impacto.findOne({
+            where: { id_impacto: evidencia.id_impacto },
+        });
+        const typeEstado = yield estado_1.Estado.findOne({
+            where: { id_estado: evidencia.id_estado },
+        });
         // Crear la definición del documento PDF
         const documentDefinition = {
             content: [
-                { text: `Evidencia ID: ${evidencia.id_evidencias}`, style: 'header' },
+                { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
                 { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
                 // Crear una tabla con los datos de la evidencia
                 {
@@ -331,6 +371,33 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                             ['Asistentes Externos Docentes', evidencia.asistentes_externos_docentes],
                             ['Asistentes Externos Estudiantes', evidencia.asistentes_externos_estudiantes],
                             ['Detalle Revisor', (detalleRevisor === null || detalleRevisor === void 0 ? void 0 : detalleRevisor.comentario_revisor) || 'No disponible'],
+                            ['Detalle Dac', (detalleDac === null || detalleDac === void 0 ? void 0 : detalleDac.comentario_dac) || 'No disponible'],
+                            ['Detalle Comite', (detalleComite === null || detalleComite === void 0 ? void 0 : detalleComite.comentario_comite) || 'No disponible'],
+                            ['Usuario',
+                                ((nameUser === null || nameUser === void 0 ? void 0 : nameUser.nombre_usuario) || '') +
+                                    ((nameUser === null || nameUser === void 0 ? void 0 : nameUser.apellido1_usuario) ? ` ${nameUser.apellido1_usuario}` : '') +
+                                    ((nameUser === null || nameUser === void 0 ? void 0 : nameUser.apellido2_usuario) ? ` ${nameUser.apellido2_usuario}` : '')
+                            ],
+                            ['Debilidades', (descripcionDebilidades === null || descripcionDebilidades === void 0 ? void 0 : descripcionDebilidades.descripcion_debilidades) || 'No disponibles'],
+                            ['Criterios',
+                                [
+                                    (detalleCriterios === null || detalleCriterios === void 0 ? void 0 : detalleCriterios.nombre_criterios) || 'No disponible',
+                                    (detalleCriterios === null || detalleCriterios === void 0 ? void 0 : detalleCriterios.descripcion_criterios) || 'No disponible'
+                                ].join('\n'),
+                            ],
+                            ['Unidad', (nameUnidad === null || nameUnidad === void 0 ? void 0 : nameUnidad.nombre_unidad) || 'No disponible'],
+                            ['Ambito Geografico', (nameAmbitoGeografico === null || nameAmbitoGeografico === void 0 ? void 0 : nameAmbitoGeografico.nombre_ambito_geografico) || 'No disponible'],
+                            ['Ambito Academico', (nameAmbitoAcademico === null || nameAmbitoAcademico === void 0 ? void 0 : nameAmbitoAcademico.nombre_ambito_academico) || 'No disponible'],
+                            ['Registro', [
+                                    (detalleRegistro === null || detalleRegistro === void 0 ? void 0 : detalleRegistro.datos_registro) || 'No disponible',
+                                    (detalleRegistro === null || detalleRegistro === void 0 ? void 0 : detalleRegistro.contenido_registro) || 'No disponible'
+                                ].join('\n'),
+                            ],
+                            ['Carrera', (nameCarrera === null || nameCarrera === void 0 ? void 0 : nameCarrera.nombre_carrera) || 'No disponible'],
+                            ['Facultad', (nameFacultad === null || nameFacultad === void 0 ? void 0 : nameFacultad.nombre_facultad) || 'No disponible'],
+                            ['Proceso', (nameProceso === null || nameProceso === void 0 ? void 0 : nameProceso.nombre_procesos) || 'No disponible'],
+                            ['Impacto', (typeImpacto === null || typeImpacto === void 0 ? void 0 : typeImpacto.interno_externo) || 'No disponible'],
+                            ['Estado', (typeEstado === null || typeEstado === void 0 ? void 0 : typeEstado.online_presencial) || 'No disponible'],
                         ],
                     },
                 },
@@ -349,8 +416,6 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         };
         // Crear el PDF
         const pdfDoc = pdfmake_1.default.createPdf(documentDefinition);
-        console.log('Detalle Revisor:', detalleRevisor);
-        console.log('Comentario Revisor:', detalleRevisor === null || detalleRevisor === void 0 ? void 0 : detalleRevisor.comentario_revisor);
         // Enviar el PDF como respuesta
         pdfDoc.getBuffer((buffer) => {
             try {

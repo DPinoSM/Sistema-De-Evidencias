@@ -1,5 +1,3 @@
-//JONATHAN MOLINA 
-//ROUTES DEBILIDADES
 import { Router } from "express";
 import { getDebilidades,newDebilidades,getOneDebilidades,deleteDebilidades,updateDebilidades } from "../controllers/debilidades";
 import validateToken from './validate-token';
@@ -11,5 +9,3 @@ router.get('/:id',validateToken, getOneDebilidades);
 router.delete('/:id',validateToken, deleteDebilidades);
 router.put('/:id',validateToken, updateDebilidades);
 export default router;
-
-//FIN

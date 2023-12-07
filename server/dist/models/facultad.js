@@ -6,10 +6,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Facultad = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-exports.Facultad = connection_1.default.define('facultad', {
-    "id_facultad": { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    "nombre_facultad": { type: sequelize_1.DataTypes.STRING },
+// Define la clase Facultad extendiendo el modelo y las interfaces
+class Facultad extends sequelize_1.Model {
+}
+exports.Facultad = Facultad;
+// Inicializa el modelo Facultad
+Facultad.init({
+    id_facultad: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    nombre_facultad: { type: sequelize_1.DataTypes.STRING },
 }, {
-    freezeTableName: true,
+    sequelize: connection_1.default,
+    modelName: 'facultad',
     timestamps: false,
+    freezeTableName: true,
 });
+// Exporta el modelo Facultad
+exports.default = Facultad;

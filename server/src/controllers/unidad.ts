@@ -116,7 +116,7 @@ export const buscarUnidad = async (req: Request, res: Response) => {
             { id_unidad: { [Op.like]: `%${searchTerm}%` } },
             { nombre_unidad: { [Op.like]: `%${searchTerm}%` } },
           ],
-        },
+        } as unknown as Record<string,any>,
       });
   
       return res.json(unidades);

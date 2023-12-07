@@ -112,7 +112,7 @@ export const buscarAmbAca = async (req: Request, res: Response) => {
             { id_ambito_academico: { [Op.like]: `%${searchTerm}%` } },
             { nombre_ambito_academico: { [Op.like]: `%${searchTerm}%` } },
           ],
-        },
+        } as unknown as Record<string,any>,
       });
   
       return res.json(ambitosAcademicos);

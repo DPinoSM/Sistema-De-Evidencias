@@ -113,7 +113,7 @@ export const buscarAmbGeo = async (req: Request, res: Response) => {
             { id_ambito_geografico: { [Op.like]: `%${searchTerm}%` } },
             { nombre_ambito_geografico: { [Op.like]: `%${searchTerm}%` } },
           ],
-        },
+        } as unknown as Record<string,any>,
       });
   
       return res.json(ambitosG);

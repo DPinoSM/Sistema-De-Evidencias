@@ -19,7 +19,7 @@ Detalle_Revisor.init({
     comentario_revisor: { type: sequelize_1.DataTypes.STRING },
 }, {
     sequelize: connection_1.default,
-    modelName: 'Detalle_Revisor',
+    modelName: 'detalle_revisor',
     timestamps: false,
     freezeTableName: true,
 });

@@ -114,7 +114,7 @@ export const buscarFacultad = async (req: Request, res: Response) => {
             { id_facultad: { [Op.like]: `%${searchTerm}%` } },
             { nombre_facultad: { [Op.like]: `%${searchTerm}%` } },
           ],
-        },
+        } as unknown as Record<string,any>,
       });
   
       return res.json(facultades);

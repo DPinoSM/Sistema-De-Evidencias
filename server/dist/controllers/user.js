@@ -211,8 +211,8 @@ const buscarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             attributes: ['id_usuario', 'nombre_usuario'],
             where: {
                 [sequelize_1.Op.or]: [
-                    { id_usuario: { [sequelize_1.Op.like]: `%{searchTerm}%` } },
-                    { nombre_usuario: { [sequelize_1.Op.like]: `%{searchTerm}%` } },
+                    { 'id_usuario': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { 'nombre_usuario': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
                 ],
             },
         });
