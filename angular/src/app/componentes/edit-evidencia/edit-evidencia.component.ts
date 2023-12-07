@@ -132,7 +132,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
         asistentes_externos_estudiantes: new FormControl(null, Validators.required),
         archivo_adjunto: new FormControl(null),
         fecha_creacion: new FormControl({value: '', disabled: true}),
-        fecha_actualizar: new FormControl({ value: this.getCurrentDateTime(), disabled: true})
+        fecha_actualizacion: new FormControl({ value: this.getCurrentDateTime(), disabled: true})
       });
       this.updateCurrentDateTime();
     }

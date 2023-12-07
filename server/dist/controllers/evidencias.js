@@ -352,7 +352,7 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                             ['Número de Folio', evidencia.numero_folio],
                             ['Correo Usuario', evidencia.correo_usuario],
                             ['Rut Usuario', evidencia.rut_usuario],
-                            ['Fecha de evidencia', evidencia.fecha_evidencia.toString()],
+                            ['Fecha de evidencia', evidencia.fecha_evidencia],
                             ['Número de mejoras', evidencia.numero_de_mejoras],
                             ['Descripción', evidencia.descripcion],
                             ['Resultado', evidencia.resultado],
@@ -360,8 +360,8 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                             ['Unidades de Personas de Evidencia', evidencia.unidades_personas_evidencias],
                             ['Palabras Claves', evidencia.palabra_clave],
                             ['Nombre Abreviado', evidencia.nombre_corto_evidencia],
-                            ['Fecha de Creación', evidencia.fecha_creacion.toString()],
-                            ['Fecha de Actualizacion', evidencia.fecha_actualizacion.toString()],
+                            ['Fecha de Creación', evidencia.fecha_creacion],
+                            ['Fecha de Actualizacion', evidencia.fecha_actualizacion],
                             ['Asistentes Internos Autoridades', evidencia.asistentes_internos_autoridades],
                             ['Asistentes Internos Administrativos', evidencia.asistentes_internos_administrativos],
                             ['Asistentes Internos Docentes', evidencia.asistentes_internos_docentes],
@@ -439,7 +439,7 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     const { id_usuario } = req.params;
     try {
         const evidenciasUsuario = yield evidencias_1.Evidencias.findAll({
-            where: { id_usuario },
+            where: { id_usuario: id_usuario },
         });
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
             return res.status(404).json({

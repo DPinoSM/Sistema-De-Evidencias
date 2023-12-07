@@ -31,68 +31,63 @@
             <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
               <thead>
                 <tr>
-                  <th scope="col">id evidencia</th>
-                  <th scope="col">Número de folio</th>
-                  <th scope="col">Fecha evidencia</th>
+                  <th scope="col">id</th>
+                  <th scope="col">Número folio</th>
+                  <th scope="col">Fecha</th>
                   <th scope="col">Unidad</th>
                   <th scope="col">Proceso</th>
                   <th scope="col">Registro</th>
                   <th scope="col">Ambito</th>
-                  <th scope="col">Estado</th>
-                  <th scope="col">Acción</th>
+                  <th scope="col">Revisado Revisor</th>
+                  <th scope="col">Revisado Comite</th>
+                  <th scope="col">Revisado DAC</th>
+                  <th scope="col"></th>
                   <th scope="col">Descargar evidencia</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let evidencias of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
                   style="border: 1px solid black;">
-                  <td style="border: 1px solid black;">{{ evidencias.id_evidencias }}</td>
-                  <td style="border: 1px solid black;">{{ evidencias.numero_folio }}</td>
-                  <td style="border: 1px solid black;">{{ evidencias.fecha_evidencia }}</td>
-                  <td style="border: 1px solid black;">{{ evidencias.unidad?.nombre_unidad }}
-                  </td>
-                  <td style="border: 1px solid black;">{{ evidencias.proceso?.nombre_procesos
-                    }}</td>
-                  <td style="border: 1px solid black;">{{ evidencias.registro?.datos_registro
-                    }}</td>
-                  <td style="border: 1px solid black;">{{
-                    evidencias.ambito_academico?.nombre_ambito_academico }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.id_evidencias }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.fecha_evidencia }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.unidad }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.proceso }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.registro }}</td>
+                  <td style="border: 1px solid black;">{{ evidencia.ambitoAcademico }}</td>
                   <td style="border: 1px solid black;">
-                      <ng-container *ngIf="evidencias.estadoRevision === 'En espera'">
-                        <i class="fas fa-question"></i>
-                      </ng-container>
-                      <ng-container *ngIf="evidencias.estadoRevision === 'Aprobado'">
-                        <i class="fas fa-user"></i>
-                        <i class="fas fa-check-circle text-success"></i>
-                      </ng-container>
-                      <ng-container *ngIf="evidencias.estadoRevision === 'Rechazado'">
-                        <i class="fas fa-user"></i>
-                        <i class="fas fa-times-circle text-danger"></i>
-                      </ng-container>
+                    <i [class]="getIconName(evidencia.Drevisor)" *ngIf="evidencia.Drevisor !== undefined"></i>
                   </td>
-                  
-                  
+
+                  <td style="border: 1px solid black;">
+                    <i [class]="getIconName(evidencia.Dcomite)" *ngIf="evidencia.Dcomite !== undefined"></i>
+                  </td>
+
+                  <td style="border: 1px solid black;">
+                    <i [class]="getIconName(evidencia.Ddac)" *ngIf="evidencia.Ddac !== undefined"></i>
+                  </td>
+
                   <td>
                     <button type="button" class="btn">
                       <i class="fas fa-eye icon-no-bg"></i>
                     </button>
-                    <button type="button" class="btn ms-2" (click)="actualizarEvidencia(evidencias.id_evidencias)">
+                    <button type="button" class="btn ms-2" (click)="actualizarEvidencia(evidencia.id_evidencias)">
                       <i class="fas fa-edit icon-no-bg"></i>
                     </button>
-                    <button type="button" class="btn ms-2" (click)="eliminarEvidencia(evidencias.id_evidencias)">
+                    <button type="button" class="btn ms-2" (click)="eliminarEvidencia(evidencia.id_evidencias)">
                       <i class="fa fa-trash icon-no-bg"></i>
                     </button>
-                    
                   </td>
                   <!--boton descarga-->
                   <td style="border: 1px solid black;">
-                    <button type="button" class="btn ms-2" (click)="descargarPDF(evidencias.id_evidencias)">
+                    <button type="button" class="btn ms-2" (click)="descargarPDF(evidencia.id_evidencias)">
                       <i class="fas fa-download"></i> Descargar
                     </button>
                   </td>
                 </tr>
-              </tbody>
+              </tbody>              
             </table>
+            
             <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
               nextLabel="Siguiente"></pagination-controls>
           </div>
