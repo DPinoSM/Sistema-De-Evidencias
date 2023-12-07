@@ -202,13 +202,33 @@ export class ListaEvidenciasComponent implements OnInit {
   
     const searchTerm = this.selectedEstado.toString().toLowerCase();
   
-    this.evidencias = this.evidenciasOriginal?.filter(evidencia => {
-
-      const estadoRevision = `${evidencia.Drevisor?.revisado_revisor === true ? 'Aprobado' : (evidencia.Drevisor?.revisado_revisor === false ? 'Rechazado' : 'En espera')} - ${evidencia.Ddac?.revisado_dac === true ? 'Aprobado' : (evidencia.Ddac?.revisado_dac === false ? 'Rechazado' : 'En espera')} - ${evidencia.Dcomite?.revisado_comite === true ? 'Aprobado' : (evidencia.Dcomite?.revisado_comite === false ? 'Rechazado' : 'En espera')}`;
+    this.evidencias = this.evidenciasOriginal?.filter((evidencia) => {
+      const revisadoRevisor = evidencia.Drevisor?.revisado_revisor;
+      const revisadoComite = evidencia.Dcomite?.revisado_comite;
+      const revisadoDac = evidencia.Ddac?.revisado_dac;
+  
+      const estadoRevision = this.getEstadoRevision(revisadoRevisor, revisadoComite, revisadoDac);
   
       return estadoRevision.includes(searchTerm);
     }) || [];
   }
+  
+  getEstadoRevision(revisor: boolean | null | undefined, comite: boolean | null | undefined, dac: boolean | null | undefined): string {
+    const estadoRevisor = this.getEstado(revisor);
+    const estadoComite = this.getEstado(comite);
+    const estadoDac = this.getEstado(dac);
+  
+    return `${estadoRevisor} - ${estadoDac} - ${estadoComite}`;
+  }
+  
+  getEstado(revisado: boolean | null | undefined): string {
+    if (revisado === null || revisado === undefined) {
+      return 'En espera';
+    } else {
+      return revisado ? 'Aprobado' : 'Rechazado';
+    }
+  }
+  
   
 
   pageChanged(page: number) {

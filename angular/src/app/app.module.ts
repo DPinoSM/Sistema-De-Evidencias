@@ -45,6 +45,7 @@ import { ListaCarreraComponent } from './componentes/lista-carrera/lista-carrera
 import { ListaImpactoComponent } from './componentes/lista-impacto/lista-impacto.component';
 import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.component';
 import { EditEvidenciaComponent } from './componentes/edit-evidencia/edit-evidencia.component';
+import { EvidenciasAdminComponent } from './componentes/evidencias-admin/evidencias-admin.component';
 
 
 
@@ -75,7 +76,8 @@ import { EditEvidenciaComponent } from './componentes/edit-evidencia/edit-eviden
     ListaCarreraComponent,
     ListaImpactoComponent,
     ListaEstadoComponent,
-    EditEvidenciaComponent
+    EditEvidenciaComponent,
+    EvidenciasAdminComponent
   ],
   imports: [
     BrowserModule,

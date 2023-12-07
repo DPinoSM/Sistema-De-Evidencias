@@ -49,9 +49,12 @@ export class SidenavComponent implements OnInit {
 
   isItemVisible(item: any): boolean {
     if (item.link === '/usuarios') {
-      // Cambia la ruta y el nombre en función del rol del usuario.
       item.link = this.userRole === 1 ? '/usuarios' : '/perfil';
       item.name = this.userRole === 1 ? 'Usuarios' : 'Perfil';
+    }
+    if (item.link === '/evidencias') {
+      item.link = this.userRole === 1 ? '/evidenciaA' : '/evidencias';
+      item.name = this.userRole === 1 ? 'Evidencias' : 'Evidencias';
     }
     return [1, 2, 3, 4, 5].includes(this.userRole);
   }

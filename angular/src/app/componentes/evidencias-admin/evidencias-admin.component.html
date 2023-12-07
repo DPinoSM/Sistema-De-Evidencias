@@ -1,0 +1,63 @@
+<div class="container-fluid g-0">
+    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <main>
+      <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
+        [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+        <div class="container">
+          <div class="title">
+            <h3 class="page-title">Lista Total de Evidencias</h3>
+
+              <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+                <thead>
+                  <tr>
+                    <th scope="col">Id Evidencias</th>
+                    <th scope="col">Número folio</th>
+                    <th scope="col">Fecha Evidencia</th>
+                    <th scope="col">Unidad</th>
+                    <th scope="col">Proceso</th>
+                    <th scope="col">Registro</th>
+                    <th scope="col">Ambito Academico</th>
+                    <th scope="col">Revisado Revisor</th>
+                    <th scope="col">Revisado Comite</th>
+                    <th scope="col">Revisado DAC</th>
+                    <th scope="col">Descargar evidencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                    style="border: 1px solid black;">
+                    <td style="border: 1px solid black;">{{ evidencia.id_evidencias }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.fecha_evidencia }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.unidad?.nombre_unidad }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.proceso?.nombre_procesos }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.registro?.datos_registro }}</td>
+                    <td style="border: 1px solid black;">{{ evidencia.ambito_academico?.nombre_ambito_academico }}</td>
+                    <td style="border: 1px solid black;">
+                      {{ evidencia.drevisor?.revisado_revisor === true ? 'Aprobado' : evidencia.drevisor?.revisado_revisor === false ? 'Rechazado' : 'Pendiente' }}
+                    </td>
+              
+                    <td style="border: 1px solid black;">
+                      {{ evidencia.dcomite?.revisado_comite === true ? 'Aprobado' : evidencia.dcomite?.revisado_comite === false ? 'Rechazado' : 'Pendiente' }}
+                    </td>
+              
+                    <td style="border: 1px solid black;">
+                      {{ evidencia.ddac?.revisado_dac === true ? 'Aprobado' : evidencia.ddac?.revisado_dac === false ? 'Rechazado' : 'Pendiente' }}
+                    </td>
+                    
+
+                    <td style="border: 1px solid black;">
+                      <button type="button" class="btn ms-2" (click)="descargarPDF(evidencia.id_evidencias)">
+                        <i class="fas fa-download"></i> Descargar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>              
+              </table>
+              
+              <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+                nextLabel="Siguiente"></pagination-controls>
+            </div>
+          </div>
+        </div>
