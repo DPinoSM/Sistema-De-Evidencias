@@ -23,7 +23,16 @@ export class EvidenciasService {
   }
 
   newEvidencia(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, data)
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (key !== 'archivo_adjunto') {
+        formData.append(key, data[key]);
+      }
+    });
+
+    // Agrega el archivo como búfer a formData
+    formData.append('archivo_adjunto', new Blob([data.archivo_adjunto]));
+    return this.http.post(`${this.baseUrl}`, formData)
     .pipe(
       catchError(err => this.handleError(err))
       );
