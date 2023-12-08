@@ -26,6 +26,7 @@ import { ListaCarreraComponent } from '../componentes/lista-carrera/lista-carrer
 import { ListaEstadoComponent } from '../componentes/lista-estado/lista-estado.component';
 import { EditEvidenciaComponent } from '../componentes/edit-evidencia/edit-evidencia.component';
 import { EvidenciasAdminComponent } from '../componentes/evidencias-admin/evidencias-admin.component';
+import { PerfilComponent } from '../componentes/perfil/perfil.component';
 
 
 const routes: Routes = [
@@ -54,7 +55,8 @@ const routes: Routes = [
   { path: 'evidencia', component: EditEvidenciaComponent },
   { path: 'impacto', component: ListaImpactoComponent},
   { path: 'carrera', component: ListaCarreraComponent},
-  { path: 'estado', component: ListaEstadoComponent}
+  { path: 'estado', component: ListaEstadoComponent},
+  { path: 'perfil', component: PerfilComponent}
   
 ];
 

@@ -26,7 +26,7 @@
                   <option value="Rechazado">Rechazado</option>
                 </select>
               </div>
-            </div>
+            </div>            
 
             <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
               <thead>
@@ -38,10 +38,8 @@
                   <th scope="col">Proceso</th>
                   <th scope="col">Registro</th>
                   <th scope="col">Ambito</th>
-                  <th scope="col">Revisado Revisor</th>
-                  <th scope="col">Revisado Comite</th>
-                  <th scope="col">Revisado DAC</th>
-                  <th scope="col"></th>
+                  <th scope="col">Revisado </th>
+                  <th scope="col">Acciones</th>
                   <th scope="col">Descargar evidencia</th>
                 </tr>
               </thead>
@@ -57,15 +55,13 @@
                   <td style="border: 1px solid black;">{{ evidencia.ambitoAcademico }}</td>
                   <td style="border: 1px solid black;">
                     <i [class]="getIconName(evidencia.Drevisor)" *ngIf="evidencia.Drevisor !== undefined"></i>
-                  </td>
-
-                  <td style="border: 1px solid black;">
+                    <span style="margin: 0 5px;">
+                    </span>
                     <i [class]="getIconName(evidencia.Dcomite)" *ngIf="evidencia.Dcomite !== undefined"></i>
-                  </td>
-
-                  <td style="border: 1px solid black;">
+                    <span style="margin: 0 5px;"></span>
                     <i [class]="getIconName(evidencia.Ddac)" *ngIf="evidencia.Ddac !== undefined"></i>
                   </td>
+                  
 
                   <td>
                     <button type="button" class="btn">

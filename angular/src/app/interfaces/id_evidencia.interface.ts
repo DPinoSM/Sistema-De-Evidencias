@@ -24,4 +24,5 @@ export interface Evidencia {
   Ddac?: DetalleDAC;
   Dcomite?: DetalleComite;
   Drevisor?: DetalleRevisor;
+  estadoAprobacion?: string;
 }

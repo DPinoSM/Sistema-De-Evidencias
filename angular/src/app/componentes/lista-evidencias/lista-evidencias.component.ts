@@ -80,6 +80,10 @@ export class ListaEvidenciasComponent implements OnInit {
     }
 
     ngOnInit() {
+      this.cargarEvidencias();
+    }
+
+    private cargarEvidencias(){
       this.selectedEstado = 'En espera';
       const idUsuario = localStorage.getItem('id_usuario');
       
@@ -135,11 +139,19 @@ export class ListaEvidenciasComponent implements OnInit {
                 this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor).subscribe((detalleRevisor) => {
                   evidencia.Drevisor = detalleRevisor?.revisado_revisor ?? null;
                 });
-              
-              
+              }
+              if (this.searchTerm && evidencia.numero_folio) {
+                const term = this.searchTerm.toLowerCase();
+                const numeroFolio = evidencia.numero_folio.toString().toLowerCase();
+    
+                if (numeroFolio.includes(term)) {
+                  this.evidencias.push(evidencia);
+                }
               }
             });
-            this.evidencias = evidencias;
+            if (!this.searchTerm) {
+              this.evidencias = evidencias;
+            }
           }
         });
       } else {
@@ -162,11 +174,6 @@ export class ListaEvidenciasComponent implements OnInit {
         return 'fas fa-question'; 
       }
     }
-    
-    
-    
-    
-    
   
   actualizarEvidencia(id: number | undefined): void {
     if (id !== undefined) {
@@ -177,6 +184,20 @@ export class ListaEvidenciasComponent implements OnInit {
       console.error('ID de evidencia no definida. No se puede actualizar.');
     }
   }
+  
+  realizarBusqueda() {
+    this.currentPage = 1;
+  
+    if (this.searchTerm) {
+      this.evidencias = [];
+      this.cargarEvidencias();
+    } else {
+      if (this.evidenciasOriginal) {
+        this.evidencias = [...this.evidenciasOriginal];
+      }
+    }
+  }
+  
   
 
   comienzaConCadena(cadena: string, input: string): boolean {
@@ -194,76 +215,9 @@ export class ListaEvidenciasComponent implements OnInit {
     }
   }
 
-  realizarBusqueda() {
-    if (this.selectedEstado === null || this.selectedEstado === undefined) {
-      this.evidencias = [...this.evidenciasOriginal!];
-      return;
-    }
-  
-    const searchTerm = this.selectedEstado.toString().toLowerCase();
-  
-    this.evidencias = this.evidenciasOriginal?.filter((evidencia) => {
-      const revisadoRevisor = evidencia.Drevisor?.revisado_revisor;
-      const revisadoComite = evidencia.Dcomite?.revisado_comite;
-      const revisadoDac = evidencia.Ddac?.revisado_dac;
-  
-      const estadoRevision = this.getEstadoRevision(revisadoRevisor, revisadoComite, revisadoDac);
-  
-      return estadoRevision.includes(searchTerm);
-    }) || [];
-  }
-  
-  getEstadoRevision(revisor: boolean | null | undefined, comite: boolean | null | undefined, dac: boolean | null | undefined): string {
-    const estadoRevisor = this.getEstado(revisor);
-    const estadoComite = this.getEstado(comite);
-    const estadoDac = this.getEstado(dac);
-  
-    return `${estadoRevisor} - ${estadoDac} - ${estadoComite}`;
-  }
-  
-  getEstado(revisado: boolean | null | undefined): string {
-    if (revisado === null || revisado === undefined) {
-      return 'En espera';
-    } else {
-      return revisado ? 'Aprobado' : 'Rechazado';
-    }
-  }
-  
-  
-
   pageChanged(page: number) {
     this.currentPage = page;
   }
-
-  getEvidencias() {
-  if (this.evidenciasSubscription) {
-    this.evidenciasSubscription.unsubscribe();
-  }
-
-  this.evidenciasSubscription = this.evidenciasService.getEvidencias()
-    .pipe(
-      catchError(error => {
-        this.errorMsg = 'Error al obtener la lista de evidencias';
-        console.error('Error al obtener la lista de evidencias', error);
-        return [];
-      })
-    )
-    .subscribe((data: Evidencia[]) => {
-      if (!this.evidenciasOriginal) {
-        this.evidenciasOriginal = data;
-      }
-      
-      this.evidencias = data.filter(evidencias => {
-        return (
-          evidencias.numero_folio?.toString() !== undefined &&
-          (
-            this.comienzaConCadena(evidencias.numero_folio.toString(), this.searchTerm) 
-          )
-        );
-      });
-    });
-}
-
   
   eliminarEvidencia(id: number | undefined) {
     if (id !== undefined) {
@@ -277,7 +231,7 @@ private realizarOperacionDeEvidencia(operacion: () => any, mensajeExitoso: strin
   operacion().subscribe({
       next: (respuesta: any) => {
           console.log(`${mensajeExitoso} exitosamente`, respuesta);
-          this.getEvidencias();
+          this.cargarEvidencias();
           this.toastr.success(`La evidencia fue ${mensajeExitoso.toLowerCase()} con éxito`, mensajeExitoso);
       },
       error: (error: any) => {
