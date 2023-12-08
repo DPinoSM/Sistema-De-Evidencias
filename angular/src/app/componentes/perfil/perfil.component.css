@@ -1,4 +1,33 @@
-/* styles.css */
+
 .sidenav-content{
     position: fixed;
 }
+
+h2 {
+    color: #007bff; 
+  }
+  
+  img {
+    max-width: 200px; 
+    border-radius: 50%; 
+  }
+
+
+.container {
+    margin-top: 50px;
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  img {
+    max-width: 200px; 
+    border-radius: 50%; 
+    margin-bottom: 20px; 
+  }
+  
+  p {
+    margin-bottom: 10px; 
+  }
+  
