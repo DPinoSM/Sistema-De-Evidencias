@@ -26,7 +26,7 @@ export class Detalle_DAC extends Model<DetalleDACAttributes, DetalleDACCreationA
 // Inicializa el modelo Detalle_DAC
 Detalle_DAC.init(
   {
-    id_detalle_dac: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id_detalle_dac: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true , allowNull: true},
     revisado_dac: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_dac: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     comentario_dac: { type: DataTypes.STRING },

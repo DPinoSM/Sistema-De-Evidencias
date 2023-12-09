@@ -11,8 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDetalle_Comite = exports.getOneDetalle_Comite = exports.updateDetalle_Comite = exports.newDetalle_Comite = exports.getDetalle_Comite = void 0;
 const detalle_comite_1 = require("../models/detalle_comite");
+const sequelize_1 = require("sequelize");
 const getDetalle_Comite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listDetalle_Comite = yield detalle_comite_1.Detalle_Comite.findAll({ attributes: ['id_detalle_comite', 'revisado_comite', 'estado_comite', 'comentario_comite'] });
+    const listDetalle_Comite = yield detalle_comite_1.Detalle_Comite.findAll({ attributes: ['id_detalle_comite', 'revisado_comite', 'estado_comite', 'comentario_comite'],
+        where: {
+            id_detalle_comite: {
+                [sequelize_1.Op.is]: null
+            }
+        } });
     res.json(listDetalle_Comite);
 });
 exports.getDetalle_Comite = getDetalle_Comite;
@@ -71,7 +77,7 @@ const updateDetalle_Comite = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.updateDetalle_Comite = updateDetalle_Comite;
 const getOneDetalle_Comite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const id_Detalle_Comite = yield detalle_comite_1.Detalle_Comite.findOne({ where: { id_detalle_comite: id } });
+    const id_Detalle_Comite = yield detalle_comite_1.Detalle_Comite.findOne({ where: { id_detalle_comite: id !== 'null' ? id : null } });
     if (!id_Detalle_Comite) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle Comite no existe dentro de la base de datos"

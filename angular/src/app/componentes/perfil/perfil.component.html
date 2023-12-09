@@ -1,9 +1,27 @@
 <div class="container-fluid g-0">
-    <app-header (SideNavToggled)="sideNavStatus = $event;"></app-header>
+    <app-header (SideNavToggled)="sideNavStatus = $event"></app-header>
     <main>
-        <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
-            [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
-        <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
-        </div>
+      <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus" [ngClass]="{ 'app-sidenav-open': sideNavStatus }"></app-sidenav>
+      <div class="display-area p-3" [ngClass]="{ 'display-area-shrink': sideNavStatus }">
+  
+        <div *ngIf="usuario" class="container">
+            <div class="card text-white bg-primary mb-3" style="max-width: 30rem; margin: 0 auto;">
+              <div class="card-header text-center bg-dark">
+                <i class="fas fa-user fa-3x mb-3"></i> 
+                <h4 class="fw-bold">Perfil</h4>
+              </div>
+              <div class="card-body bg-dark">
+                <h5 class="card-title">{{ usuario.nombre_usuario }} {{ usuario.apellido1_usuario }}</h5>
+                <p class="card-text">
+                  <strong>RUT:</strong> {{ usuario.rut_usuario }}<br>
+                  <strong>Correo:</strong> {{ usuario.correo_usuario }}<br>
+                  <strong>Rol:</strong> {{ usuario.rol.nombre_rol }}<br>
+                  <strong>Unidad:</strong> {{ usuario.unidad.nombre_unidad }}
+                </p>
+              </div>
+            </div>
+          </div>
+      </div>
     </main>
-</div>
+  </div>
+  

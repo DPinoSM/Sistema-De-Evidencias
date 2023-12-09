@@ -13,7 +13,7 @@ class Detalle_Revisor extends sequelize_1.Model {
 exports.Detalle_Revisor = Detalle_Revisor;
 // Inicializa el modelo Detalle_Revisor
 Detalle_Revisor.init({
-    id_detalle_revisor: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id_detalle_revisor: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: true },
     revisado_revisor: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_revisor: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     comentario_revisor: { type: sequelize_1.DataTypes.STRING },

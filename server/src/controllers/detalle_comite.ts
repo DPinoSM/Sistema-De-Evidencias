@@ -1,8 +1,14 @@
 import {Request, Response} from 'express';
 import { Detalle_Comite } from '../models/detalle_comite';
+import { Op } from 'sequelize';
 
 export const getDetalle_Comite = async(req: Request, res: Response) =>{  
-    const listDetalle_Comite = await Detalle_Comite.findAll({attributes:['id_detalle_comite','revisado_comite','estado_comite','comentario_comite']});
+    const listDetalle_Comite = await Detalle_Comite.findAll({attributes:['id_detalle_comite','revisado_comite','estado_comite','comentario_comite'],
+    where: {
+        id_detalle_comite: {
+            [Op.is]: null
+        } as unknown as Record<string,any>
+    }});
     res.json(listDetalle_Comite)
 }
 export const newDetalle_Comite = async(req: Request, res: Response) =>{
@@ -59,7 +65,7 @@ export const updateDetalle_Comite = async(req: Request, res: Response) => {
 }
 export const getOneDetalle_Comite = async(req: Request, res: Response) =>{
     const { id} =  req.params;
-    const id_Detalle_Comite= await Detalle_Comite.findOne({where: {id_detalle_comite: id}})
+    const id_Detalle_Comite= await Detalle_Comite.findOne({where: {id_detalle_comite: id !== 'null' ? id : null} as unknown as Record<string,any>})
     if (!id_Detalle_Comite) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle Comite no existe dentro de la base de datos"

@@ -52,10 +52,16 @@ export class SidenavComponent implements OnInit {
       item.link = this.userRole === 1 ? '/usuarios' : '/perfil';
       item.name = this.userRole === 1 ? 'Usuarios' : 'Perfil';
     }
+
     if (item.link === '/evidencias') {
       item.link = this.userRole === 1 ? '/evidenciaA' : '/evidencias';
       item.name = this.userRole === 1 ? 'Evidencias' : 'Evidencias';
     }
+    
+    if (item.link === '/debilidad' || item.link === '/impacto') {
+      return this.userRole === 1;
+    }
+
     return [1, 2, 3, 4, 5].includes(this.userRole);
   }
 }

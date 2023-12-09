@@ -2,9 +2,15 @@
 //CONTROLLERS DETALLE REVISOR
 import {Request, Response} from 'express';
 import { Detalle_Revisor } from '../models/detalle_revisor';
+import { Op } from 'sequelize';
 
 export const getDetalle_Revisor = async(req: Request, res: Response) =>{  
-    const listDetalle_Revisor = await Detalle_Revisor.findAll({attributes:['id_detalle_revisor','revisado_revisor','estado_revisor','comentario_revisor']});
+    const listDetalle_Revisor = await Detalle_Revisor.findAll({attributes:['id_detalle_revisor','revisado_revisor','estado_revisor','comentario_revisor'],
+    where: {
+        id_detalle_revisor: {
+            [Op.is]: null
+        } as unknown as Record<string,any>
+    }});
     res.json(listDetalle_Revisor)
 }
 export const newDetalle_Revisor = async(req: Request, res: Response) =>{
@@ -61,7 +67,7 @@ export const updateDetalle_Revisor = async(req: Request, res: Response) => {
 }
 export const getOneDetalle_Revisor = async(req: Request, res: Response) =>{
     const { id} =  req.params;
-    const idDetalle_Revisor = await Detalle_Revisor.findOne({where: {id_detalle_revisor: id}})
+    const idDetalle_Revisor = await Detalle_Revisor.findOne({where: {id_detalle_revisor: id !== 'null' ? id : null} as unknown as Record<string,any>})
     if (!idDetalle_Revisor) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle revisor no existe dentro de la base de datos"

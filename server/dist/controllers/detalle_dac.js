@@ -11,8 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDetalle_DAC = exports.getOneDetalle_DAC = exports.updateDetalle_DAC = exports.newDetalle_DAC = exports.getDetalle_DAC = void 0;
 const detalle_dac_1 = require("../models/detalle_dac");
+const sequelize_1 = require("sequelize");
 const getDetalle_DAC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listDetalle_DAC = yield detalle_dac_1.Detalle_DAC.findAll({ attributes: ['id_detalle_dac', 'revisado_dac', 'estado_dac', 'comentario_dac'] });
+    const listDetalle_DAC = yield detalle_dac_1.Detalle_DAC.findAll({ attributes: ['id_detalle_dac', 'revisado_dac', 'estado_dac', 'comentario_dac'],
+        where: {
+            id_detalle_dac: {
+                [sequelize_1.Op.is]: null
+            }
+        } });
     res.json(listDetalle_DAC);
 });
 exports.getDetalle_DAC = getDetalle_DAC;
@@ -71,7 +77,7 @@ const updateDetalle_DAC = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.updateDetalle_DAC = updateDetalle_DAC;
 const getOneDetalle_DAC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const id_Detalle_DAC = yield detalle_dac_1.Detalle_DAC.findOne({ where: { id_detalle_dac: id } });
+    const id_Detalle_DAC = yield detalle_dac_1.Detalle_DAC.findOne({ where: { id_detalle_dac: id !== 'null' ? id : null } });
     if (!id_Detalle_DAC) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle DAC no existe dentro de la base de datos"

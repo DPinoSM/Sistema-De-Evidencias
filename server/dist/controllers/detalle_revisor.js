@@ -11,8 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDetalle_Revisor = exports.getOneDetalle_Revisor = exports.updateDetalle_Revisor = exports.newDetalle_Revisor = exports.getDetalle_Revisor = void 0;
 const detalle_revisor_1 = require("../models/detalle_revisor");
+const sequelize_1 = require("sequelize");
 const getDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findAll({ attributes: ['id_detalle_revisor', 'revisado_revisor', 'estado_revisor', 'comentario_revisor'] });
+    const listDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findAll({ attributes: ['id_detalle_revisor', 'revisado_revisor', 'estado_revisor', 'comentario_revisor'],
+        where: {
+            id_detalle_revisor: {
+                [sequelize_1.Op.is]: null
+            }
+        } });
     res.json(listDetalle_Revisor);
 });
 exports.getDetalle_Revisor = getDetalle_Revisor;
@@ -71,7 +77,7 @@ const updateDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
 exports.updateDetalle_Revisor = updateDetalle_Revisor;
 const getOneDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id } });
+    const idDetalle_Revisor = yield detalle_revisor_1.Detalle_Revisor.findOne({ where: { id_detalle_revisor: id !== 'null' ? id : null } });
     if (!idDetalle_Revisor) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle revisor no existe dentro de la base de datos"

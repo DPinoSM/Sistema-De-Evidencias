@@ -26,7 +26,7 @@ export class Detalle_Comite extends Model<DetalleComiteAttributes, DetalleComite
 // Inicializa el modelo Detalle_Comite
 Detalle_Comite.init(
   {
-    id_detalle_comite: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id_detalle_comite: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: true },
     revisado_comite: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_comite: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     comentario_comite: { type: DataTypes.STRING },

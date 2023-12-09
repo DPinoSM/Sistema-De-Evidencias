@@ -18,6 +18,8 @@ import { Impacto } from '../models/impacto';
 import { Estado } from '../models/estado';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import * as fs from 'fs-extra';
+import path from 'path';
 
 export const newEvidencia = async (req: Request, res: Response) => {
     try {
@@ -61,7 +63,14 @@ export const newEvidencia = async (req: Request, res: Response) => {
             id_estado
         } = req.body;
 
-        const numeroFolio = await Evidencias.findOne({ where: { numero_folio } });
+        const numeroFolio = await Evidencias.findOne({ where: { numero_folio: numero_folio } });
+
+        if (numero_folio === undefined || numero_folio === null) {
+            return res.status(400).json({
+              msg: 'El campo "numero_folio" es requerido.',
+            });
+          }
+          
 
         if (numeroFolio) {
             return res.status(400).json({
@@ -427,12 +436,21 @@ export const generarPDF = async (req: Request, res: Response) => {
     });
     const typeEstado = await Estado.findOne({
         where: {id_estado: evidencia.id_estado},
-    });
+    }); 
+
+    const imageData = Buffer.from(evidencia.archivo_adjunto).toString('base64');
+    console.log('Contenido del buffer:', evidencia.archivo_adjunto);
+
+    console.log('ImageData',imageData);
+
+
+
     // Crear la definición del documento PDF
     const documentDefinition: TDocumentDefinitions = {
       content: [
         { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
         { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
+        
         // Crear una tabla con los datos de la evidencia
         {
           table: {
@@ -492,6 +510,7 @@ export const generarPDF = async (req: Request, res: Response) => {
             ],
           },
         } as any,
+        { image: `data:image/png;base64,${imageData}` , width:500},
       ],
       styles: {
         header: {
@@ -509,23 +528,21 @@ export const generarPDF = async (req: Request, res: Response) => {
     // Crear el PDF
     const pdfDoc = pdfMake.createPdf(documentDefinition);
 
-    
-
     // Enviar el PDF como respuesta
-    pdfDoc.getBuffer((buffer: any) => {
-      try{
-        res.attachment(`evidencia_${id}.pdf`);  
-        res.type('application/pdf');
-        res.end(buffer, 'binary');
-      } catch (error: any) {
-        console.error('Error',error);
-        res.status(500).send('Error interno del servidor')
-      }
-    });
-  } catch (error) {
-    console.error('Error al generar el PDF',error);
-    res.status(500).send('Error interno del servidor');
-  }
+    pdfDoc.getBuffer((result: Buffer) => {
+        try {
+            res.attachment(`evidencia_${id}.pdf`);
+            res.type('application/pdf');
+            res.end(result, 'binary');
+        } catch (error) {
+          console.error('Error procesando imagen', error);
+          res.status(500).send('Error proceso de imagen');
+        }
+      });
+    } catch (error) {
+      console.error('Error al generar el PDF', error);
+      res.status(500).send('Error interno del servidor');
+    }
 };
 
 export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
@@ -533,7 +550,28 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
 
     try {
         const evidenciasUsuario = await Evidencias.findAll({
-            where: { id_usuario: id_usuario },
+            where: {
+                id_usuario: id_usuario,
+                id_detalle_revisor: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+                id_detalle_dac: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+                id_detalle_comite: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+            } as unknown as Record<string,any>,
+            
         });
 
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
