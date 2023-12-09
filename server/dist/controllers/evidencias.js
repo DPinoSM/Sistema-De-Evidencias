@@ -342,14 +342,14 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const typeEstado = yield estado_1.Estado.findOne({
             where: { id_estado: evidencia.id_estado },
         });
-        const imageData = evidencia.archivo_adjunto;
-        const imageBase64 = imageData.toString('base64');
+        const imageData = Buffer.from(evidencia.archivo_adjunto).toString('base64');
+        console.log('Contenido del buffer:', evidencia.archivo_adjunto);
+        console.log('ImageData', imageData);
         // Crear la definición del documento PDF
         const documentDefinition = {
             content: [
                 { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
                 { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
-                { image: `data:image/jpeg;base64,${imageData}`, width: 500 },
                 // Crear una tabla con los datos de la evidencia
                 {
                     table: {
@@ -409,6 +409,7 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                         ],
                     },
                 },
+                { image: `data:image/png;base64,${imageData}`, width: 500 },
             ],
             styles: {
                 header: {
@@ -424,8 +425,6 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         };
         // Crear el PDF
         const pdfDoc = pdfmake_1.default.createPdf(documentDefinition);
-        console.log('\n', imageData);
-        console.log('\n', imageBase64);
         // Enviar el PDF como respuesta
         pdfDoc.getBuffer((result) => {
             try {
@@ -449,7 +448,27 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     const { id_usuario } = req.params;
     try {
         const evidenciasUsuario = yield evidencias_1.Evidencias.findAll({
-            where: { id_usuario: id_usuario },
+            where: {
+                id_usuario: id_usuario,
+                id_detalle_revisor: {
+                    [sequelize_1.Op.or]: [
+                        { [sequelize_1.Op.eq]: null },
+                        { [sequelize_1.Op.ne]: null },
+                    ],
+                },
+                id_detalle_dac: {
+                    [sequelize_1.Op.or]: [
+                        { [sequelize_1.Op.eq]: null },
+                        { [sequelize_1.Op.ne]: null },
+                    ],
+                },
+                id_detalle_comite: {
+                    [sequelize_1.Op.or]: [
+                        { [sequelize_1.Op.eq]: null },
+                        { [sequelize_1.Op.ne]: null },
+                    ],
+                },
+            },
         });
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
             return res.status(404).json({

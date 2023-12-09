@@ -13,7 +13,7 @@ class Detalle_DAC extends sequelize_1.Model {
 exports.Detalle_DAC = Detalle_DAC;
 // Inicializa el modelo Detalle_DAC
 Detalle_DAC.init({
-    id_detalle_dac: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id_detalle_dac: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: true },
     revisado_dac: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_dac: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     comentario_dac: { type: sequelize_1.DataTypes.STRING },

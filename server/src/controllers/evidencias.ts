@@ -436,11 +436,12 @@ export const generarPDF = async (req: Request, res: Response) => {
     });
     const typeEstado = await Estado.findOne({
         where: {id_estado: evidencia.id_estado},
-    });
+    }); 
 
-    const imageData = evidencia.archivo_adjunto;
+    const imageData = Buffer.from(evidencia.archivo_adjunto).toString('base64');
+    console.log('Contenido del buffer:', evidencia.archivo_adjunto);
 
-    const imageBase64 = imageData.toString('base64');
+    console.log('ImageData',imageData);
 
 
 
@@ -449,7 +450,7 @@ export const generarPDF = async (req: Request, res: Response) => {
       content: [
         { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
         { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
-        { image: `data:image/jpeg;base64,${imageData}`, width:500},
+        
         // Crear una tabla con los datos de la evidencia
         {
           table: {
@@ -509,6 +510,7 @@ export const generarPDF = async (req: Request, res: Response) => {
             ],
           },
         } as any,
+        { image: `data:image/png;base64,${imageData}` , width:500},
       ],
       styles: {
         header: {
@@ -525,9 +527,6 @@ export const generarPDF = async (req: Request, res: Response) => {
 
     // Crear el PDF
     const pdfDoc = pdfMake.createPdf(documentDefinition);
-
-    console.log('\n',imageData);
-    console.log('\n',imageBase64);
 
     // Enviar el PDF como respuesta
     pdfDoc.getBuffer((result: Buffer) => {
@@ -551,7 +550,28 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
 
     try {
         const evidenciasUsuario = await Evidencias.findAll({
-            where: { id_usuario: id_usuario },
+            where: {
+                id_usuario: id_usuario,
+                id_detalle_revisor: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+                id_detalle_dac: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+                id_detalle_comite: {
+                    [Op.or]: [
+                        { [Op.eq]: null },
+                        { [Op.ne]: null },
+                    ],
+                },
+            } as unknown as Record<string,any>,
+            
         });
 
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {

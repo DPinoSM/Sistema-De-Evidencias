@@ -13,7 +13,7 @@ class Detalle_Comite extends sequelize_1.Model {
 exports.Detalle_Comite = Detalle_Comite;
 // Inicializa el modelo Detalle_Comite
 Detalle_Comite.init({
-    id_detalle_comite: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    id_detalle_comite: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: true },
     revisado_comite: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     estado_comite: { type: sequelize_1.DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     comentario_comite: { type: sequelize_1.DataTypes.STRING },

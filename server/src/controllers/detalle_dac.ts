@@ -1,8 +1,14 @@
 import {Request, Response} from 'express';
 import { Detalle_DAC } from '../models/detalle_dac';
+import { Op } from 'sequelize';
 
 export const getDetalle_DAC = async(req: Request, res: Response) =>{  
-    const listDetalle_DAC = await Detalle_DAC.findAll({attributes:['id_detalle_dac','revisado_dac','estado_dac','comentario_dac']});
+    const listDetalle_DAC = await Detalle_DAC.findAll({attributes:['id_detalle_dac','revisado_dac','estado_dac','comentario_dac'],
+    where: {
+        id_detalle_dac: {
+            [Op.is]: null
+        } as unknown as Record<string,any>
+    }});
     res.json(listDetalle_DAC)
 }
 export const newDetalle_DAC = async(req: Request, res: Response) =>{
@@ -59,7 +65,7 @@ export const updateDetalle_DAC = async(req: Request, res: Response) => {
 }
 export const getOneDetalle_DAC = async(req: Request, res: Response) =>{
     const { id} =  req.params;
-    const id_Detalle_DAC= await Detalle_DAC.findOne({where: {id_detalle_dac: id}})
+    const id_Detalle_DAC= await Detalle_DAC.findOne({where: {id_detalle_dac: id !== 'null' ? id : null} as unknown as Record<string,any>})
     if (!id_Detalle_DAC) {
         return res.status(400).json({
             msg: "El ID: " + id + " del detalle DAC no existe dentro de la base de datos"
