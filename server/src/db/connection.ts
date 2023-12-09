@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-const sequelize = new Sequelize('Sistema de Evidencias', 'postgres', 'popi09', {
+const sequelize = new Sequelize('Sistema de Evidencias', 'postgres', 'admin', {
     host: 'localhost',
     dialect: 'postgres',
 });
