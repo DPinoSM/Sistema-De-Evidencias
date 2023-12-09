@@ -47,6 +47,7 @@ import { ListaEstadoComponent } from './componentes/lista-estado/lista-estado.co
 import { EditEvidenciaComponent } from './componentes/edit-evidencia/edit-evidencia.component';
 import { EvidenciasAdminComponent } from './componentes/evidencias-admin/evidencias-admin.component';
 import { PerfilComponent } from './componentes/perfil/perfil.component';
+import { ARevidenciaComponent } from './componentes/arevidencia/arevidencia.component';
 
 
 
@@ -79,7 +80,8 @@ import { PerfilComponent } from './componentes/perfil/perfil.component';
     ListaEstadoComponent,
     EditEvidenciaComponent,
     EvidenciasAdminComponent,
-    PerfilComponent
+    PerfilComponent,
+    ARevidenciaComponent
   ],
   imports: [
     BrowserModule,
