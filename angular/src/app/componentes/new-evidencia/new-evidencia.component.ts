@@ -358,14 +358,13 @@ export class NewEvidenciaComponent implements OnInit {
       const fecha_creacion = this.getCurrentDateTime();
       this.form.get('fecha_creacion')?.setValue(fecha_creacion);
 
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as ArrayBuffer;
-        const uintArray = new Uint8Array(result);
-        const archivo_adjunto = uintArray;
-
-        this.evidenciasService.newEvidencia({
+      if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as ArrayBuffer;
+          const uintArray = new Uint8Array(result);
+      
+          this.evidenciasService.newEvidencia({
               numero_folio: numero_folio,
               fecha_evidencia: fecha_evidencia,
               rut_usuario: rut_usuario,
@@ -397,7 +396,7 @@ export class NewEvidenciaComponent implements OnInit {
               asistentes_externos_administrativos: asistentes_externos_administrativos,
               asistentes_externos_docentes: asistentes_externos_docentes,
               asistentes_externos_estudiantes: asistentes_externos_estudiantes,
-              archivo_adjunto: archivo_adjunto,
+              archivo_adjunto: uintArray,
               fecha_creacion: this.getCurrentDateTime(),
             }).subscribe({
               next: (response) => {
@@ -415,10 +414,10 @@ export class NewEvidenciaComponent implements OnInit {
           };
     
           reader.readAsArrayBuffer(files[0]);
-        } else {
-          console.error('No se ha seleccionado ningún archivo.');
-          this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
-        }
+          } else {
+            console.error('No se ha seleccionado ningún archivo.');
+            this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
+          }
       } else {
         console.error('Formulario no válido. Verifica los campos.');
         this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');

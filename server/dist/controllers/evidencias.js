@@ -337,11 +337,14 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const typeEstado = yield estado_1.Estado.findOne({
             where: { id_estado: evidencia.id_estado },
         });
+        const imageData = evidencia.archivo_adjunto;
+        const imageBase64 = imageData.toString('base64');
         // Crear la definición del documento PDF
         const documentDefinition = {
             content: [
                 { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
                 { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
+                { image: `data:image/jpeg;base64,${imageData}`, width: 500 },
                 // Crear una tabla con los datos de la evidencia
                 {
                     table: {
@@ -416,16 +419,18 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         };
         // Crear el PDF
         const pdfDoc = pdfmake_1.default.createPdf(documentDefinition);
+        console.log('\n', imageData);
+        console.log('\n', imageBase64);
         // Enviar el PDF como respuesta
-        pdfDoc.getBuffer((buffer) => {
+        pdfDoc.getBuffer((result) => {
             try {
                 res.attachment(`evidencia_${id}.pdf`);
                 res.type('application/pdf');
-                res.end(buffer, 'binary');
+                res.end(result, 'binary');
             }
             catch (error) {
-                console.error('Error', error);
-                res.status(500).send('Error interno del servidor');
+                console.error('Error procesando imagen', error);
+                res.status(500).send('Error proceso de imagen');
             }
         });
     }
