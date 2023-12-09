@@ -18,6 +18,8 @@ import { Impacto } from '../models/impacto';
 import { Estado } from '../models/estado';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import * as fs from 'fs-extra';
+import path from 'path';
 
 export const newEvidencia = async (req: Request, res: Response) => {
     try {
@@ -428,11 +430,19 @@ export const generarPDF = async (req: Request, res: Response) => {
     const typeEstado = await Estado.findOne({
         where: {id_estado: evidencia.id_estado},
     });
+
+    const imageData = evidencia.archivo_adjunto;
+
+    const imageBase64 = imageData.toString('base64');
+
+
+
     // Crear la definición del documento PDF
     const documentDefinition: TDocumentDefinitions = {
       content: [
         { text: `Evidencia: ${evidencia.nombre_corto_evidencia}`, style: 'header' },
         { text: '\nDetalles de la Evidencia:\n\n', style: 'subheader' },
+        { image: `data:image/jpeg;base64,${imageData}`, width:500},
         // Crear una tabla con los datos de la evidencia
         {
           table: {
@@ -509,23 +519,24 @@ export const generarPDF = async (req: Request, res: Response) => {
     // Crear el PDF
     const pdfDoc = pdfMake.createPdf(documentDefinition);
 
-    
+    console.log('\n',imageData);
+    console.log('\n',imageBase64);
 
     // Enviar el PDF como respuesta
-    pdfDoc.getBuffer((buffer: any) => {
-      try{
-        res.attachment(`evidencia_${id}.pdf`);  
-        res.type('application/pdf');
-        res.end(buffer, 'binary');
-      } catch (error: any) {
-        console.error('Error',error);
-        res.status(500).send('Error interno del servidor')
-      }
-    });
-  } catch (error) {
-    console.error('Error al generar el PDF',error);
-    res.status(500).send('Error interno del servidor');
-  }
+    pdfDoc.getBuffer((result: Buffer) => {
+        try {
+            res.attachment(`evidencia_${id}.pdf`);
+            res.type('application/pdf');
+            res.end(result, 'binary');
+        } catch (error) {
+          console.error('Error procesando imagen', error);
+          res.status(500).send('Error proceso de imagen');
+        }
+      });
+    } catch (error) {
+      console.error('Error al generar el PDF', error);
+      res.status(500).send('Error interno del servidor');
+    }
 };
 
 export const getEvidenciasByUsuario = async (req: Request, res: Response) => {

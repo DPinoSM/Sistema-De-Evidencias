@@ -405,7 +405,7 @@ export class NewEvidenciaComponent implements OnInit {
                 this.toastr.success('Evidencia creada con éxito', 'Éxito');
                 this.form.reset();
                 this.imagenesAdjuntas = [];
-                this.router.navigate(['/evidencias']);
+                //this.router.navigate(['/evidencias']);
               },
               error: (error) => {
                 console.error('Error al crear la evidencia', error);
