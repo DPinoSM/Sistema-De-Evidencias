@@ -363,8 +363,8 @@ export class NewEvidenciaComponent implements OnInit {
         reader.onload = (event) => {
           const result = event.target?.result as ArrayBuffer;
           const uintArray = new Uint8Array(result);
-      
-          this.evidenciasService.newEvidencia({
+
+        this.evidenciasService.newEvidencia({
               numero_folio: numero_folio,
               fecha_evidencia: fecha_evidencia,
               rut_usuario: rut_usuario,
@@ -404,7 +404,7 @@ export class NewEvidenciaComponent implements OnInit {
                 this.toastr.success('Evidencia creada con éxito', 'Éxito');
                 this.form.reset();
                 this.imagenesAdjuntas = [];
-                this.router.navigate(['/evidencias']);
+                //this.router.navigate(['/evidencias']);
               },
               error: (error) => {
                 console.error('Error al crear la evidencia', error);
@@ -414,10 +414,10 @@ export class NewEvidenciaComponent implements OnInit {
           };
     
           reader.readAsArrayBuffer(files[0]);
-          } else {
-            console.error('No se ha seleccionado ningún archivo.');
-            this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
-          }
+        } else {
+          console.error('No se ha seleccionado ningún archivo.');
+          this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
+        }
       } else {
         console.error('Formulario no válido. Verifica los campos.');
         this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
