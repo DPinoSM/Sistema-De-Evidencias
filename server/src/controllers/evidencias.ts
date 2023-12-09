@@ -63,7 +63,14 @@ export const newEvidencia = async (req: Request, res: Response) => {
             id_estado
         } = req.body;
 
-        const numeroFolio = await Evidencias.findOne({ where: { numero_folio } });
+        const numeroFolio = await Evidencias.findOne({ where: { numero_folio: numero_folio } });
+
+        if (numero_folio === undefined || numero_folio === null) {
+            return res.status(400).json({
+              msg: 'El campo "numero_folio" es requerido.',
+            });
+          }
+          
 
         if (numeroFolio) {
             return res.status(400).json({

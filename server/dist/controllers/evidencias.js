@@ -35,7 +35,12 @@ const vfs_fonts_1 = __importDefault(require("pdfmake/build/vfs_fonts"));
 const newEvidencia = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { numero_folio, correo_usuario, rut_usuario, fecha_evidencia, numero_de_mejoras, descripcion, resultado, almacenamiento, unidades_personas_evidencias, palabra_clave, nombre_corto_evidencia, fecha_creacion, fecha_actualizacion, asistentes_internos_autoridades, asistentes_internos_administrativos, asistentes_internos_docentes, asistentes_internos_estudiantes, asistentes_externos_autoridades, asistentes_externos_administrativos, asistentes_externos_docentes, asistentes_externos_estudiantes, archivo_adjunto, id_detalle_revisor, id_detalle_dac, id_detalle_comite, id_usuario, id_debilidades, id_criterios, id_unidad, id_ambito_geografico, id_ambito_academico, id_registro, id_carrera, id_facultad, id_procesos, id_impacto, id_estado } = req.body;
-        const numeroFolio = yield evidencias_1.Evidencias.findOne({ where: { numero_folio } });
+        const numeroFolio = yield evidencias_1.Evidencias.findOne({ where: { numero_folio: numero_folio } });
+        if (numero_folio === undefined || numero_folio === null) {
+            return res.status(400).json({
+                msg: 'El campo "numero_folio" es requerido.',
+            });
+        }
         if (numeroFolio) {
             return res.status(400).json({
                 msg: 'Ya existe una Evidencia con ese número de folio',
