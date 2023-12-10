@@ -29,7 +29,7 @@ export interface Evidencia {
   ambito_academico?: AmbitoAcademico;
   ambito_geografico?: AmbitoGeografico;
   criterio?: Criterio;
-  debilidades?: Debilidad;
+  debilidad?: Debilidad;
   carrera?: Carrera;
   facultad?: Facultad;
   impacto?: Impacto;

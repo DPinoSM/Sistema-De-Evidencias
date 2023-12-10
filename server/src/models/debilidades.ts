@@ -7,7 +7,6 @@ interface DebilidadesAttributes {
   id_debilidades: number;
   descripcion_debilidades: string;
   estado_debilidades: boolean;
-  id_criterios: number;
 }
 
 // Define la interfaz para las propiedades opcionales de Debilidades
@@ -20,7 +19,6 @@ export class Debilidades extends Model<DebilidadesAttributes, DebilidadesCreatio
   public id_debilidades!: number;
   public descripcion_debilidades!: string;
   public estado_debilidades!: boolean;
-  public id_criterios!: number;
 
   // Agrega una propiedad para la relación
   public criterio!: typeof Criterio; // Corregir aquí
@@ -34,7 +32,6 @@ Debilidades.init(
     id_debilidades: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     descripcion_debilidades: { type: DataTypes.STRING },
     estado_debilidades: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-    id_criterios: { type: DataTypes.INTEGER },
   },
   {
     sequelize,
@@ -44,8 +41,6 @@ Debilidades.init(
   }
 );
 
-// Establece la relación entre la clave primaria
-Debilidades.belongsTo(Criterio, { foreignKey: 'id_criterios' });
 
 // Exporta el modelo Debilidades
 export default Debilidades;

@@ -5,8 +5,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Debilidad } from 'src/app/interfaces/debilidades.interface';
-import { Criterio } from 'src/app/interfaces/criterio.interface';
-import { CriterioService } from 'src/app/services/criterio.service';
 
 @Component({
   selector: 'app-lista-debilidad',
@@ -16,7 +14,6 @@ import { CriterioService } from 'src/app/services/criterio.service';
 export class ListaDebilidadComponent {
   debilidades: Debilidad[] = [];
   debilidadOriginal: Debilidad[] | null = null;
-  criterios: Criterio[] = [];
   errorMsg: string | undefined;
   form: FormGroup;
   sideNavStatus: boolean = false;
@@ -28,7 +25,6 @@ export class ListaDebilidadComponent {
 
   constructor(
     private debilidadService: DebilidadService,
-    private criterioService: CriterioService, 
     private toastr: ToastrService) {
       this.form = new FormGroup({
         descripcion_debilidades: new FormControl('', [Validators.required]),
@@ -39,15 +35,8 @@ export class ListaDebilidadComponent {
 
   ngOnInit() {
     this.actualizarListaDeDebilidades();
-    this.getCriterios();
   }
 
-
-  getCriterios(){
-    this.criterioService.getCriterios().subscribe((criterio) => {
-      this.criterios = criterio;
-    });
-  }
 
   mostrarAgregarEditarDebilidad(id: number | null) {
     if (id !== null) {

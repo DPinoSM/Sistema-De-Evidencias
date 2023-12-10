@@ -12,9 +12,6 @@ export const getDebilidades = async(req: Request, res: Response) =>{
                 'descripcion_debilidades',
                 'estado_debilidades',
             ],
-            include: [
-                {model: Criterio, attributes: ['nombre_criterios']},
-            ],
         });
     
         res.json(listDebilidades)
@@ -32,7 +29,6 @@ export const newDebilidades = async(req: Request, res: Response) =>{
         const  {
             descripcion_debilidades,
             estado_debilidades, 
-            id_criterios
         } =  req.body;
 
         const id_Debilidades = await Debilidades.findOne({where: {descripcion_debilidades}});
@@ -46,8 +42,9 @@ export const newDebilidades = async(req: Request, res: Response) =>{
         const newDebilidades = await Debilidades.create({
                 descripcion_debilidades,
                 estado_debilidades,
-                id_criterios
+                
             });
+            
 
         const debilidadesConRelaciones = await newDebilidades.reload();
 
@@ -65,7 +62,7 @@ export const newDebilidades = async(req: Request, res: Response) =>{
 }
 export const updateDebilidades = async(req: Request, res: Response) => {
     const {id} = req.params;
-    const {descripcion_debilidades, estado_debilidades, id_criterios} = req.body;
+    const {descripcion_debilidades, estado_debilidades} = req.body;
     const id_Debilidades = await Debilidades.findOne({where: {id_debilidades: id}})
     if (!id_Debilidades) {
         return res.status(400).json({
@@ -76,7 +73,6 @@ export const updateDebilidades = async(req: Request, res: Response) => {
         await Debilidades.update({
             descripcion_debilidades,
             estado_debilidades,
-            id_criterios
             },
             {where: {id_debilidades: id}}
         )

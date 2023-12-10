@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDebilidades = exports.getOneDebilidades = exports.updateDebilidades = exports.newDebilidades = exports.getDebilidades = void 0;
 const debilidades_1 = require("../models/debilidades");
-const criterio_1 = require("../models/criterio");
 const getDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const listDebilidades = yield debilidades_1.Debilidades.findAll({
@@ -19,9 +18,6 @@ const getDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 'id_debilidades',
                 'descripcion_debilidades',
                 'estado_debilidades',
-            ],
-            include: [
-                { model: criterio_1.Criterio, attributes: ['nombre_criterios'] },
             ],
         });
         res.json(listDebilidades);
@@ -37,7 +33,7 @@ const getDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getDebilidades = getDebilidades;
 const newDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { descripcion_debilidades, estado_debilidades, id_criterios } = req.body;
+        const { descripcion_debilidades, estado_debilidades, } = req.body;
         const id_Debilidades = yield debilidades_1.Debilidades.findOne({ where: { descripcion_debilidades } });
         if (id_Debilidades) {
             return res.status(400).json({
@@ -47,7 +43,6 @@ const newDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const newDebilidades = yield debilidades_1.Debilidades.create({
             descripcion_debilidades,
             estado_debilidades,
-            id_criterios
         });
         const debilidadesConRelaciones = yield newDebilidades.reload();
         return res.json({
@@ -66,7 +61,7 @@ const newDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.newDebilidades = newDebilidades;
 const updateDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { descripcion_debilidades, estado_debilidades, id_criterios } = req.body;
+    const { descripcion_debilidades, estado_debilidades } = req.body;
     const id_Debilidades = yield debilidades_1.Debilidades.findOne({ where: { id_debilidades: id } });
     if (!id_Debilidades) {
         return res.status(400).json({
@@ -77,7 +72,6 @@ const updateDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, functi
         yield debilidades_1.Debilidades.update({
             descripcion_debilidades,
             estado_debilidades,
-            id_criterios
         }, { where: { id_debilidades: id } });
         return res.json({
             msg: 'La debilidad con ID:' + id + ' se ha actualizado correctamente'

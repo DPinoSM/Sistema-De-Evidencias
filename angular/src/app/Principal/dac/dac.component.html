@@ -31,11 +31,11 @@
                                     <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
                                     <td style="border: 1px solid black;">{{ evidencia.usuario?.nombre_usuario }}</td>
                                     <td style="border: 1px solid black;">{{ evidencia.usuario?.rut_usuario }}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.unidad }}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.criterio}}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.proceso}}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.registro}}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.debilidades }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.unidad?.nombre_unidad }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.criterio?.nombre_criterios}}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.proceso?.nombre_procesos}}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.registro?.datos_registro }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.debilidad?.descripcion_debilidades }}</td>
                                     <td style="border: 1px solid black;">
                                         <button type="button" class="btn ms-2" >ESTADO </button>
                                     </td>       

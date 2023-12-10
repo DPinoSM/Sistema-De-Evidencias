@@ -4,7 +4,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Evidencia } from 'src/app/interfaces/evidencia.interface';
 import { saveAs } from 'file-saver';
-
+import { Proceso } from 'src/app/interfaces/proceso.interface';
+import { ProcesosService } from 'src/app/services/proceso.service';
+import { Registro } from 'src/app/interfaces/registro.interface';
+import { RegistroService } from 'src/app/services/registro.service';
+import { Debilidad } from 'src/app/interfaces/debilidades.interface';
+import { DebilidadService } from 'src/app/services/debilidad.service';
+import { Criterio } from 'src/app/interfaces/criterio.interface';
+import { CriterioService } from 'src/app/services/criterio.service';
 @Component({
   selector: 'app-responsable',
   templateUrl: './responsable.component.html',
@@ -14,6 +21,10 @@ import { saveAs } from 'file-saver';
 export class ResponsableComponent implements OnInit {
   sideNavStatus: boolean = false;
   evidencias: Evidencia[] = [];
+  proceso: Proceso[] = [];
+  registro: Registro[] = [];
+  debilidades: Debilidad[] = [];
+  criterios: Criterio[] = [];
   errorMsg: string | undefined;
   private evidenciasSubscription!: Subscription;
   currentPage: number = 1;
@@ -22,24 +33,59 @@ export class ResponsableComponent implements OnInit {
 
   constructor(
     private evidenciasService: EvidenciasService,
+    private procesoService: ProcesosService,
+    private registroService: RegistroService,
+    private debilidadService: DebilidadService,
+    private criterioService: CriterioService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit() {
     this.getEvidencias();
+    this.getCriterio();
+    this.getDebilidades();
+    this.getProceso();
+    this.getRegistro();
+  }
+
+  getDebilidades() {
+    this.debilidadService.obtenerDebilidad().subscribe((debilidades) => {
+      this.debilidades = debilidades;
+    });
+  }
+
+  getRegistro() {
+    this.registroService.getRegistros().subscribe((registro) => {
+      this.registro = registro;
+    });
+  }
+
+  getProceso() {
+    this.procesoService.getProcesos().subscribe((procesos) => {
+      this.proceso = procesos;
+    });
+  }
+
+  getCriterio() {
+    this.criterioService.getCriterios().subscribe((criterio) => {
+      this.criterios = criterio;
+    });
   }
 
   getEvidencias() {
     if (this.evidenciasSubscription) {
       this.evidenciasSubscription.unsubscribe();
     }
-
+  
     this.evidenciasSubscription = this.evidenciasService.getEvidencias()
-      .subscribe((data: Evidencia[]) => {
-        this.evidencias = data;
-      }, error => {
-        this.errorMsg = 'Error al obtener la lista de evidencias';
-        console.error('Error al obtener la lista de evidencias', error);
+      .subscribe({
+        next: (data: Evidencia[]) => {
+          this.evidencias = data;
+        },
+        error: (error) => {
+          this.errorMsg = 'Error al obtener la lista de evidencias';
+          console.error('Error al obtener la lista de evidencias', error);
+        }
       });
   }
   
