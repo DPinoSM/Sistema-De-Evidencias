@@ -3,38 +3,62 @@
     <main>
         <app-sidenav class="sidenav-content" [sideNavStatus]="sideNavStatus"
             [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
-        <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
-            <p class="fs-1 fw-bold fst-italic">Proxima Interfaz de Departamento de Calidad UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-            <p class="fs-1 fw-bold fst-italic">Bienvenidos al Sistema de Evidencias UCM</p>
-        </div>
+            <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
+                <div class="container">
+                  <div class="title">
+                            <h3 class="page-title">Evidencias DAC</h3>                              
+                              <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">id</th>                
+                                    <th scope="col">Numero de Folio</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Usuario(RUT)</th>
+                                    <th scope="col">Unidad</th>
+                                    <th scope="col">Criterio</th>
+                                    <th scope="col">Proceso</th>
+                                    <th scope="col">Registro</th>
+                                    <th scope="col">Debilidad</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acción</th>
+                                    <th scope="col">Descargar evidencia</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                                    style="border: 1px solid black;">
+                                    <td style="border: 1px solid black;">{{ evidencia.id_evidencias }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.usuario?.nombre_usuario }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.usuario?.rut_usuario }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.unidad }}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.criterio}}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.proceso}}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.registro}}</td>
+                                    <td style="border: 1px solid black;">{{ evidencia.debilidades }}</td>
+                                    <td style="border: 1px solid black;">
+                                        <button type="button" class="btn ms-2" >ESTADO </button>
+                                    </td>       
+                                    <td style="border: 1px solid black;">
+                                          <button type="button" class="btn ms-2">
+                                            <i class="fas fa-eye icon-no-bg"></i>
+                                          </button>
+                                    </td>          
+                                    <!--boton descarga-->
+                                    <td style="border: 1px solid black;">
+                                      <button type="button" class="btn ms-2" (click)="descargarPDF(evidencia.id_evidencias)">
+                                        <i class="fas fa-download"></i> Descargar
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tbody>              
+                              </table>
+                              <pagination-controls (pageChange)="pageChanged($event)" previousLabel="Anterior"
+                                nextLabel="Siguiente"></pagination-controls>
+                        </div>
+          
+                 </div>
+            </div>
+          
     </main>
 </div>
