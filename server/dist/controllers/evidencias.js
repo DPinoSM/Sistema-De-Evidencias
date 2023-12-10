@@ -442,10 +442,16 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.generarPDF = generarPDF;
 const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_usuario } = req.params;
+    // Validar que id_usuario sea un número antes de continuar
+    if (isNaN(+id_usuario)) {
+        return res.status(400).json({
+            msg: 'El parámetro id_usuario debe ser un número válido.',
+        });
+    }
     try {
         const evidenciasUsuario = yield evidencias_1.Evidencias.findAll({
             where: {
-                id_usuario: id_usuario,
+                id_usuario: +id_usuario,
                 id_detalle_revisor: {
                     [sequelize_1.Op.or]: [
                         { [sequelize_1.Op.eq]: null },

@@ -54,15 +54,21 @@
                   <td style="border: 1px solid black;">{{ evidencia.registro }}</td>
                   <td style="border: 1px solid black;">{{ evidencia.ambitoAcademico }}</td>
                   <td style="border: 1px solid black;">
-                    <i [class]="getIconName(evidencia.Drevisor)" *ngIf="evidencia.Drevisor !== undefined"></i>
-                    <span style="margin: 0 5px;">
-                    </span>
-                    <i [class]="getIconName(evidencia.Dcomite)" *ngIf="evidencia.Dcomite !== undefined"></i>
+                    <!-- Drevisor -->
+                    <i [class]="(evidencia.Drevisor !== undefined) ? getIconName(evidencia.Drevisor) : 'fas fa-question'"></i>
+                  
                     <span style="margin: 0 5px;"></span>
-                    <i [class]="getIconName(evidencia.Ddac)" *ngIf="evidencia.Ddac !== undefined"></i>
+                  
+                    <!-- Dcomite -->
+                    <i [class]="(evidencia.Dcomite !== undefined) ? getIconName(evidencia.Dcomite) : 'fas fa-question'"></i>
+                  
+                    <span style="margin: 0 5px;"></span>
+                  
+                    <!-- Ddac -->
+                    <i [class]="(evidencia.Ddac !== undefined) ? getIconName(evidencia.Ddac) : 'fas fa-question'"></i>
                   </td>
                   
-
+                
                   <td>
                     <button type="button" class="btn">
                       <i class="fas fa-eye icon-no-bg"></i>
