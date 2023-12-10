@@ -17,9 +17,7 @@ import { Proceso } from '../models/proceso';
 import { Impacto } from '../models/impacto';
 import { Estado } from '../models/estado';
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts'
-import * as fs from 'fs-extra';
-import path from 'path';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 export const newEvidencia = async (req: Request, res: Response) => {
     try {
@@ -438,11 +436,6 @@ export const generarPDF = async (req: Request, res: Response) => {
         where: {id_estado: evidencia.id_estado},
     }); 
 
-    const imageData = Buffer.from(evidencia.archivo_adjunto).toString('base64');
-    console.log('Contenido del buffer:', evidencia.archivo_adjunto);
-
-    console.log('ImageData',imageData);
-
 
 
     // Crear la definición del documento PDF
@@ -510,7 +503,6 @@ export const generarPDF = async (req: Request, res: Response) => {
             ],
           },
         } as any,
-        { image: `data:image/png;base64,${imageData}` , width:500},
       ],
       styles: {
         header: {

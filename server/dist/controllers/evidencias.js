@@ -342,9 +342,6 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const typeEstado = yield estado_1.Estado.findOne({
             where: { id_estado: evidencia.id_estado },
         });
-        const imageData = Buffer.from(evidencia.archivo_adjunto).toString('base64');
-        console.log('Contenido del buffer:', evidencia.archivo_adjunto);
-        console.log('ImageData', imageData);
         // Crear la definición del documento PDF
         const documentDefinition = {
             content: [
@@ -409,7 +406,6 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                         ],
                     },
                 },
-                { image: `data:image/png;base64,${imageData}`, width: 500 },
             ],
             styles: {
                 header: {
