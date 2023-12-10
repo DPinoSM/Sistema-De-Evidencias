@@ -103,7 +103,7 @@ export class NewEvidenciaComponent implements OnInit {
         fecha_evidencia: new FormControl(null, Validators.required),
         rut_usuario: new FormControl({value: '', disabled: true}),
         correo_usuario: new FormControl({value: '', disabled: true}),
-        id_usuario: new FormControl(null, Validators.required),
+        id_usuario: new FormControl({value: '', disabled: true}),
         id_unidad: new FormControl(null, Validators.required),
         id_procesos: new FormControl(null, Validators.required),
         id_registro: new FormControl(null, Validators.required),
@@ -161,6 +161,7 @@ export class NewEvidenciaComponent implements OnInit {
       this.form.patchValue({
         rut_usuario: usuarioLogeadoInfo.rut,
         correo_usuario: usuarioLogeadoInfo.correo,
+        id_usuario: usuarioLogeadoInfo.id
       });
     }
 
@@ -179,6 +180,12 @@ export class NewEvidenciaComponent implements OnInit {
     });
   }
 
+  getNombreUsuario(): string {
+    const idUsuarioSeleccionado = this.form.get('id_usuario')?.value;
+    const usuarioSeleccionado = this.usuarios.find(usuario => usuario.id_usuario === idUsuarioSeleccionado);
+    return usuarioSeleccionado ? usuarioSeleccionado.nombre_usuario : '';
+  }
+  
   getUsers() {
     this.usuarioService.getUsers().subscribe((usuarios) => {
       this.usuarios = usuarios;

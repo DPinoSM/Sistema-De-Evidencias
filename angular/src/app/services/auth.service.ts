@@ -34,12 +34,13 @@ export class AuthService {
   }
 
   // Nuevo método para obtener la información del usuario logeado
-  getUsuarioLogeadoInfo(): { rut: number; correo: string } | null {
+  getUsuarioLogeadoInfo(): { rut: number; correo: string; id: number } | null {
+    const id = localStorage.getItem('id_usuario');
     const rut = localStorage.getItem('rut_usuario');
     const correo = localStorage.getItem('correo_usuario');
   
-    if (rut !== null && correo !== null) {
-      return { rut: +rut, correo: correo || '' }; 
+    if (rut !== null && correo !== null && id !== null) {
+      return { rut: +rut, id: +id, correo: correo || '' }; 
     }
   
     return null;
