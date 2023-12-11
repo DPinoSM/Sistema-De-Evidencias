@@ -588,4 +588,43 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
     }
 };
 
+export const filtrarXestado = async (req: Request, res: Response) => {
+    try {
+        const evidenciasFiltradas = await Evidencias.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        id_detalle_revisor: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_dac: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_comite: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                    },
+                ],
+            } as unknown as Record<string, any>,
+        });
+
+        res.json(evidenciasFiltradas);
+    } catch (error) {
+        console.error('Error en el controlador filtrarXEestado:', error);
+        res.status(500).json({
+            msg: 'Error interno del servidor',
+            error,
+        });
+    }
+};
+
 

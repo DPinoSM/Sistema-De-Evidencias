@@ -183,8 +183,19 @@ export class NewEvidenciaComponent implements OnInit {
   getNombreUsuario(): string {
     const idUsuarioSeleccionado = this.form.get('id_usuario')?.value;
     const usuarioSeleccionado = this.usuarios.find(usuario => usuario.id_usuario === idUsuarioSeleccionado);
-    return usuarioSeleccionado ? usuarioSeleccionado.nombre_usuario : '';
+  
+    // Asegúrate de que el objeto usuarioSeleccionado y la propiedad apellido_usuario existan
+    if (usuarioSeleccionado && usuarioSeleccionado.apellido1_usuario) {
+      return `${usuarioSeleccionado.nombre_usuario} ${usuarioSeleccionado.apellido1_usuario}`;
+    } else if (usuarioSeleccionado) {
+      // Si no hay apellido, devuelve solo el nombre
+      return usuarioSeleccionado.nombre_usuario;
+    } else {
+      // Si no se encuentra el usuario, devuelve una cadena vacía o maneja el caso según tus necesidades
+      return '';
+    }
   }
+  
   
   getUsers() {
     this.usuarioService.getUsers().subscribe((usuarios) => {

@@ -205,6 +205,38 @@ export class ListaEvidenciasComponent implements OnInit {
     }
   }
   
+  filtrarXEstadoRealizar() {
+    if (this.evidenciasOriginal) {
+      this.evidencias = this.evidenciasOriginal.filter(evidencia => {
+        const revisadoRevisor = evidencia.Drevisor?.revisado_revisor;
+        const revisadoComite = evidencia.Dcomite?.revisado_comite;
+        const revisadoDAC = evidencia.Ddac?.revisado_dac;
+  
+        switch (this.selectedEstado) {
+          case 'En espera':
+            // Condición para contar como en espera
+            return revisadoRevisor === null || revisadoComite === null || revisadoDAC === null;
+  
+          case 'Aprobado':
+            // Condición para contar como aprobado
+            return revisadoRevisor && revisadoComite && revisadoDAC;
+  
+          case 'Rechazado':
+            // Condición para contar como rechazado
+            return !(revisadoRevisor && revisadoComite && revisadoDAC);
+  
+          default:
+            return true; // Si el estado seleccionado no coincide con ninguno, mostrar todas las evidencias
+        }
+      });
+  
+      // Llamada a la función para actualizar la lista
+      this.cargarEvidencias();
+    }
+  }
+  
+  
+  
   
 
   comienzaConCadena(cadena: string, input: string): boolean {

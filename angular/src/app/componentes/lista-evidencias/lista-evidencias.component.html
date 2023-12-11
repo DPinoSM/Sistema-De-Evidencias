@@ -20,7 +20,7 @@
 
             <div class="d-flex justify-content-end mt-4">
               <div class="search-container">
-                <select [(ngModel)]="selectedEstado" (change)="realizarBusqueda()">
+                <select [(ngModel)]="selectedEstado" (change)="filtrarXEstadoRealizar()">
                   <option value="En espera">En espera</option>
                   <option value="Aprobado">Aprobado</option>
                   <option value="Rechazado">Rechazado</option>
@@ -44,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 5, currentPage: currentPage }"
+                <tr *ngFor="let evidencia of evidencias | paginate: { itemsPerPage: 8, currentPage: currentPage }"
                   style="border: 1px solid black;">
                   <td style="border: 1px solid black;">{{ evidencia.id_evidencias }}</td>
                   <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>

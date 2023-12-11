@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
+exports.filtrarXestado = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
 const evidencias_1 = require("../models/evidencias");
 const unidad_1 = require("../models/unidad");
 const sequelize_1 = require("sequelize");
@@ -488,3 +488,42 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getEvidenciasByUsuario = getEvidenciasByUsuario;
+const filtrarXestado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const evidenciasFiltradas = yield evidencias_1.Evidencias.findAll({
+            where: {
+                [sequelize_1.Op.or]: [
+                    {
+                        id_detalle_revisor: {
+                            [sequelize_1.Op.or]: [
+                                { [sequelize_1.Op.eq]: null },
+                                { [sequelize_1.Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_dac: {
+                            [sequelize_1.Op.or]: [
+                                { [sequelize_1.Op.eq]: null },
+                                { [sequelize_1.Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_comite: {
+                            [sequelize_1.Op.or]: [
+                                { [sequelize_1.Op.eq]: null },
+                                { [sequelize_1.Op.ne]: null },
+                            ],
+                        },
+                    },
+                ],
+            },
+        });
+        res.json(evidenciasFiltradas);
+    }
+    catch (error) {
+        console.error('Error en el controlador filtrarXEestado:', error);
+        res.status(500).json({
+            msg: 'Error interno del servidor',
+            error,
+        });
+    }
+});
+exports.filtrarXestado = filtrarXestado;
