@@ -590,14 +590,26 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
 
 
 export const filtrarEvidenciasPorAprobacion = async (req: Request, res: Response) => {
-    const { estado } = req.params;
+    const { estado, id_usuario } = req.params;
 
     try {
+
+        const idUsuarioNumero = Number(id_usuario);
+
+        if (isNaN(idUsuarioNumero)) {
+            // Manejar el caso en que id_usuario no sea un número válido
+            return res.status(400).json({ error: 'El id_usuario no es un número válido' });
+        }
         // Obtén todas las evidencias de la base de datos
         const todasLasEvidencias = await Evidencias.findAll();
 
         // Filtra las evidencias según el estado proporcionado
         const evidenciasFiltradas = await Promise.all(todasLasEvidencias.map(async (evidencia) => {
+
+            if (evidencia.id_usuario !== idUsuarioNumero) {
+                return null;
+            }
+
             const detalleRevisor = await Detalle_Revisor.findOne({
                 where: { id_detalle_revisor: evidencia.id_detalle_revisor },
             });

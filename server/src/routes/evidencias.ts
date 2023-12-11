@@ -10,5 +10,5 @@ router.put('/:id', updateEvidencia);
 router.get('/buscar', validateToken, buscarEvidencia); 
 router.get('/pdf/:id',generarPDF);
 router.get('/usuario/:id_usuario', getEvidenciasByUsuario);
-router.get('/clasificar-evidencias/:estado', filtrarEvidenciasPorAprobacion);
+router.get('/clasificar-evidencias/:estado/:id_usuario', filtrarEvidenciasPorAprobacion);
 export default router;
