@@ -75,6 +75,13 @@ export class EvidenciasService {
       );
   }
   
+  filtrarXEestado(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/filtrar`)
+      .pipe(
+        catchError(err => this.handleError(err))
+      );
+  }
+
   // Manejo de errores
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la solicitud:', error);

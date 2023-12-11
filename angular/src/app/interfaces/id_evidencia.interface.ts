@@ -10,13 +10,13 @@ export interface Evidencia {
   id_evidencias?: number;
   numero_folio?: string;
   fecha_evidencia?: Date;
-  id_unidad?: number,
-  id_procesos?: number,
-  id_ambito_academico?: number,
-  id_registro?: number,
-  id_detalle_dac?: number,
-  id_detalle_comite?: number,
-  id_detalle_revisor?: number,
+  id_unidad?: number;
+  id_procesos?: number;
+  id_ambito_academico?: number;
+  id_registro?: number;
+  id_detalle_dac?: number | null;
+  id_detalle_comite?: number | null;
+  id_detalle_revisor?: number | null;
   unidad?: Unidad;
   proceso?: Proceso;
   registro?: Registro;
@@ -25,4 +25,5 @@ export interface Evidencia {
   Dcomite?: DetalleComite;
   Drevisor?: DetalleRevisor;
   estadoAprobacion?: string;
+  icono?: string;
 }

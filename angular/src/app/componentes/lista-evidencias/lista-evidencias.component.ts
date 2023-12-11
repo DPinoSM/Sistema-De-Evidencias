@@ -120,26 +120,34 @@ export class ListaEvidenciasComponent implements OnInit {
                 });
               }
 
-               // Obtener detalles de DAC
-              if (evidencia.id_detalle_dac !== undefined) {
+              // Obtener detalles de DAC
+              if (evidencia.id_detalle_dac !== undefined && evidencia.id_detalle_dac !== null) {
                 this.dacService.obtenerDacPorId(evidencia.id_detalle_dac).subscribe((detalleDac) => {
-                  evidencia.Ddac = detalleDac?.revisado_dac ?? null; 
+                  evidencia.Ddac = detalleDac?.revisado_dac ?? null;
                 });
+              } else {
+                evidencia.Ddac = undefined; 
               }
               
               // Obtener detalles de comité
-              if (evidencia.id_detalle_comite !== undefined) {
+              if (evidencia.id_detalle_comite !== undefined && evidencia.id_detalle_comite !== null) {
                 this.comiteService.obtenerComitePorId(evidencia.id_detalle_comite).subscribe((detalleComite) => {
                   evidencia.Dcomite = detalleComite?.revisado_comite ?? null;
                 });
+              } else {
+                evidencia.Dcomite = undefined; 
               }
               
               // Obtener detalles de revisor
-              if (evidencia.id_detalle_revisor !== undefined) {
+              if (evidencia.id_detalle_revisor !== undefined && evidencia.id_detalle_revisor !== null) {
                 this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor).subscribe((detalleRevisor) => {
                   evidencia.Drevisor = detalleRevisor?.revisado_revisor ?? null;
                 });
+              } else {
+                evidencia.Drevisor = undefined;
               }
+              
+              evidencia.icono = this.getIconName(evidencia.Drevisor || evidencia.Dcomite || evidencia.Ddac);
               if (this.searchTerm && evidencia.numero_folio) {
                 const term = this.searchTerm.toLowerCase();
                 const numeroFolio = evidencia.numero_folio.toString().toLowerCase();
@@ -160,13 +168,7 @@ export class ListaEvidenciasComponent implements OnInit {
     }
     
     getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null | undefined): string {
-      if (state === null) {
-        return 'fas fa-question';
-      } else if (state === undefined) {
-        return 'fas fa-question';
-      } else if (Array.isArray(state) && state.length === 0) {
-        return 'fas fa-question';
-      } else if (state === true) {
+      if (state === true) {
         return 'fas fa-user fas fa-check-circle text-success';
       } else if (state === false) {
         return 'fas fa-user fas fa-times-circle text-danger';
@@ -174,6 +176,11 @@ export class ListaEvidenciasComponent implements OnInit {
         return 'fas fa-question'; 
       }
     }
+    
+    
+    
+    
+    
   
   actualizarEvidencia(id: number | undefined): void {
     if (id !== undefined) {
@@ -197,6 +204,38 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
   }
+  
+  filtrarXEstadoRealizar() {
+    if (this.evidenciasOriginal) {
+      this.evidencias = this.evidenciasOriginal.filter(evidencia => {
+        const revisadoRevisor = evidencia.Drevisor?.revisado_revisor;
+        const revisadoComite = evidencia.Dcomite?.revisado_comite;
+        const revisadoDAC = evidencia.Ddac?.revisado_dac;
+  
+        switch (this.selectedEstado) {
+          case 'En espera':
+            // Condición para contar como en espera
+            return revisadoRevisor === null || revisadoComite === null || revisadoDAC === null;
+  
+          case 'Aprobado':
+            // Condición para contar como aprobado
+            return revisadoRevisor && revisadoComite && revisadoDAC;
+  
+          case 'Rechazado':
+            // Condición para contar como rechazado
+            return !(revisadoRevisor && revisadoComite && revisadoDAC);
+  
+          default:
+            return true; // Si el estado seleccionado no coincide con ninguno, mostrar todas las evidencias
+        }
+      });
+  
+      // Llamada a la función para actualizar la lista
+      this.cargarEvidencias();
+    }
+  }
+  
+  
   
   
 

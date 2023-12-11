@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEvidenciasPorFecha = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
+exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
 const evidencias_1 = require("../models/evidencias");
 const unidad_1 = require("../models/unidad");
 const sequelize_1 = require("sequelize");
@@ -442,10 +442,16 @@ const generarPDF = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.generarPDF = generarPDF;
 const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_usuario } = req.params;
+    // Validar que id_usuario sea un número antes de continuar
+    if (isNaN(+id_usuario)) {
+        return res.status(400).json({
+            msg: 'El parámetro id_usuario debe ser un número válido.',
+        });
+    }
     try {
         const evidenciasUsuario = yield evidencias_1.Evidencias.findAll({
             where: {
-                id_usuario: id_usuario,
+                id_usuario: +id_usuario,
                 id_detalle_revisor: {
                     [sequelize_1.Op.or]: [
                         { [sequelize_1.Op.eq]: null },
@@ -482,36 +488,3 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getEvidenciasByUsuario = getEvidenciasByUsuario;
-const getEvidenciasPorFecha = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { fechaInicial, fechaFinal } = req.query;
-    if (!fechaInicial || !fechaFinal) {
-        return res.status(400).json({
-            msg: 'Las fechas de inicio y fin son obligatorias',
-        });
-    }
-    try {
-        const analisisFechaInicial = new Date(fechaInicial);
-        const analisisFechaFinal = new Date(fechaFinal);
-        if (isNaN(analisisFechaInicial.getTime()) || isNaN(analisisFechaFinal.getTime())) {
-            return res.status(400).json({
-                msg: 'Las fechas proporcionadas no son válidas',
-            });
-        }
-        const listEvidencias = yield evidencias_1.Evidencias.findAll({
-            where: {
-                fecha_creacion: {
-                    [sequelize_1.Op.between]: [analisisFechaInicial, analisisFechaFinal],
-                },
-            },
-        });
-        res.json(listEvidencias);
-    }
-    catch (error) {
-        console.error('Error en el controlador:', error);
-        res.status(500).json({
-            msg: 'Ocurrió un error en el servidor',
-            error,
-        });
-    }
-});
-exports.getEvidenciasPorFecha = getEvidenciasPorFecha;

@@ -540,10 +540,17 @@ export const generarPDF = async (req: Request, res: Response) => {
 export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
     const { id_usuario } = req.params;
 
+    // Validar que id_usuario sea un número antes de continuar
+    if (isNaN(+id_usuario)) {
+        return res.status(400).json({
+            msg: 'El parámetro id_usuario debe ser un número válido.',
+        });
+    }
+
     try {
         const evidenciasUsuario = await Evidencias.findAll({
             where: {
-                id_usuario: id_usuario,
+                id_usuario: +id_usuario,
                 id_detalle_revisor: {
                     [Op.or]: [
                         { [Op.eq]: null },
@@ -562,8 +569,7 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
                         { [Op.ne]: null },
                     ],
                 },
-            } as unknown as Record<string,any>,
-            
+            } as unknown as Record<string, any>,
         });
 
         if (!evidenciasUsuario || evidenciasUsuario.length === 0) {
@@ -581,6 +587,46 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const filtrarXestado = async (req: Request, res: Response) => {
+    try {
+        const evidenciasFiltradas = await Evidencias.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        id_detalle_revisor: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_dac: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                        id_detalle_comite: {
+                            [Op.or]: [
+                                { [Op.eq]: null },
+                                { [Op.ne]: null },
+                            ],
+                        },
+                    },
+                ],
+            } as unknown as Record<string, any>,
+        });
+
+        res.json(evidenciasFiltradas);
+    } catch (error) {
+        console.error('Error en el controlador filtrarXEestado:', error);
+        res.status(500).json({
+            msg: 'Error interno del servidor',
+            error,
+        });
+    }
+};
+
 
 export const getEvidenciasPorFecha = async (req: Request, res: Response) => {
     const { fechaInicial, fechaFinal } = req.query;
