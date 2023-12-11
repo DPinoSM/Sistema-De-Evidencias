@@ -489,12 +489,20 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
 });
 exports.getEvidenciasByUsuario = getEvidenciasByUsuario;
 const filtrarEvidenciasPorAprobacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { estado } = req.params;
+    const { estado, id_usuario } = req.params;
     try {
+        const idUsuarioNumero = Number(id_usuario);
+        if (isNaN(idUsuarioNumero)) {
+            // Manejar el caso en que id_usuario no sea un número válido
+            return res.status(400).json({ error: 'El id_usuario no es un número válido' });
+        }
         // Obtén todas las evidencias de la base de datos
         const todasLasEvidencias = yield evidencias_1.Evidencias.findAll();
         // Filtra las evidencias según el estado proporcionado
         const evidenciasFiltradas = yield Promise.all(todasLasEvidencias.map((evidencia) => __awaiter(void 0, void 0, void 0, function* () {
+            if (evidencia.id_usuario !== idUsuarioNumero) {
+                return null;
+            }
             const detalleRevisor = yield detalle_revisor_1.Detalle_Revisor.findOne({
                 where: { id_detalle_revisor: evidencia.id_detalle_revisor },
             });
