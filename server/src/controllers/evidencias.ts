@@ -582,3 +582,40 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
     }
 };
 
+export const getEvidenciasPorFecha = async (req: Request, res: Response) => {
+    const { fechaInicial, fechaFinal } = req.query;
+
+    if (!fechaInicial || !fechaFinal) {
+        return res.status(400).json({
+            msg: 'Las fechas de inicio y fin son obligatorias',
+        });
+    }
+
+    try {
+
+        const analisisFechaInicial = new Date(fechaInicial as string);
+        const analisisFechaFinal = new Date(fechaFinal as string);
+
+        if (isNaN(analisisFechaInicial.getTime()) || isNaN(analisisFechaFinal.getTime())) {
+            return res.status(400).json({
+                msg: 'Las fechas proporcionadas no son válidas',
+            });
+        }
+
+        const listEvidencias = await Evidencias.findAll({
+            where: {
+                fecha_creacion: {
+                    [Op.between]: [analisisFechaInicial, analisisFechaFinal],
+                },
+            },
+        });
+
+        res.json(listEvidencias);
+    } catch (error) {
+        console.error('Error en el controlador:', error);
+        res.status(500).json({
+            msg: 'Ocurrió un error en el servidor',
+            error,
+        });
+    }
+};
