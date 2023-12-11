@@ -83,14 +83,13 @@ export class ListaEvidenciasComponent implements OnInit {
       this.cargarEvidencias();
     }
 
-    private cargarEvidencias(){
+    private cargarEvidencias() {
       this.selectedEstado = 'En espera';
       const idUsuario = localStorage.getItem('id_usuario');
-      
+    
       if (idUsuario) {
         this.evidenciasService.getEvidenciasByUsuario(+idUsuario).subscribe((evidencias) => {
           if (evidencias && evidencias.length > 0) {
-            // Obtener detalles adicionales para cada evidencia
             evidencias.forEach((evidencia) => {
               // Obtener detalles de unidad
               if (evidencia.id_unidad !== undefined) {
@@ -147,6 +146,7 @@ export class ListaEvidenciasComponent implements OnInit {
                 evidencia.Drevisor = undefined;
               }
               
+              evidencia.estado = this.determinarEstadoEvidencia(evidencia);
               evidencia.icono = this.getIconName(evidencia.Drevisor || evidencia.Dcomite || evidencia.Ddac);
               if (this.searchTerm && evidencia.numero_folio) {
                 const term = this.searchTerm.toLowerCase();
@@ -157,6 +157,7 @@ export class ListaEvidenciasComponent implements OnInit {
                 }
               }
             });
+    
             if (!this.searchTerm) {
               this.evidencias = evidencias;
             }
@@ -167,6 +168,64 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
     
+    filtrarEvidencias() {
+      // Restaurar las evidencias originales si no hay un estado seleccionado
+      if (!this.selectedEstado && this.evidenciasOriginal) {
+        this.evidencias = [...this.evidenciasOriginal];
+        return;
+      }
+    
+      if (this.selectedEstado) {
+        // Limpiar la lista actual antes de cargar nuevas evidencias
+        this.evidencias = [];
+    
+        // Llama al servicio de filtrado con el estado seleccionado
+        this.evidenciasService.filtrarEvidenciasPorAprobacion(this.selectedEstado)
+          .subscribe({
+            next: (data) => {
+              // Actualiza la lista de evidencias con los resultados filtrados
+              this.evidencias = data;
+    
+              // Guardar las evidencias originales después de realizar el filtrado
+              if (!this.evidenciasOriginal) {
+                this.evidenciasOriginal = [...this.evidencias];
+              }
+    
+              // Agregar un pequeño retraso para permitir que Angular actualice la vista
+              setTimeout(() => {
+                // Puedes intentar eliminar el siguiente bloque si el retraso no es necesario
+                // this.cdr.detectChanges();  // Importa ChangeDetectorRef y añádelo al constructor
+              }, 100);
+            },
+            error: (error) => {
+              console.error('Error al filtrar evidencias:', error);
+            }
+          });
+      } else {
+        // Si no hay un estado seleccionado pero hay evidencias originales, restaurarlas
+        if (this.evidenciasOriginal) {
+          this.evidencias = [...this.evidenciasOriginal];
+        }
+      }
+    }
+
+    determinarEstadoEvidencia(evidencia: Evidencia): string {
+      const revisor = evidencia.Drevisor?.revisado_revisor;
+      const dac = evidencia.Ddac?.revisado_dac;
+      const comite = evidencia.Dcomite?.revisado_comite;
+    
+      if (revisor === true && dac === true && comite === true) {
+        return 'Aprobada';
+      } else if (revisor === false || dac === false || comite === false) {
+        return 'Rechazada';
+      } else {
+        return 'En espera';
+      }
+    }
+    
+    
+    
+
     getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null | undefined): string {
       if (state === true) {
         return 'fas fa-user fas fa-check-circle text-success';
@@ -204,27 +263,7 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
   }
-  
-  filtrarXEstadoRealizar() {
-    if (this.evidenciasOriginal) {
-      // Llamada al servicio para filtrar por estado
-      this.evidenciasService.filtrarXEestado().subscribe({
-        next: (data) => {
-          // Manejar la respuesta del servicio
-          console.log('Evidencias filtradas por estado:', data);
-  
-          // Actualizar la lista de evidencias si es necesario
-          this.cargarEvidencias();
-        },
-        error: (error) => {
-          // Manejar el error
-          console.error('Error al filtrar evidencias por estado:', error);
-        }
-      });
-    }
-  }
-  
-  
+
   
 
   comienzaConCadena(cadena: string, input: string): boolean {

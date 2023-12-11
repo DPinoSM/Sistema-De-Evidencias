@@ -75,8 +75,8 @@ export class EvidenciasService {
       );
   }
   
-  filtrarXEestado(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/filtrar`)
+  filtrarEvidenciasPorAprobacion(estado: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/clasificar-evidencias/${estado}`)
       .pipe(
         catchError(err => this.handleError(err))
       );
