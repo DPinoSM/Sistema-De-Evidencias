@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filtrarXestado = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
+exports.filtrarEvidenciasPorAprobacion = exports.getEvidenciasPorFecha = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
 const evidencias_1 = require("../models/evidencias");
 const unidad_1 = require("../models/unidad");
 const sequelize_1 = require("sequelize");
@@ -488,42 +488,79 @@ const getEvidenciasByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getEvidenciasByUsuario = getEvidenciasByUsuario;
-const filtrarXestado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getEvidenciasPorFecha = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { fechaInicial, fechaFinal } = req.query;
+    if (!fechaInicial || !fechaFinal) {
+        return res.status(400).json({
+            msg: 'Las fechas de inicio y fin son obligatorias',
+        });
+    }
     try {
-        const evidenciasFiltradas = yield evidencias_1.Evidencias.findAll({
+        const analisisFechaInicial = new Date(fechaInicial);
+        const analisisFechaFinal = new Date(fechaFinal);
+        if (isNaN(analisisFechaInicial.getTime()) || isNaN(analisisFechaFinal.getTime())) {
+            return res.status(400).json({
+                msg: 'Las fechas proporcionadas no son válidas',
+            });
+        }
+        const listEvidencias = yield evidencias_1.Evidencias.findAll({
             where: {
-                [sequelize_1.Op.or]: [
-                    {
-                        id_detalle_revisor: {
-                            [sequelize_1.Op.or]: [
-                                { [sequelize_1.Op.eq]: null },
-                                { [sequelize_1.Op.ne]: null },
-                            ],
-                        },
-                        id_detalle_dac: {
-                            [sequelize_1.Op.or]: [
-                                { [sequelize_1.Op.eq]: null },
-                                { [sequelize_1.Op.ne]: null },
-                            ],
-                        },
-                        id_detalle_comite: {
-                            [sequelize_1.Op.or]: [
-                                { [sequelize_1.Op.eq]: null },
-                                { [sequelize_1.Op.ne]: null },
-                            ],
-                        },
-                    },
-                ],
+                fecha_creacion: {
+                    [sequelize_1.Op.between]: [analisisFechaInicial, analisisFechaFinal],
+                },
             },
         });
-        res.json(evidenciasFiltradas);
+        res.json(listEvidencias);
     }
     catch (error) {
-        console.error('Error en el controlador filtrarXEestado:', error);
+        console.error('Error en el controlador:', error);
         res.status(500).json({
-            msg: 'Error interno del servidor',
+            msg: 'Ocurrió un error en el servidor',
             error,
         });
     }
 });
-exports.filtrarXestado = filtrarXestado;
+exports.getEvidenciasPorFecha = getEvidenciasPorFecha;
+const filtrarEvidenciasPorAprobacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { estado } = req.params;
+    try {
+        // Obtén todas las evidencias de la base de datos
+        const todasLasEvidencias = yield evidencias_1.Evidencias.findAll();
+        // Filtra las evidencias según el estado proporcionado
+        const evidenciasFiltradas = yield Promise.all(todasLasEvidencias.map((evidencia) => __awaiter(void 0, void 0, void 0, function* () {
+            const detalleRevisor = yield detalle_revisor_1.Detalle_Revisor.findOne({
+                where: { id_detalle_revisor: evidencia.id_detalle_revisor },
+            });
+            const detalleDac = yield detalle_dac_1.Detalle_DAC.findOne({
+                where: { id_detalle_dac: evidencia.id_detalle_dac },
+            });
+            const detalleComite = yield detalle_comite_1.Detalle_Comite.findOne({
+                where: { id_detalle_comite: evidencia.id_detalle_comite },
+            });
+            const estadoEvidencia = determinarEstadoEvidencia(detalleRevisor, detalleDac, detalleComite);
+            // Devuelve la evidencia solo si coincide con el estado proporcionado
+            return estadoEvidencia === estado ? evidencia : null;
+        })));
+        // Devuelve la lista de evidencias filtradas
+        const evidenciasFiltradasSinNulos = evidenciasFiltradas.filter(e => e !== null);
+        // Devuelve la lista de evidencias filtradas
+        res.json(evidenciasFiltradasSinNulos);
+    }
+    catch (error) {
+        console.error('Error al filtrar evidencias por aprobación:', error);
+        res.status(500).json({ error: 'Ocurrió un error al filtrar evidencias por aprobación' });
+    }
+});
+exports.filtrarEvidenciasPorAprobacion = filtrarEvidenciasPorAprobacion;
+// Función para determinar el estado de una evidencia
+const determinarEstadoEvidencia = (detalleRevisor, detalleDac, detalleComite) => {
+    if ((detalleRevisor === null || detalleRevisor === void 0 ? void 0 : detalleRevisor.revisado_revisor) === true && (detalleDac === null || detalleDac === void 0 ? void 0 : detalleDac.revisado_dac) === true && (detalleComite === null || detalleComite === void 0 ? void 0 : detalleComite.revisado_comite) === true) {
+        return 'Aprobada';
+    }
+    else if ((detalleRevisor === null || detalleRevisor === void 0 ? void 0 : detalleRevisor.revisado_revisor) === false || (detalleDac === null || detalleDac === void 0 ? void 0 : detalleDac.revisado_dac) === false || (detalleComite === null || detalleComite === void 0 ? void 0 : detalleComite.revisado_comite) === false) {
+        return 'Rechazada';
+    }
+    else {
+        return 'En espera';
+    }
+};

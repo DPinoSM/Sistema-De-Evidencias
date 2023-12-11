@@ -44,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let facultad of facultades | paginate: { itemsPerPage: 5, currentPage: currentPage }" style="border: 1px solid black;">
+                <tr *ngFor="let facultad of facultades | paginate: { itemsPerPage: 10, currentPage: currentPage }" style="border: 1px solid black;">
                   <td style="border: 1px solid black;">{{ facultad.id_facultad }}</td>
                   <td style="border: 1px solid black;">{{ facultad.nombre_facultad }}</td>
                   <td style="border: 1px solid black;">

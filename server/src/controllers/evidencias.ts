@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Evidencias } from '../models/evidencias';
 import { Unidad } from '../models/unidad';
-import { Op } from 'sequelize';
+import { Model, Op } from 'sequelize';
 import { Detalle_Revisor } from '../models/detalle_revisor';
 import { Detalle_DAC } from '../models/detalle_dac';
 import { Detalle_Comite } from '../models/detalle_comite';
@@ -588,43 +588,51 @@ export const getEvidenciasByUsuario = async (req: Request, res: Response) => {
     }
 };
 
-export const filtrarXestado = async (req: Request, res: Response) => {
-    try {
-        const evidenciasFiltradas = await Evidencias.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        id_detalle_revisor: {
-                            [Op.or]: [
-                                { [Op.eq]: null },
-                                { [Op.ne]: null },
-                            ],
-                        },
-                        id_detalle_dac: {
-                            [Op.or]: [
-                                { [Op.eq]: null },
-                                { [Op.ne]: null },
-                            ],
-                        },
-                        id_detalle_comite: {
-                            [Op.or]: [
-                                { [Op.eq]: null },
-                                { [Op.ne]: null },
-                            ],
-                        },
-                    },
-                ],
-            } as unknown as Record<string, any>,
-        });
 
-        res.json(evidenciasFiltradas);
+export const filtrarEvidenciasPorAprobacion = async (req: Request, res: Response) => {
+    const { estado } = req.params;
+
+    try {
+        // Obtén todas las evidencias de la base de datos
+        const todasLasEvidencias = await Evidencias.findAll();
+
+        // Filtra las evidencias según el estado proporcionado
+        const evidenciasFiltradas = await Promise.all(todasLasEvidencias.map(async (evidencia) => {
+            const detalleRevisor = await Detalle_Revisor.findOne({
+                where: { id_detalle_revisor: evidencia.id_detalle_revisor },
+            });
+            const detalleDac = await Detalle_DAC.findOne({
+                where: { id_detalle_dac: evidencia.id_detalle_dac },
+            });
+            const detalleComite = await Detalle_Comite.findOne({
+                where: { id_detalle_comite: evidencia.id_detalle_comite },
+            });
+
+            const estadoEvidencia = determinarEstadoEvidencia(detalleRevisor, detalleDac, detalleComite);
+
+            // Devuelve la evidencia solo si coincide con el estado proporcionado
+            return estadoEvidencia === estado ? evidencia : null;
+        }));
+
+        // Devuelve la lista de evidencias filtradas
+        const evidenciasFiltradasSinNulos = evidenciasFiltradas.filter(e => e !== null);
+
+        // Devuelve la lista de evidencias filtradas
+        res.json(evidenciasFiltradasSinNulos);
+
     } catch (error) {
-        console.error('Error en el controlador filtrarXEestado:', error);
-        res.status(500).json({
-            msg: 'Error interno del servidor',
-            error,
-        });
+        console.error('Error al filtrar evidencias por aprobación:', error);
+        res.status(500).json({ error: 'Ocurrió un error al filtrar evidencias por aprobación' });
     }
 };
 
-
+// Función para determinar el estado de una evidencia
+const determinarEstadoEvidencia = (detalleRevisor: any, detalleDac: any, detalleComite: any): string => {
+    if (detalleRevisor?.revisado_revisor === true && detalleDac?.revisado_dac === true && detalleComite?.revisado_comite === true) {
+        return 'Aprobada';
+    } else if (detalleRevisor?.revisado_revisor === false || detalleDac?.revisado_dac === false || detalleComite?.revisado_comite === false) {
+        return 'Rechazada';
+    } else {
+        return 'En espera';
+    }
+};
