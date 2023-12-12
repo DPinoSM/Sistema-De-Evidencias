@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection';
-import { Criterio } from './criterio';
 
 // Define la interfaz para las propiedades de Debilidades
 interface DebilidadesAttributes {
@@ -19,9 +18,6 @@ export class Debilidades extends Model<DebilidadesAttributes, DebilidadesCreatio
   public id_debilidades!: number;
   public descripcion_debilidades!: string;
   public estado_debilidades!: boolean;
-
-  // Agrega una propiedad para la relación
-  public criterio!: typeof Criterio; 
 }
 
 // Inicializa el modelo Debilidades
