@@ -22,6 +22,7 @@
               <div class="search-container">
                 <label for="estadoSelect" class="visually-hidden">Seleccionar Estado:</label>
                 <select id="estadoSelect" [(ngModel)]="selectedEstado" (change)="filtrarEvidencias()">
+                  <option value="">Seleccionar Estado</option>
                   <option value="En espera">En espera</option>
                   <option value="Aprobada">Aprobada</option>
                   <option value="Rechazada">Rechazada</option>
@@ -40,7 +41,7 @@
                   <th scope="col">Proceso</th>
                   <th scope="col">Registro</th>
                   <th scope="col">Ambito</th>
-                  <th scope="col">Revisado </th>
+                  <th scope="col">Estado Revisado </th>
                   <th scope="col">Acciones</th>
                   <th scope="col">Descargar evidencia</th>
                 </tr>

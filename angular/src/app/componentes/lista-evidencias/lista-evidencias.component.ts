@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/services/shared.service';
@@ -41,13 +41,15 @@ export class ListaEvidenciasComponent implements OnInit {
   Dcomite: DetalleComite[] = [];
   Drevisor: DetalleRevisor[] = [];
   evidenciasOriginal: Evidencia[] | null = null;
+  id_usuario: number | undefined;
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
   form: FormGroup;
   currentPage: number = 1;
   searchTerm: string = '';
   private evidenciasSubscription!: Subscription;    
-  selectedEstado: string | null = null;
+  selectedEstado: string = '';
+
 
 
 
@@ -83,84 +85,107 @@ export class ListaEvidenciasComponent implements OnInit {
       this.cargarEvidencias();
     }
 
+    private actualizarDetalles(evidencias: any[]): void {
+      const observables = evidencias.map((evidencia) => {
+        const detallesObservables = [];
+    
+        if (evidencia.id_unidad !== undefined) {
+          detallesObservables.push(this.unidadService.getUnidad(evidencia.id_unidad));
+        }
+    
+        // Obtener detalles de proceso
+        if (evidencia.id_procesos !== undefined) {
+          detallesObservables.push(this.procesoService.getProcesoById(evidencia.id_procesos));
+        }
+
+        // Obtener detalles de registro
+        if (evidencia.id_registro !== undefined) {
+          detallesObservables.push(this.registroService.getRegistroById(evidencia.id_registro));
+        }
+
+        // Obtener detalles de ámbito académico
+        if (evidencia.id_ambito_academico !== undefined) {
+          detallesObservables.push(this.ambitoAService.getAmbitoAcademico(evidencia.id_ambito_academico));
+        }
+
+        // Obtener detalles de DAC
+        if (evidencia.id_detalle_dac !== undefined && evidencia.id_detalle_dac !== null) {
+          detallesObservables.push(this.dacService.obtenerDacPorId(evidencia.id_detalle_dac));
+        }
+
+        // Obtener detalles de comité
+        if (evidencia.id_detalle_comite !== undefined && evidencia.id_detalle_comite !== null) {
+          detallesObservables.push(this.comiteService.obtenerComitePorId(evidencia.id_detalle_comite));
+        }
+
+        // Obtener detalles de revisor
+        if (evidencia.id_detalle_revisor !== undefined && evidencia.id_detalle_revisor !== null) {
+          detallesObservables.push(this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor));
+        }
+    
+        return forkJoin(detallesObservables).pipe(
+          map((detalles) => {
+            if (detalles[0]) {
+              evidencia.unidad = detalles[0]?.nombre_unidad || '';
+            }
+        
+            if (detalles[1]) {
+              evidencia.proceso = detalles[1]?.nombre_procesos || '';
+            }
+        
+            if (detalles[2]) {
+              evidencia.registro = detalles[2]?.datos_registro || '';
+            }
+        
+            if (detalles[3]) {
+              evidencia.ambitoAcademico = detalles[3]?.nombre_ambito_academico || '';
+            }
+        
+            if (detalles[4]) {
+              evidencia.Ddac = detalles[4]?.revisado_dac ?? null;
+            }
+        
+            if (detalles[5]) {
+              evidencia.Dcomite = detalles[5]?.revisado_comite ?? null;
+            }
+        
+            if (detalles[6]) {
+              evidencia.Drevisor = detalles[6]?.revisado_revisor ?? null;
+            }
+
+            
+    
+            evidencia.icono = this.getIconName(evidencia.Drevisor || evidencia.Dcomite || evidencia.Ddac);
+            if (this.searchTerm && evidencia.numero_folio) {
+              const term = this.searchTerm.toLowerCase();
+              const numeroFolio = evidencia.numero_folio.toString().toLowerCase();
+    
+              if (numeroFolio.includes(term)) {
+                this.evidencias.push(evidencia);
+              }
+            }
+          })
+        );
+      });
+    
+      forkJoin(observables).subscribe(() => {
+        if (!this.searchTerm) {
+          this.evidencias = evidencias;
+        }
+    
+        if (!this.evidenciasOriginal) {
+          this.evidenciasOriginal = [...this.evidencias];
+        }
+      });
+    }
+
     private cargarEvidencias() {
-      this.selectedEstado = 'En espera';
       const idUsuario = localStorage.getItem('id_usuario');
     
       if (idUsuario) {
         this.evidenciasService.getEvidenciasByUsuario(+idUsuario).subscribe((evidencias) => {
           if (evidencias && evidencias.length > 0) {
-            evidencias.forEach((evidencia) => {
-              // Obtener detalles de unidad
-              if (evidencia.id_unidad !== undefined) {
-                this.unidadService.getUnidad(evidencia.id_unidad).subscribe((unidad) => {
-                  evidencia.unidad = unidad?.nombre_unidad || '';
-                });
-              }
-              
-              // Obtener detalles de proceso
-              if (evidencia.id_procesos !== undefined) {
-                this.procesoService.getProcesoById(evidencia.id_procesos).subscribe((proceso) => {
-                  evidencia.proceso = proceso?.nombre_procesos || '';
-                });
-              }
-    
-              // Obtener detalles de registro
-              if (evidencia.id_registro !== undefined) {
-                this.registroService.getRegistroById(evidencia.id_registro).subscribe((registro) => {
-                  evidencia.registro = registro?.datos_registro || '';
-                });
-              }
-    
-              // Obtener detalles de ámbito académico
-              if (evidencia.id_ambito_academico !== undefined) {
-                this.ambitoAService.getAmbitoAcademico(evidencia.id_ambito_academico).subscribe((ambitoAcademico) => {
-                  evidencia.ambitoAcademico = ambitoAcademico?.nombre_ambito_academico || '';
-                });
-              }
-
-              // Obtener detalles de DAC
-              if (evidencia.id_detalle_dac !== undefined && evidencia.id_detalle_dac !== null) {
-                this.dacService.obtenerDacPorId(evidencia.id_detalle_dac).subscribe((detalleDac) => {
-                  evidencia.Ddac = detalleDac?.revisado_dac ?? null;
-                });
-              } else {
-                evidencia.Ddac = undefined; 
-              }
-              
-              // Obtener detalles de comité
-              if (evidencia.id_detalle_comite !== undefined && evidencia.id_detalle_comite !== null) {
-                this.comiteService.obtenerComitePorId(evidencia.id_detalle_comite).subscribe((detalleComite) => {
-                  evidencia.Dcomite = detalleComite?.revisado_comite ?? null;
-                });
-              } else {
-                evidencia.Dcomite = undefined; 
-              }
-              
-              // Obtener detalles de revisor
-              if (evidencia.id_detalle_revisor !== undefined && evidencia.id_detalle_revisor !== null) {
-                this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor).subscribe((detalleRevisor) => {
-                  evidencia.Drevisor = detalleRevisor?.revisado_revisor ?? null;
-                });
-              } else {
-                evidencia.Drevisor = undefined;
-              }
-              
-              evidencia.estado = this.determinarEstadoEvidencia(evidencia);
-              evidencia.icono = this.getIconName(evidencia.Drevisor || evidencia.Dcomite || evidencia.Ddac);
-              if (this.searchTerm && evidencia.numero_folio) {
-                const term = this.searchTerm.toLowerCase();
-                const numeroFolio = evidencia.numero_folio.toString().toLowerCase();
-    
-                if (numeroFolio.includes(term)) {
-                  this.evidencias.push(evidencia);
-                }
-              }
-            });
-    
-            if (!this.searchTerm) {
-              this.evidencias = evidencias;
-            }
+            this.actualizarDetalles(evidencias);
           }
         });
       } else {
@@ -168,33 +193,27 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
     
+        
     filtrarEvidencias() {
-      // Restaurar las evidencias originales si no hay un estado seleccionado
+      const idUsuario = localStorage.getItem('id_usuario');
+    
       if (!this.selectedEstado && this.evidenciasOriginal) {
         this.evidencias = [...this.evidenciasOriginal];
         return;
       }
     
-      if (this.selectedEstado) {
-        // Limpiar la lista actual antes de cargar nuevas evidencias
+      if (this.selectedEstado && idUsuario) {
         this.evidencias = [];
     
-        // Llama al servicio de filtrado con el estado seleccionado
-        this.evidenciasService.filtrarEvidenciasPorAprobacion(this.selectedEstado)
+        this.evidenciasService.filtrarEvidenciasPorAprobacion(this.selectedEstado, +idUsuario)
           .subscribe({
             next: (data) => {
-              // Actualiza la lista de evidencias con los resultados filtrados
+              console.log(data);
               this.evidencias = data;
-    
-              // Guardar las evidencias originales después de realizar el filtrado
-              if (!this.evidenciasOriginal) {
-                this.evidenciasOriginal = [...this.evidencias];
-              }
-    
-              // Agregar un pequeño retraso para permitir que Angular actualice la vista
+              this.actualizarDetalles(this.evidencias);
               setTimeout(() => {
                 // Puedes intentar eliminar el siguiente bloque si el retraso no es necesario
-                // this.cdr.detectChanges();  // Importa ChangeDetectorRef y añádelo al constructor
+                // this.cdr.detectChanges();
               }, 100);
             },
             error: (error) => {
@@ -202,7 +221,6 @@ export class ListaEvidenciasComponent implements OnInit {
             }
           });
       } else {
-        // Si no hay un estado seleccionado pero hay evidencias originales, restaurarlas
         if (this.evidenciasOriginal) {
           this.evidencias = [...this.evidenciasOriginal];
         }
@@ -223,10 +241,8 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
     
-    
-    
 
-    getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null | undefined): string {
+    getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null ): string {
       if (state === true) {
         return 'fas fa-user fas fa-check-circle text-success';
       } else if (state === false) {
@@ -263,9 +279,7 @@ export class ListaEvidenciasComponent implements OnInit {
       }
     }
   }
-
   
-
   comienzaConCadena(cadena: string, input: string): boolean {
     if (!cadena || !input) {
       return true; 
