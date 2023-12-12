@@ -1,7 +1,6 @@
-// Importa las dependencias necesarias
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection';
-import { Evidencias } from './evidencias';  // Asegúrate de importar el modelo Evidencias
+import { Evidencias } from './evidencias';  
 
 // Define la interfaz para las propiedades de Detalle_Revisor
 interface DetalleRevisorAttributes {
@@ -43,8 +42,6 @@ Detalle_Revisor.init(
     freezeTableName: true,
   }
 );
-
-// Define la relación con Evidencias
 
 // Exporta el modelo Detalle_Revisor
 export default Detalle_Revisor;
