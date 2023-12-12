@@ -21,9 +21,7 @@ export class Debilidades extends Model<DebilidadesAttributes, DebilidadesCreatio
   public estado_debilidades!: boolean;
 
   // Agrega una propiedad para la relación
-  public criterio!: typeof Criterio; // Corregir aquí
-
-  // ...
+  public criterio!: typeof Criterio; 
 }
 
 // Inicializa el modelo Debilidades

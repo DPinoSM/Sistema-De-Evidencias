@@ -1,5 +1,3 @@
-//JONATHAN MOLINA 
-//CONTROLLERS DETALLE REVISOR
 import {Request, Response} from 'express';
 import { Detalle_Revisor } from '../models/detalle_revisor';
 import { Op } from 'sequelize';
@@ -105,5 +103,3 @@ export const deleteDetalle_Revisor = async(req: Request, res: Response) =>{
 
         }
 }
-
-//FIN
