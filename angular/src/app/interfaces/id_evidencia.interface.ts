@@ -24,6 +24,8 @@ export interface Evidencia {
   Ddac?: DetalleDAC;
   Dcomite?: DetalleComite;
   Drevisor?: DetalleRevisor;
-  estadoAprobacion?: string;
-  icono?: string;
+  selectedEstado?: string;
+  iconoDdac: string;
+  iconoDcomite: string;
+  iconoDrevisor: string;
 }

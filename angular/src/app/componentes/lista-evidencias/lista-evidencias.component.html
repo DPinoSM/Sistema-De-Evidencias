@@ -20,14 +20,17 @@
 
             <div class="d-flex justify-content-end mt-4">
               <div class="search-container">
-                <select [(ngModel)]="selectedEstado" (change)="filtrarXEstadoRealizar()">
+                <label for="estadoSelect" class="visually-hidden">Seleccionar Estado:</label>
+                <select id="estadoSelect" [(ngModel)]="selectedEstado" (change)="filtrarEvidencias()">
+                  <option value="">Seleccionar Estado</option>
                   <option value="En espera">En espera</option>
-                  <option value="Aprobado">Aprobado</option>
-                  <option value="Rechazado">Rechazado</option>
+                  <option value="Aprobada">Aprobada</option>
+                  <option value="Rechazada">Rechazada</option>
                 </select>
               </div>
-            </div>            
-
+            </div>
+            
+            
             <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
               <thead>
                 <tr>
@@ -38,7 +41,7 @@
                   <th scope="col">Proceso</th>
                   <th scope="col">Registro</th>
                   <th scope="col">Ambito</th>
-                  <th scope="col">Revisado </th>
+                  <th scope="col">Estado Revisado </th>
                   <th scope="col">Acciones</th>
                   <th scope="col">Descargar evidencia</th>
                 </tr>

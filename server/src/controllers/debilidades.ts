@@ -1,5 +1,3 @@
-//JONATHAN MOLINA 
-//CONTROLLERS DEBILIDADES
 import e, {Request, Response} from 'express';
 import { Debilidades } from '../models/debilidades';
 import { Criterio } from '../models/criterio';
@@ -127,4 +125,3 @@ export const deleteDebilidades = async(req: Request, res: Response) =>{
 
         }
 }
-//FIN

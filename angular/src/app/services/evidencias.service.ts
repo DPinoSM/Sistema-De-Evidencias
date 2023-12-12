@@ -75,11 +75,21 @@ export class EvidenciasService {
       );
   }
   
-  filtrarXEestado(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/filtrar`)
+  filtrarEvidenciasPorAprobacion(selectedEstado: string, id_usuario: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/clasificar-evidencias/${selectedEstado}/${id_usuario}`)
       .pipe(
         catchError(err => this.handleError(err))
       );
+  }
+
+  determinarEstadoEvidencia(detalleRevisor: any, detalleDac: any, detalleComite: any): string {
+    if (detalleRevisor?.revisado_revisor === true && detalleDac?.revisado_dac === true && detalleComite?.revisado_comite === true) {
+      return 'Aprobada';
+    } else if (detalleRevisor?.revisado_revisor === false || detalleDac?.revisado_dac === false || detalleComite?.revisado_comite === false) {
+      return 'Rechazada';
+    } else {
+      return 'En espera';
+    }
   }
 
   // Manejo de errores
