@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Detalle_Revisor = void 0;
-// Importa las dependencias necesarias
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
 // Define la clase Detalle_Revisor extendiendo el modelo y las interfaces
@@ -23,6 +22,5 @@ Detalle_Revisor.init({
     timestamps: false,
     freezeTableName: true,
 });
-// Define la relación con Evidencias
 // Exporta el modelo Detalle_Revisor
 exports.default = Detalle_Revisor;

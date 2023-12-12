@@ -127,4 +127,3 @@ const deleteDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.deleteDebilidades = deleteDebilidades;
-//FIN

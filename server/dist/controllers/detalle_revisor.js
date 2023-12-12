@@ -117,4 +117,3 @@ const deleteDetalle_Revisor = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.deleteDetalle_Revisor = deleteDetalle_Revisor;
-//FIN
