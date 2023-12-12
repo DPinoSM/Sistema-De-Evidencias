@@ -648,3 +648,43 @@ const determinarEstadoEvidencia = (detalleRevisor: any, detalleDac: any, detalle
         return 'En espera';
     }
 };
+
+export const actualizarEvidenciaDesdeDetalleDAC = async (req: Request, res: Response) => {
+    const { id_evidencia, revisado_dac, comentario_dac } = req.body;
+
+    try {
+        const evidencia = await Evidencias.findByPk(id_evidencia);
+
+        if (!evidencia) {
+            return res.status(404).json({
+                msg: La evidencia con ID ${id_evidencia} no existe,
+            });
+        }
+        await Evidencias.update(
+            {
+                quien_actualizo: 'DAC',
+                comentario_actualizacion: comentario_dac,
+            },
+            { where: { id_evidencias: id_evidencia } }
+        );
+        // Actualiza los detalles específicos de Detalle DAC
+        await Detalle_DAC.update(
+            {
+                revisado_dac,
+                comentario_dac,
+            },
+            { where: { id_detalle_dac: evidencia.id_detalle_dac } }
+        );
+
+        res.json({
+            msg: 'Se ha actualizado la evidencia ${id_evidencia} desde Detalle DAC',
+            aprobada: revisado_dac, //  aprobado o rechazado
+            comentario_dac, });// se agrega al comentario dacs
+    } catch (error) {
+        console.error('Error en el controlador actualizar EvidenciaDesdeDetalleDAC:', error);
+        res.status(400).json({
+            msg: 'No se ha podido actualizar la evidencia con ID: ${id_evidencia} desde Detalle DAC',
+            error,
+        });
+    }
+};
