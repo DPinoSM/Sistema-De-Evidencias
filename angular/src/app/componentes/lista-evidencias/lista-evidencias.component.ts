@@ -85,7 +85,7 @@ export class ListaEvidenciasComponent implements OnInit {
       this.cargarEvidencias();
     }
 
-    private actualizarDetalles(evidencias: any[]): void {
+    actualizarDetalles(evidencias: any[]): void {
       const observables = evidencias.map((evidencia) => {
         const detallesObservables = [];
     
@@ -108,20 +108,21 @@ export class ListaEvidenciasComponent implements OnInit {
           detallesObservables.push(this.ambitoAService.getAmbitoAcademico(evidencia.id_ambito_academico));
         }
 
-        // Obtener detalles de DAC
-        if (evidencia.id_detalle_dac !== undefined && evidencia.id_detalle_dac !== null) {
-          detallesObservables.push(this.dacService.obtenerDacPorId(evidencia.id_detalle_dac));
+         // Obtener detalles de revisor
+         if (evidencia.id_detalle_revisor !== undefined && evidencia.id_detalle_revisor !== null) {
+          detallesObservables.push(this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor));
         }
-
+        
         // Obtener detalles de comité
         if (evidencia.id_detalle_comite !== undefined && evidencia.id_detalle_comite !== null) {
           detallesObservables.push(this.comiteService.obtenerComitePorId(evidencia.id_detalle_comite));
         }
 
-        // Obtener detalles de revisor
-        if (evidencia.id_detalle_revisor !== undefined && evidencia.id_detalle_revisor !== null) {
-          detallesObservables.push(this.revisorService.obtenerRevisorPorId(evidencia.id_detalle_revisor));
+        // Obtener detalles de DAC
+        if (evidencia.id_detalle_dac !== undefined && evidencia.id_detalle_dac !== null) {
+          detallesObservables.push(this.dacService.obtenerDacPorId(evidencia.id_detalle_dac));
         }
+       
     
         return forkJoin(detallesObservables).pipe(
           map((detalles) => {
@@ -141,21 +142,22 @@ export class ListaEvidenciasComponent implements OnInit {
               evidencia.ambitoAcademico = detalles[3]?.nombre_ambito_academico || '';
             }
         
-            if (detalles[4]) {
-              evidencia.Ddac = detalles[4]?.revisado_dac ?? null;
+            if (detalles[4] && evidencia.Drevisor === undefined) {
+              evidencia.Drevisor = detalles[4]?.revisado_revisor ?? null;
+              evidencia.icono = this.getIconNameForDetalleRevisor(evidencia.Drevisor);
             }
         
-            if (detalles[5]) {
+            if (detalles[5] && evidencia.Dcomite === undefined) {
               evidencia.Dcomite = detalles[5]?.revisado_comite ?? null;
+              evidencia.icono = this.getIconNameForDetalleComite(evidencia.Dcomite);
             }
         
-            if (detalles[6]) {
-              evidencia.Drevisor = detalles[6]?.revisado_revisor ?? null;
+            if (detalles[6] && evidencia.Ddac === undefined) {
+              evidencia.Ddac = detalles[6]?.revisado_dac ?? null;
+              evidencia.icono = this.getIconNameForDetalleDAC(evidencia.Ddac);
             }
-
+        
             
-    
-            evidencia.icono = this.getIconName(evidencia.Drevisor || evidencia.Dcomite || evidencia.Ddac);
             if (this.searchTerm && evidencia.numero_folio) {
               const term = this.searchTerm.toLowerCase();
               const numeroFolio = evidencia.numero_folio.toString().toLowerCase();
@@ -212,8 +214,6 @@ export class ListaEvidenciasComponent implements OnInit {
               this.evidencias = data;
               this.actualizarDetalles(this.evidencias);
               setTimeout(() => {
-                // Puedes intentar eliminar el siguiente bloque si el retraso no es necesario
-                // this.cdr.detectChanges();
               }, 100);
             },
             error: (error) => {
@@ -229,12 +229,11 @@ export class ListaEvidenciasComponent implements OnInit {
 
     determinarEstadoEvidencia(evidencia: Evidencia): string {
       const revisor = evidencia.Drevisor?.revisado_revisor;
-      const dac = evidencia.Ddac?.revisado_dac;
       const comite = evidencia.Dcomite?.revisado_comite;
-    
-      if (revisor === true && dac === true && comite === true) {
+      const dac = evidencia.Ddac?.revisado_dac;
+      if (revisor === true && comite === true && dac === true) {
         return 'Aprobada';
-      } else if (revisor === false || dac === false || comite === false) {
+      } else if (revisor === false || comite === false || dac === false) {
         return 'Rechazada';
       } else {
         return 'En espera';
@@ -242,21 +241,47 @@ export class ListaEvidenciasComponent implements OnInit {
     }
 
     
+    getIconNameForDetalleRevisor(state: DetalleRevisor | null | undefined): string {
+      return this.getIconName(state, 'DetalleRevisor') || 'fas fa-question';
+    }
 
-    getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null ): string {
-      if (state === true) {
-        return 'fas fa-user fas fa-check-circle text-success';
-      } else if (state === false) {
-        return 'fas fa-user fas fa-times-circle text-danger';
-      } else {
-        return 'fas fa-question'; 
-      }
+    getIconNameForDetalleComite(state: DetalleComite | null | undefined): string {
+      return this.getIconName(state, 'DetalleComite') || 'fas fa-question';
+    }
+
+    getIconNameForDetalleDAC(state: DetalleDAC | null | undefined): string {
+      return this.getIconName(state, 'DetalleDAC') || 'fas fa-question';
     }
     
-    
-    
-    
-    
+    private getIconName(state: DetalleComite | DetalleRevisor | DetalleDAC | boolean | null | undefined, type: string): string {
+  if (type === 'DetalleRevisor') {
+    if (state === true) {
+      return 'fas fa-user fas fa-check-circle text-success';
+    } else if (state === false) {
+      return 'fas fa-user fas fa-times-circle text-danger';
+    } else {
+      return 'fas fa-question';
+    }
+  } else if (type === 'DetalleComite') {
+    if (state === true) {
+      return 'fas fa-user fas fa-check-circle text-success';
+    } else if (state === false) {
+      return 'fas fa-user fas fa-times-circle text-danger';
+    } else {
+      return 'fas fa-question';
+    }
+  } else if (type === 'DetalleDAC') {
+    if (state === true) {
+      return 'fas fa-user fas fa-check-circle text-success';
+    } else if (state === false) {
+      return 'fas fa-user fas fa-times-circle text-danger';
+    } else {
+      return 'fas fa-question';
+    }
+  } else {
+    return 'fas fa-question';
+  }
+}
   
   actualizarEvidencia(id: number | undefined): void {
     if (id !== undefined) {

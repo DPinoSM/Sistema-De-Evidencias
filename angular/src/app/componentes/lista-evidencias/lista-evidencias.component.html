@@ -58,18 +58,19 @@
                   <td style="border: 1px solid black;">{{ evidencia.ambitoAcademico }}</td>
                   <td style="border: 1px solid black;">
                     <!-- Drevisor -->
-                    <i [class]="(evidencia.Drevisor !== undefined) ? getIconName(evidencia.Drevisor) : 'fas fa-question'"></i>
-                  
+                    <i [class]="getIconNameForDetalleRevisor(evidencia.Drevisor)"></i>
+                    
                     <span style="margin: 0 5px;"></span>
-                  
+                    
                     <!-- Dcomite -->
-                    <i [class]="(evidencia.Dcomite !== undefined) ? getIconName(evidencia.Dcomite) : 'fas fa-question'"></i>
-                  
+                    <i [class]="getIconNameForDetalleComite(evidencia.Dcomite)"></i>
+                    
                     <span style="margin: 0 5px;"></span>
-                  
+                    
                     <!-- Ddac -->
-                    <i [class]="(evidencia.Ddac !== undefined) ? getIconName(evidencia.Ddac) : 'fas fa-question'"></i>
+                    <i [class]="getIconNameForDetalleDAC(evidencia.Ddac)"></i>
                   </td>
+                  
                   
                 
                   <td>
