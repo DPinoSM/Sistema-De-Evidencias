@@ -116,7 +116,7 @@ const deleteDebilidades = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         yield debilidades_1.Debilidades.destroy({ where: { id_debilidades: id } });
         return res.json({
-            msg: 'La debilidd con ID: ' + id + ' ha sido borrada exitosamente'
+            msg: 'La debilidad con ID: ' + id + ' ha sido borrada exitosamente'
         });
     }
     catch (error) {

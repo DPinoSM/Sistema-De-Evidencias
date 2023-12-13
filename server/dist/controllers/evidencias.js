@@ -272,10 +272,16 @@ const buscarEvidencia = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const evidencias = yield evidencias_1.Evidencias.findAll({
             attributes: ['id_evidencias', 'nombre_corto_evidencia'],
+            include: [
+                { model: carrera_1.Carrera, attributes: ['nombre_carrera'] },
+                { model: facultad_1.Facultad, attributes: ['nombre_facultad'] },
+            ],
             where: {
                 [sequelize_1.Op.or]: [
                     { 'id_evidencias': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
                     { 'nombre_corto_evidencia': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { 'nombre_facultad': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
+                    { 'nombre_carrera': { [sequelize_1.Op.like]: `%${searchTerm}%` } },
                 ],
             },
         });
