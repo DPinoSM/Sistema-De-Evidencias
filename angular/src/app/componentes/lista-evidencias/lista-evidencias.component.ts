@@ -240,6 +240,7 @@ export class ListaEvidenciasComponent implements OnInit {
         return 'En espera';
       }
     }
+
     
 
     getIconName(state: boolean | DetalleComite | DetalleRevisor | DetalleDAC | null ): string {

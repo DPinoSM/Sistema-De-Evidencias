@@ -447,7 +447,7 @@ export class EditEvidenciaComponent implements OnInit, OnDestroy {
                 asistentes_externos_docentes: asistentes_externos_docentes,
                 asistentes_externos_estudiantes: asistentes_externos_estudiantes,
                 fecha_creacion: fecha_creacion,
-                archivo_adjunto: files,
+                archivo_adjunto: archivo_adjunto,
                 fecha_actualizacion: fecha_actualizacion,
           }).subscribe({
             next: (response) => {

@@ -27,6 +27,7 @@ import { ListaEstadoComponent } from '../componentes/lista-estado/lista-estado.c
 import { EditEvidenciaComponent } from '../componentes/edit-evidencia/edit-evidencia.component';
 import { EvidenciasAdminComponent } from '../componentes/evidencias-admin/evidencias-admin.component';
 import { PerfilComponent } from '../componentes/perfil/perfil.component';
+import { ARevidenciaComponent } from '../componentes/arevidencia/arevidencia.component';
 
 
 const routes: Routes = [
@@ -56,7 +57,8 @@ const routes: Routes = [
   { path: 'impacto', component: ListaImpactoComponent},
   { path: 'carrera', component: ListaCarreraComponent},
   { path: 'estado', component: ListaEstadoComponent},
-  { path: 'perfil', component: PerfilComponent}
+  { path: 'perfil', component: PerfilComponent},
+  { path: 'ARevidencia', component: ARevidenciaComponent}
   
 ];
 

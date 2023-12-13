@@ -11,7 +11,7 @@ import { Debilidad } from 'src/app/interfaces/debilidades.interface';
   templateUrl: './lista-debilidad.component.html',
   styleUrls: ['./lista-debilidad.component.css', '../../../shared-styles.css']
 })
-export class ListaDebilidadComponent {
+export class ListaDebilidadComponent implements OnInit {
   debilidades: Debilidad[] = [];
   debilidadOriginal: Debilidad[] | null = null;
   errorMsg: string | undefined;
@@ -29,7 +29,6 @@ export class ListaDebilidadComponent {
       this.form = new FormGroup({
         descripcion_debilidades: new FormControl('', [Validators.required]),
         estado_debilidades: new FormControl(null, [Validators.required]),
-        id_criterios: new FormControl(null, [Validators.required])
       });
   }
 
@@ -59,16 +58,14 @@ export class ListaDebilidadComponent {
     if (this.form.valid) {
       const descripcion_debilidades = this.form.get('descripcion_debilidades')?.value;
       const estado_debilidades = this.form.get('estado_debilidades')?.value;
-      const id_criterios = this.form.get('id_criterios')?.value;
   
       if (this.debilidadEditId) {
-        this.editarDebilidad(this.debilidadEditId, descripcion_debilidades, estado_debilidades, id_criterios);
+        this.editarDebilidad(this.debilidadEditId, descripcion_debilidades, estado_debilidades);
       } else {
         this.realizarOperacionDeDebilidad(() =>
           this.debilidadService.nuevaDebilidad({ 
             descripcion_debilidades: descripcion_debilidades, 
             estado_debilidades: estado_debilidades,
-            id_criterio: id_criterios 
           }), 'Evidencia Creada');
       }
   
@@ -81,7 +78,6 @@ export class ListaDebilidadComponent {
       if (debilidad) {
         this.form.get('descripcion_debilidades')?.setValue(debilidad.descripcion_debilidades);
         this.form.get('estado_debilidades')?.setValue(debilidad.estado_debilidades);
-        this.form.get('id_criterios')?.setValue(debilidad.id_criterios);
       }
     });
   }
@@ -140,12 +136,11 @@ export class ListaDebilidadComponent {
   }
 
   
-  editarDebilidad(id: number, descripcion_debilidades: string, estado_debilidades: boolean, id_criterios: number) {
+  editarDebilidad(id: number, descripcion_debilidades: string, estado_debilidades: boolean) {
     this.realizarOperacionDeDebilidad(() =>
       this.debilidadService.actualizarDebilidad(id, {
         descripcion_debilidades: descripcion_debilidades,
         estado_debilidades: estado_debilidades,
-        id_criterios: id_criterios
       }), 'Debilidad Editada');
   }
   

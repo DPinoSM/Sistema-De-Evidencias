@@ -1,6 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection';
+<<<<<<< HEAD
+=======
 
+>>>>>>> 34be78bcb0f430612b6dd767ff42bf8d8e83c1eb
 // Define la interfaz para las propiedades de Debilidades
 interface DebilidadesAttributes {
   id_debilidades: number;
@@ -18,6 +21,10 @@ export class Debilidades extends Model<DebilidadesAttributes, DebilidadesCreatio
   public id_debilidades!: number;
   public descripcion_debilidades!: string;
   public estado_debilidades!: boolean;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 34be78bcb0f430612b6dd767ff42bf8d8e83c1eb
 }
 
 // Inicializa el modelo Debilidades

@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { SharedService } from 'src/app/services/shared.service';
 import { DatePipe } from '@angular/common';
 import { Evidencia } from '../../interfaces/evidencia.interface';
@@ -43,7 +43,7 @@ import { CriterioService } from 'src/app/services/criterio.service';
   templateUrl: './arevidencia.component.html',
   styleUrls: ['./arevidencia.component.css']
 })
-export class ARevidenciaComponent implements OnInit, OnDestroy {
+export class ARevidenciaComponent implements OnInit{
   evidencias: Evidencia[] = [];
   ddac: DetalleDAC[] = [];
   dcomite: DetalleComite[] = [];
@@ -62,16 +62,9 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
   estado: Estado[] = [];
   errorMsg: string | undefined;
   sideNavStatus: boolean = false;
-  selectedImages: File[] = [];
-  imagenesAdjuntas: string[] = [];
-  images: any[] = [];
-  rut_usuario: number | null = null;
-  correo_usuario: string | null = null;
   idEvidencia: number | null = null;
   form: FormGroup;
-  dateTimeInterval: any;
-  currentDateTime: string = '';
-  imagenBase64: string | null = null;
+  isFormDisabled: boolean = false;
 
 
   constructor(
@@ -94,55 +87,53 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
     private impactoService: ImpactoService,
     private datePipe: DatePipe,
     private sharedService: SharedService,
-    private estadoService: EstadoService,
-    private authService: AuthService
+    private estadoService: EstadoService
   ) {
       this.form = new FormGroup({
-        idEvidencia: new FormControl(null),
-        numero_folio: new FormControl('', Validators.required),
-        fecha_evidencia: new FormControl(null, Validators.required),
-        rut_usuario: new FormControl({value: '', disabled: true}),
-        correo_usuario: new FormControl({value: '', disabled: true}),
-        id_usuario: new FormControl(null, Validators.required),
-        id_unidad: new FormControl(null, Validators.required),
-        id_procesos: new FormControl(null, Validators.required),
-        id_registro: new FormControl(null, Validators.required),
-        numero_de_mejoras: new FormControl(null, Validators.required),
-        id_ambito_academico: new FormControl(null, Validators.required),
-        id_ambito_geografico: new FormControl(null, Validators.required),
-        id_criterios: new FormControl(null, Validators.required),
-        id_debilidades: new FormControl(null, Validators.required),
-        id_carrera: new FormControl(null, Validators.required),
-        id_facultad: new FormControl(null, Validators.required),
-        id_impacto: new FormControl(null, Validators.required),
-        id_estado: new FormControl(null, Validators.required),
-        descripcion: new FormControl('', Validators.required),
-        resultado: new FormControl('', Validators.required),
-        almacenamiento: new FormControl('', Validators.required),
-        unidades_personas_evidencias: new FormControl('', Validators.required),
-        palabra_clave: new FormControl('', Validators.required),
-        nombre_corto_evidencia: new FormControl('', Validators.required),
-        asistentes_internos_autoridades: new FormControl(null, Validators.required),
-        asistentes_internos_administrativos: new FormControl(null, Validators.required),
-        asistentes_internos_docentes: new FormControl(null, Validators.required),
-        asistentes_internos_estudiantes: new FormControl(null, Validators.required),
-        asistentes_externos_autoridades: new FormControl(null, Validators.required),
-        asistentes_externos_administrativos: new FormControl(null, Validators.required),
-        asistentes_externos_docentes: new FormControl(null, Validators.required),
-        asistentes_externos_estudiantes: new FormControl(null, Validators.required),
-        archivo_adjunto: new FormControl(null),
-        fecha_creacion: new FormControl({value: '', disabled: true}),
-        fecha_actualizacion: new FormControl({ value: this.getCurrentDateTime(), disabled: true})
-      });
-      this.updateCurrentDateTime();
+          id_evidencia: new FormControl({ value: null, disabled: true }),
+          numero_folio: new FormControl({ value: '', disabled: true }),
+          fecha_evidencia: new FormControl({ value: null, disabled: true }),
+          rut_usuario: new FormControl({ value: '', disabled: true }),
+          correo_usuario: new FormControl({ value: '', disabled: true }),
+          id_usuario: new FormControl({ value: null, disabled: true }),
+          id_unidad: new FormControl({ value: null, disabled: true }),
+          id_procesos: new FormControl({ value: null, disabled: true }),
+          id_registro: new FormControl({ value: null, disabled: true }),
+          numero_de_mejoras: new FormControl({ value: null, disabled: true }),
+          id_ambito_academico: new FormControl({ value: null, disabled: true }),
+          id_ambito_geografico: new FormControl({ value: null, disabled: true }),
+          id_criterios: new FormControl({ value: null, disabled: true }),
+          id_debilidades: new FormControl({ value: null, disabled: true }),
+          id_carrera: new FormControl({ value: null, disabled: true }),
+          id_facultad: new FormControl({ value: null, disabled: true }),
+          id_impacto: new FormControl({ value: null, disabled: true }),
+          id_estado: new FormControl({ value: null, disabled: true }),
+          descripcion: new FormControl({ value: '', disabled: true }),
+          resultado: new FormControl({ value: '', disabled: true }),
+          almacenamiento: new FormControl({ value: '', disabled: true }),
+          unidades_personas_evidencias: new FormControl({ value: '', disabled: true }),
+          palabra_clave: new FormControl({ value: '', disabled: true }),
+          nombre_corto_evidencia: new FormControl({ value: '', disabled: true }),
+          asistentes_internos_autoridades: new FormControl({ value: null, disabled: true }),
+          asistentes_internos_administrativos: new FormControl({ value: null, disabled: true }),
+          asistentes_internos_docentes: new FormControl({ value: null, disabled: true }),
+          asistentes_internos_estudiantes: new FormControl({ value: null, disabled: true }),
+          asistentes_externos_autoridades: new FormControl({ value: null, disabled: true }),
+          asistentes_externos_administrativos: new FormControl({ value: null, disabled: true }),
+          asistentes_externos_docentes: new FormControl({ value: null, disabled: true }),
+          asistentes_externos_estudiantes: new FormControl({ value: null, disabled: true }),
+          fecha_creacion: new FormControl({ value: '', disabled: true }),
+          id_detalle_revisor: new FormControl(null),
+          id_detalle_comite: new FormControl(null),
+          id_detalle_dac: new FormControl(null)
+        });
     }
     
     
 
     ngOnInit() {
       this.sharedService.evidenciaId$.subscribe((id) => {
-        this.form.get('idEvidencia')?.setValue(id);
-        // Call obtenerEvidencia method when the component starts
+        this.form.get('id_evidencia')?.setValue(id);
         this.obtenerEvidencia(id);
       });
     this.getUsers();
@@ -157,24 +148,6 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
     this.getImpacto();
     this.getProceso();
     this.getRegistro();
-    
-    const usuarioLogeadoInfo = this.authService.getUsuarioLogeadoInfo();
-
-
-    if (usuarioLogeadoInfo) {
-      this.form.patchValue({
-        rut_usuario: usuarioLogeadoInfo.rut,
-        correo_usuario: usuarioLogeadoInfo.correo,
-      });
-    }
-
-    this.dateTimeInterval = setInterval(() => {
-      this.updateCurrentDateTime();
-    }, 10);
-  }
-  
-  ngOnDestroy() {
-    clearInterval(this.dateTimeInterval);
   }
 
   obtenerEvidencia(id: number | null) {
@@ -214,12 +187,8 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
           asistentes_externos_administrativos: evidencias.asistentes_externos_administrativos,
           asistentes_externos_docentes: evidencias.asistentes_externos_docentes,
           asistentes_externos_estudiantes: evidencias.asistentes_externos_estudiantes,
-          archivo_adjunto: evidencias.archivo_adjunto,
-          fecha_creacion: evidencias.fecha_creacion,
-          fecha_actualizacion: evidencias.fecha_actualizacion,
-          
+          fecha_creacion: evidencias.fecha_creacion,      
         });
-        this.imagenBase64 = evidencias.archivo_adjunto;
       }
     })
   } else {
@@ -228,8 +197,6 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
   }
   }
   
-
-
   getUnidades() {
     this.unidadService.getUnidades().subscribe((unidades) => {
       this.unidades = unidades;
@@ -302,179 +269,31 @@ export class ARevidenciaComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateCurrentDateTime() {
-    this.currentDateTime = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss') || '';
-  }
-
-  getCurrentDateTime(): string {
-    const currentDate = new Date();
-    return this.datePipe.transform(currentDate, 'yyyy-MM-dd HH:mm:ss') || '';
-  }
-
-  onFileSelected(event: any) {
-    const files: FileList | null = event.target.files;
-  
-    if (files && files.length > 0) {
-      this.handleFiles(files);
-    } else {
-      console.error('No se ha seleccionado ningún archivo.');
-    }
-  }
-  
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-  }
-  
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.handleFiles(files);
-    }
-  }
-  
-  onDragStart(event: DragEvent, index: number) {
-    event.dataTransfer?.setData('text/plain', index.toString());
-  }
-  
-  private handleFiles(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        this.imagenesAdjuntas.push(result);
-      };
-      reader.readAsDataURL(files[i]);
-  
-      this.selectedImages.push(files[i]);
-    }
-    this.form.get('archivo_adjunto')?.setValue(this.selectedImages);
-  }
-  
-  getSafeImageURL(image: File): string {
-    return URL.createObjectURL(image);
-  }
-
-  eliminarImagen(index: number) {
-    this.imagenesAdjuntas.splice(index, 1);
-    this.selectedImages.splice(index, 1);
-  }
-  
-
-  cancelar() {
-    this.router.navigate(['/evidencias']);
-  }
-  
-    // AQUI VA LO DE APROBAR, RECHAZAR EVIDENCIASSSSS
-    actualizarEvidencia(idEvidencia: number | null) {
-      if (idEvidencia !== null) {
-    console.log('Estado del formulario antes de la validación:', this.form.value);
-  
-    if (this.form.valid) {
-      const files: File[] = this.selectedImages;  
-      if (files && files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const result = event.target?.result as ArrayBuffer;
-          const uintArray = new Uint8Array(result);
-          const archivo_adjunto = uintArray;
-  
-          const fecha_actualizacion = this.getCurrentDateTime();
-          const numero_folio = this.form.get('numero_folio')?.value;
-          const fecha_evidencia = this.form.get('fecha_evidencia')?.value;
-          const rut_usuario = this.form.get('rut_usuario')?.value;
-          const correo_usuario = this.form.get('correo_usuario')?.value;
-          const id_usuario = this.form.get('id_usuario')?.value;
-          const id_unidad = this.form.get('id_unidad')?.value;
-          const id_procesos = this.form.get('id_procesos')?.value;
-          const id_registro = this.form.get('id_registro')?.value;
-          const numero_de_mejoras = this.form.get('numero_de_mejoras')?.value;
-          const id_ambito_academico = this.form.get('id_ambito_academico')?.value;
-          const id_ambito_geografico = this.form.get('id_ambito_geografico')?.value;
-          const id_criterios = this.form.get('id_criterios')?.value;
-          const id_debilidades = this.form.get('id_debilidades')?.value;
-          const id_carrera = this.form.get('id_carrera')?.value;
-          const id_facultad = this.form.get('id_facultad')?.value;
-          const id_impacto = this.form.get('id_impacto')?.value;
-          const id_estado = this.form.get('id_estado')?.value;
-          const descripcion = this.form.get('descripcion')?.value;
-          const resultado = this.form.get('resultado')?.value;
-          const almacenamiento = this.form.get('almacenamiento')?.value;
-          const unidades_personas_evidencias = this.form.get('unidades_personas_evidencias')?.value;
-          const palabra_clave = this.form.get('palabra_clave')?.value;
-          const nombre_corto_evidencia = this.form.get('nombre_corto_evidencia')?.value;
-          const asistentes_internos_autoridades = this.form.get('asistentes_internos_autoridades')?.value;
-          const asistentes_internos_administrativos = this.form.get('asistentes_internos_administrativos')?.value;
-          const asistentes_internos_docentes = this.form.get('asistentes_internos_docentes')?.value;
-          const asistentes_internos_estudiantes = this.form.get('asistentes_internos_estudiantes')?.value;
-          const asistentes_externos_autoridades = this.form.get('asistentes_externos_autoridades')?.value;
-          const asistentes_externos_administrativos = this.form.get('asistentes_externos_administrativos')?.value;
-          const asistentes_externos_docentes = this.form.get('asistentes_externos_docentes')?.value;
-          const asistentes_externos_estudiantes = this.form.get('asistentes_externos_estudiantes')?.value;
-          const fecha_creacion = this.form.get('fecha_creacion')?.value;
+    actualizarEvidencia(id_evidencia: number | null) {
+      if (id_evidencia !== null) {
+          const id_detalle_revisor = this.form.get('id_detalle_revisor')?.value;
+          const id_detalle_comite = this.form.get('id_detalle_comite')?.value;
+          const id_detalle_dac = this.form.get('id_detalle_dac')?.value;
           
-  
-          this.evidenciasService.updateEvidencia(idEvidencia, {
-                numero_folio: numero_folio,
-                fecha_evidencia: fecha_evidencia,
-                rut_usuario: rut_usuario,
-                correo_usuario: correo_usuario,
-                id_usuario: id_usuario,
-                id_unidad: id_unidad,
-                id_procesos: id_procesos,
-                id_registro: id_registro,
-                numero_de_mejoras: numero_de_mejoras,
-                id_ambito_academico: id_ambito_academico,
-                id_ambito_geografico: id_ambito_geografico,
-                id_criterios: id_criterios,
-                id_debilidades: id_debilidades,
-                id_carrera: id_carrera,
-                id_facultad: id_facultad,
-                id_impacto: id_impacto,
-                id_estado: id_estado,
-                descripcion: descripcion,
-                resultado: resultado,
-                almacenamiento: almacenamiento,
-                unidades_personas_evidencias: unidades_personas_evidencias,
-                palabra_clave: palabra_clave,
-                nombre_corto_evidencia: nombre_corto_evidencia,
-                asistentes_internos_autoridades: asistentes_internos_autoridades,
-                asistentes_internos_administrativos: asistentes_internos_administrativos,
-                asistentes_internos_docentes: asistentes_internos_docentes,
-                asistentes_internos_estudiantes: asistentes_internos_estudiantes,
-                asistentes_externos_autoridades: asistentes_externos_autoridades,
-                asistentes_externos_administrativos: asistentes_externos_administrativos,
-                asistentes_externos_docentes: asistentes_externos_docentes,
-                asistentes_externos_estudiantes: asistentes_externos_estudiantes,
-                fecha_creacion: fecha_creacion,
-                archivo_adjunto: files,
-                fecha_actualizacion: fecha_actualizacion,
+          this.evidenciasService.updateEvidencia(id_evidencia, {
+                id_detalle_revisor: id_detalle_revisor,
+                id_detalle_comite: id_detalle_comite,
+                id_detalle_dac: id_detalle_dac
           }).subscribe({
             next: (response) => {
-              console.log('Evidencia actualizada con éxito', response);
-              this.toastr.success('Evidencia actualizada con éxito', 'Éxito');
+              this.toastr.success('Evidencia aprobada con éxito', 'Éxito');
               this.form.reset();
-              this.imagenesAdjuntas = [];
-              this.router.navigate(['/evidencias']);
             },
             error: (error) => {
-              console.error('Error al actualizar la evidencia', error);
-              this.toastr.error('Error al actualizar la evidencia', 'Error');
+              this.toastr.error('Error al aprobar la evidencia', 'Error');
             }
           });
         };
-  
-        reader.readAsArrayBuffer(files[0]);
-      } else {
-        console.error('No se ha seleccionado ningún archivo.');
-        this.toastr.error('No se ha seleccionado ningún archivo.', 'Error');
-      }
-    } else {
-      console.error('Formulario no válido. Verifica los campos.');
-      this.toastr.error('Formulario no válido. Verifica los campos.', 'Error');
     }
-  }
-}
+
+    cancelar() {
+      this.router.navigate(['/comite']);
+    }
 
 }
 

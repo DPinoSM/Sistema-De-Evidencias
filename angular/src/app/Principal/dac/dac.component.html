@@ -38,9 +38,8 @@
                                     <td style="border: 1px solid black;">{{ evidencia.debilidad?.descripcion_debilidades }}</td>
                                     <td style="border: 1px solid black;">
                                         <button type="button" class="btn ms-2" >ESTADO </button>
-                                    </td>       
-                                    <td style="border: 1px solid black;">
-                                          <button type="button" class="btn ms-2">
+                                        <td style="border: 1px solid black;">
+                                          <button type="button" class="btn ms-2" (click)="verEvidencia(evidencia.id_evidencias)">
                                             <i class="fas fa-eye icon-no-bg"></i>
                                           </button>
                                     </td>          
