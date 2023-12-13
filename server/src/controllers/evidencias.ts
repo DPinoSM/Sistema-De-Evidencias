@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Evidencias } from '../models/evidencias';
 import { Unidad } from '../models/unidad';
-import { Model, Op } from 'sequelize';
+import { Model, Op, where } from 'sequelize';
 import { Detalle_Revisor } from '../models/detalle_revisor';
 import { Detalle_DAC } from '../models/detalle_dac';
 import { Detalle_Comite } from '../models/detalle_comite';
@@ -649,42 +649,122 @@ const determinarEstadoEvidencia = (detalleRevisor: any, detalleDac: any, detalle
     }
 };
 
-export const actualizarEvidenciaDesdeDetalleDAC = async (req: Request, res: Response) => {
-    const { id_evidencia, revisado_dac, comentario_dac } = req.body;
+export const actualizarRevisor = async(req: Request, res: Response) => {
+    const {id} = req.params;
+
+    const {id_detalle_revisor} = req.body
 
     try {
-        const evidencia = await Evidencias.findByPk(id_evidencia);
+
+        const evidencia = await Evidencias.findByPk(id);
 
         if (!evidencia) {
-            return res.status(404).json({
-                msg: La evidencia con ID ${id_evidencia} no existe,
-            });
+            return res.status(404).json({mensaje: 'Evidencia no encontrada'});
         }
-        await Evidencias.update(
-            {
-                quien_actualizo: 'DAC',
-                comentario_actualizacion: comentario_dac,
+        
+        let new_id_revisor = null;
+
+        if(id_detalle_revisor === 1){
+            new_id_revisor = 1;
+            await Evidencias.update({
+                id_detalle_revisor: new_id_revisor,
             },
-            { where: { id_evidencias: id_evidencia } }
-        );
-        // Actualiza los detalles específicos de Detalle DAC
-        await Detalle_DAC.update(
-            {
-                revisado_dac,
-                comentario_dac,
+            {where: {id_evidencias: id}})
+
+        } else if (id_detalle_revisor === 2){
+            new_id_revisor = 2;
+            await Evidencias.update({
+                id_detalle_revisor: new_id_revisor,
             },
-            { where: { id_detalle_dac: evidencia.id_detalle_dac } }
-        );
+            {where: {id_evidencias: id}})
+        }
 
         res.json({
-            msg: 'Se ha actualizado la evidencia ${id_evidencia} desde Detalle DAC',
-            aprobada: revisado_dac, //  aprobado o rechazado
-            comentario_dac, });// se agrega al comentario dacs
-    } catch (error) {
-        console.error('Error en el controlador actualizar EvidenciaDesdeDetalleDAC:', error);
-        res.status(400).json({
-            msg: 'No se ha podido actualizar la evidencia con ID: ${id_evidencia} desde Detalle DAC',
-            error,
+            msg: 'Se ha actualizado correctamente el Revisor',
         });
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 };
+
+export const actualizarDac = async(req: Request, res: Response) => {
+    const {id} = req.params;
+
+    const {id_detalle_dac} = req.body
+
+    try {
+
+        const evidencia = await Evidencias.findByPk(id);
+
+        if (!evidencia) {
+            return res.status(404).json({mensaje: 'Evidencia no encontrada'});
+        }
+        
+        let new_id_dac = null;
+
+        if(id_detalle_dac === 1){
+            new_id_dac = 1;
+            await Evidencias.update({
+                id_detalle_dac: new_id_dac,
+            },
+            {where: {id_evidencias: id}})
+
+        } else if (id_detalle_dac === 2){
+            new_id_dac = 2;
+            await Evidencias.update({
+                id_detalle_dac: new_id_dac,
+            },
+            {where: {id_evidencias: id}})
+        }
+
+        res.json({
+            msg: 'Se ha actualizado correctamente el Dac',
+        });
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+};
+
+export const actualizarComite = async(req: Request, res: Response) => {
+    const {id} = req.params;
+
+    const {id_detalle_comite} = req.body
+
+    try {
+
+        const evidencia = await Evidencias.findByPk(id);
+
+        if (!evidencia) {
+            return res.status(404).json({mensaje: 'Evidencia no encontrada'});
+        }
+        
+        let new_id_comite = null;
+
+        if(id_detalle_comite === 1){
+            new_id_comite = 1;
+            await Evidencias.update({
+                id_detalle_comite: new_id_comite,
+            },
+            {where: {id_evidencias: id}})
+
+        } else if (id_detalle_comite === 2){
+            new_id_comite = 2;
+            await Evidencias.update({
+                id_detalle_comite: new_id_comite,
+            },
+            {where: {id_evidencias: id}})
+        }
+
+        res.json({
+            msg: 'Se ha actualizado correctamente el Comite',
+        });
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+}
