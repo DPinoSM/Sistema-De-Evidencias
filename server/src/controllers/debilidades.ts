@@ -1,6 +1,5 @@
-import e, {Request, Response} from 'express';
+import {Request, Response} from 'express';
 import { Debilidades } from '../models/debilidades';
-import { Criterio } from '../models/criterio';
 
 export const getDebilidades = async(req: Request, res: Response) =>{   
     try {
@@ -115,7 +114,7 @@ export const deleteDebilidades = async(req: Request, res: Response) =>{
         await Debilidades.destroy({where: {id_debilidades: id}}
         )
         return res.json({
-            msg:'La debilidd con ID: ' + id + ' ha sido borrada exitosamente'
+            msg:'La debilidad con ID: ' + id + ' ha sido borrada exitosamente'
         })
         }catch (error){
             return res.status(400).json({
