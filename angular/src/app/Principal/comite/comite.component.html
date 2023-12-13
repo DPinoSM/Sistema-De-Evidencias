@@ -6,7 +6,7 @@
             <div class="display-area p-3" [ngClass]="{'display-area-shrink': sideNavStatus}">
                 <div class="container">
                   <div class="title">
-                            <h3 class="page-title">Evidencias Revisor</h3>                              
+                            <h3 class="page-title">Evidencias </h3>                              
                               <table class="table table-bordered table-striped table-hover" style="border: 1px solid black;">
                                 <thead>
                                   <tr>
@@ -14,7 +14,6 @@
                                     <th scope="col">Numero de Folio</th>
                                     <th scope="col">Proceso</th>
                                     <th scope="col">Tipo de Registro</th>
-                                    <th scope="col">Debilidad</th>
                                     <th scope="col">Criterio</th>
                                     <th scope="col">Estado</th>
                                     <th scope="col">Acción</th>
@@ -28,13 +27,12 @@
                                     <td style="border: 1px solid black;">{{ evidencia.numero_folio }}</td>
                                     <td style="border: 1px solid black;">{{ evidencia.proceso?.nombre_procesos}}</td>
                                     <td style="border: 1px solid black;">{{ evidencia.registro?.datos_registro}}</td>
-                                    <td style="border: 1px solid black;">{{ evidencia.debilidad?.descripcion_debilidades }}</td>
                                     <td style="border: 1px solid black;">{{ evidencia.criterio?.nombre_criterios}}</td>
                                     <td style="border: 1px solid black;">
                                         <button type="button" class="btn ms-2" >ESTADO </button>
                                     </td>       
                                     <td style="border: 1px solid black;">
-                                          <button type="button" class="btn ms-2">
+                                          <button type="button" class="btn ms-2" (click)="verEvidencia(evidencia.id_evidencias)">
                                             <i class="fas fa-eye icon-no-bg"></i>
                                           </button>
                                     </td>          

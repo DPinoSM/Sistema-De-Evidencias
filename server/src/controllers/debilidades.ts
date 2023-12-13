@@ -1,6 +1,5 @@
 import e, {Request, Response} from 'express';
 import { Debilidades } from '../models/debilidades';
-import { Criterio } from '../models/criterio';
 
 export const getDebilidades = async(req: Request, res: Response) =>{   
     try {

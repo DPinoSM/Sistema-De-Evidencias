@@ -387,24 +387,6 @@
                     </div>
                   </div>
                   
-                <!-- Opción para adjuntar imágenes -->
-                <div class="row mb-3">
-                  <div class="col">
-                    <div class="form-group">
-                      <label for="archivo_adjunto">Adjuntar Imágenes:</label>
-                      <input type="file" (change)="onFileSelected($event)" multiple />
-                      <div (dragover)="onDragOver($event)" (drop)="onDrop($event)" class="drop-area">
-                        Arrastra y suelta imágenes aquí
-                      </div>
-                      <div class="image-container" *ngFor="let image of selectedImages; let i = index" draggable="true" (dragstart)="onDragStart($event, i)">
-                        <img *ngIf="imagenBase64" [src]="imagenBase64" alt="Imagen Adjunta" class="adjunta-image" />
-                        <button type="button" (click)="eliminarImagen(i)" class="btn btn-danger btn-sm">Eliminar</button>
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
-                
                 
                 <div class="row mb-3">
                   <div class="col">
@@ -415,36 +397,13 @@
                   </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                      <div class="form-group">
-                        <label for="fecha_actualizacion">Fecha Actualizacion:</label>
-                        <input type="text" id="fecha_actualizacion" class="form-control" formControlName="fecha_actualizacion" [value]="currentDateTime" readonly required>
-                      </div>
-                    </div>
-                  </div>
-                
-                
+                      
                 <!-- Botones Cancelar y Enviar -->
                 <div class="form-actions">
                   <button type="button" class="btn btn-secondary m-4" (click)="cancelar()">Cancelar</button>
-                  <button type="submit" class="btn btn-primary">Actualizar Evidencia</button>
+                  <button type="button" class="btn btn-secondary m-4" >Rechazar Evidencia</button>
+                  <button type="submit" class="btn btn-primary">Aprobar Evidencia</button>
                 </div>
-
-                <!--comentario //faltan cositas -->
-                <div class="col">
-                    comentario
-                </div>
-
-                <!--Boton aprobar rechazar evidencia-->
-                    <div class="col">
-                      <!--<button type="button" class="btn btn-success" (click)="aprobarEvidencia()">Aprobar</button>-->
-                      <button type="button" class="btn btn-success" >Aprobar</button>
-                    </div>
-                    <div class="col">
-                      <!--<button type="button" class="btn btn-danger" (click)="rechazarEvidencia()">Rechazar</button>-->
-                      <button type="button" class="btn btn-danger">Rechazar</button>
-                    </div>
               </form>
               </div>
             </div>

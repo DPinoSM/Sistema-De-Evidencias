@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EvidenciasService } from '../../services/evidencias.service';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription, catchError } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Evidencia } from 'src/app/interfaces/evidencia.interface';
 import { saveAs } from 'file-saver';
+import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 import { Proceso } from 'src/app/interfaces/proceso.interface';
 import { ProcesosService } from 'src/app/services/proceso.service';
 import { Registro } from 'src/app/interfaces/registro.interface';
@@ -27,10 +27,9 @@ export class ComiteComponent implements OnInit {
   dcomite: DetalleComite[] = [];
   proceso: Proceso[] = [];
   registro: Registro[] = [];
-  debilidad: Debilidad[] = [];
+  debilidades: Debilidad[] = [];
   criterios: Criterio[] = [];
   errorMsg: string | undefined;
-  form: FormGroup;
   private evidenciasSubscription!: Subscription;
   currentPage: number = 1;
   searchTerm: string = '';
@@ -43,19 +42,9 @@ export class ComiteComponent implements OnInit {
     private debilidadService: DebilidadService,
     private criterioService: CriterioService,
     private comiteService: ComiteService,
-    private toastr: ToastrService
-  ) {
-    this.form = new FormGroup({
-      id_evidencias: new FormControl(null, [Validators.required]),
-      numero_folio: new FormControl(null, [Validators.required]),
-      fecha_evidencia: new FormControl('', [Validators.required]),
-      id_procesos: new FormControl(null, [Validators.required]),
-      id_registro: new FormControl(null, [Validators.required]),
-      id_debilidades: new FormControl(null, [Validators.required]),
-      id_criterio: new FormControl(null, [Validators.required]),
-      id_detalle_comite: new FormControl(null, [Validators.required]),
-    });
-  }
+    private router: Router,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit() {
     this.getEvidencias();
@@ -74,7 +63,7 @@ export class ComiteComponent implements OnInit {
 
   getDebilidades() {
     this.debilidadService.obtenerDebilidad().subscribe((debilidad) => {
-      this.debilidad = debilidad;
+      this.debilidades = debilidad;
       console.log('Debilidades:', debilidad);
     });
   }
@@ -82,6 +71,7 @@ export class ComiteComponent implements OnInit {
   getRegistro() {
     this.registroService.getRegistros().subscribe((registro) => {
       this.registro = registro;
+      console.log('Registro:', registro);
     });
   }
 
@@ -195,6 +185,15 @@ export class ComiteComponent implements OnInit {
       });
     } else {
       console.error('ID de evidencias no definido. No se puede descargar el PDF.');
+    }
+  }
+
+  verEvidencia(id: number | undefined): void {
+    if (id !== undefined) {
+      this.sharedService.setEvidenciaId(id);
+      this.router.navigate(['/ARevidencia']);
+    } else {
+      console.error('ID de evidencia no definida. No se puede actualizar.');
     }
   }
 }
