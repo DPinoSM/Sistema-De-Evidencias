@@ -355,16 +355,10 @@ export const buscarEvidencia = async (req: Request, res: Response) =>{
     try {
         const evidencias = await Evidencias.findAll({
             attributes: ['id_evidencias', 'nombre_corto_evidencia'],
-            include: [
-                { model: Carrera, attributes: ['nombre_carrera']},
-                { model: Facultad, attributes: ['nombre_facultad']},
-            ],
             where: {
                 [Op.or]: [
                     { 'id_evidencias': { [Op.like]: `%${searchTerm}%` } },
                     { 'nombre_corto_evidencia': { [Op.like]: `%${searchTerm}%` } },
-                    { 'nombre_facultad': { [Op.like]: `%${searchTerm}%` } },
-                    { 'nombre_carrera':  { [Op.like]: `%${searchTerm}%`} },
                 ],
             }as unknown as Record<string,any>,
         });
