@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filtrarEvidenciasPorAprobacion = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
+exports.actualizarComite = exports.actualizarDac = exports.actualizarRevisor = exports.filtrarEvidenciasPorAprobacion = exports.getEvidenciasByUsuario = exports.generarPDF = exports.buscarEvidencia = exports.updateEvidencia = exports.deleteEvidencia = exports.getEvidencia = exports.getEvidencias = exports.newEvidencia = void 0;
 const evidencias_1 = require("../models/evidencias");
 const unidad_1 = require("../models/unidad");
 const sequelize_1 = require("sequelize");
@@ -539,3 +539,96 @@ const determinarEstadoEvidencia = (detalleRevisor, detalleDac, detalleComite) =>
         return 'En espera';
     }
 };
+const actualizarRevisor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { id_detalle_revisor } = req.body;
+    try {
+        const evidencia = yield evidencias_1.Evidencias.findByPk(id);
+        if (!evidencia) {
+            return res.status(404).json({ mensaje: 'Evidencia no encontrada' });
+        }
+        let new_id_revisor = null;
+        if (id_detalle_revisor === 1) {
+            new_id_revisor = 1;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_revisor: new_id_revisor,
+            }, { where: { id_evidencias: id } });
+        }
+        else if (id_detalle_revisor === 2) {
+            new_id_revisor = 2;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_revisor: new_id_revisor,
+            }, { where: { id_evidencias: id } });
+        }
+        res.json({
+            msg: 'Se ha actualizado correctamente el Revisor',
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+});
+exports.actualizarRevisor = actualizarRevisor;
+const actualizarDac = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { id_detalle_dac } = req.body;
+    try {
+        const evidencia = yield evidencias_1.Evidencias.findByPk(id);
+        if (!evidencia) {
+            return res.status(404).json({ mensaje: 'Evidencia no encontrada' });
+        }
+        let new_id_dac = null;
+        if (id_detalle_dac === 1) {
+            new_id_dac = 1;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_dac: new_id_dac,
+            }, { where: { id_evidencias: id } });
+        }
+        else if (id_detalle_dac === 2) {
+            new_id_dac = 2;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_dac: new_id_dac,
+            }, { where: { id_evidencias: id } });
+        }
+        res.json({
+            msg: 'Se ha actualizado correctamente el Dac',
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+});
+exports.actualizarDac = actualizarDac;
+const actualizarComite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { id_detalle_comite } = req.body;
+    try {
+        const evidencia = yield evidencias_1.Evidencias.findByPk(id);
+        if (!evidencia) {
+            return res.status(404).json({ mensaje: 'Evidencia no encontrada' });
+        }
+        let new_id_comite = null;
+        if (id_detalle_comite === 1) {
+            new_id_comite = 1;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_comite: new_id_comite,
+            }, { where: { id_evidencias: id } });
+        }
+        else if (id_detalle_comite === 2) {
+            new_id_comite = 2;
+            yield evidencias_1.Evidencias.update({
+                id_detalle_comite: new_id_comite,
+            }, { where: { id_evidencias: id } });
+        }
+        res.json({
+            msg: 'Se ha actualizado correctamente el Comite',
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+});
+exports.actualizarComite = actualizarComite;
